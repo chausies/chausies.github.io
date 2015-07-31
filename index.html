@@ -9,6 +9,12 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
   <link rel="stylesheet" type="text/css" href="style/style.css" />
+	<script src="jquery.js"></script> 
+	<script> 
+	$(function(){
+		$("#sidebar_content").load("sidebar.html"); 
+	});
+	</script> 
 </head>
 
 <body>
@@ -33,7 +39,7 @@
     <div id="site_content">
       <div id="sidebar_container">
 				<p>a</p>
-				<!--#include file="sidebar.html" -->
+				<div id="sidebar_content"></div>
 				<p>b</p>
       </div>
       <div id="content">
