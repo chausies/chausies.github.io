@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Ajay Shanker Tripathi</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="js/sorttable.js"></script>
+  <script> 
+  $(function(){
+    $("#sidebar_content").load("sidebar.html"); 
+  });
+  $(function(){
+    $("#logo_content").load("logo.html"); 
+  });
+  $(function(){
+    $("#footer_content").load("footer.html"); 
+  });
+  </script> 
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo_content"></div>
+      <div id="menubar">
+        <ul id="menu">
+          <li class="#"><a href="index.html">About Me</a></li>
+          <li><a href="#">Academic Record</a></li>
+          <li><a href="#">CV</a></li>
+          <li><a href="#">My Projects</a></li>
+          <li><a href="#">Silly things</a></li>
+          <li><a href="#">Find me</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      <div id="sidebar_content"></div>
+      <div id="content">
+        <h2>University of California Berkeley Class of 2015</h2>
+        <p>Major: Electrical Engineering and Computer Science (EECS)</p>
+        <p>Technical Course GPA: 3.99 (all A's)</p> 
+        <p>Took 31 semesters' worth of technical classes, including 6
+        graduate-level EE courses.</p> 
+        <p>Note that all units are semester-long units. To convert to
+        quarter units, multiply by a factor of 1.5.</p>
+        <table style="width:100%; border-spacing:0;" class="sortable">
+          <tr><th>Course</th><th>Description</th><th>Grade</th><th>Units</th><th>Semester Taken</th></tr>
+          <tr><td>Item 1</td><td>Description of Item 1</td></tr>
+          <tr><td>Item 2</td><td>Description of Item 2</td></tr>
+          <tr><td>Item 3</td><td>Description of Item 3</td></tr>
+          <tr><td>Item 4</td><td>Description of Item 4</td></tr>
+        </table>
+      </div>
+    </div>
+    <div id="footer_content"></div>
+  </div>
+</body>
+</html>
