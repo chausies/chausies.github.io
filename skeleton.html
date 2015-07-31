@@ -9,15 +9,24 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
   <link rel="stylesheet" type="text/css" href="style/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script> 
+  $(function(){
+    $("#sidebar_content").load("sidebar.html"); 
+  });
+  $(function(){
+    $("#logo_content").load("logo.html"); 
+  });
+  $(function(){
+    $("#footer_content").load("footer.html"); 
+  });
+  </script> 
 </head>
 
 <body>
   <div id="main">
     <div id="header">
-      <div id="logo">
-        <h1>Ajay Shanker Tripathi</h1>
-        <div class="slogan">rhythm in randomness, melody in entropy</div>
-      </div>
+      <div id="logo_content"></div>
       <div id="menubar">
         <ul id="menu">
           <li class="#"><a href="index.html">About Me</a></li>
@@ -30,16 +39,12 @@
       </div>
     </div>
     <div id="site_content">
-      <div id="sidebar_container">
-
-      </div>
+      <div id="sidebar_content"></div>
       <div id="content">
 
       </div>
     </div>
-    <div id="footer">
-
-    </div>
+    <div id="footer_content"></div>
   </div>
 </body>
 </html>

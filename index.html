@@ -9,21 +9,21 @@
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
   <link rel="stylesheet" type="text/css" href="style/style.css" />
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	<script> 
-	$(function(){
-		$("#sidebar_content").load("sidebar.html"); 
-	});
-	</script> 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script> 
+  $(function(){
+    $("#sidebar_content").load("sidebar.html"); 
+  });
+  $(function(){
+    $("#logo_content").load("logo.html"); 
+  });
+  </script> 
 </head>
 
 <body>
   <div id="main">
     <div id="header">
-      <div id="logo">
-        <h1>Ajay Shanker Tripathi</h1>
-        <div class="slogan">rhythm in randomness, melody in entropy</div>
-      </div>
+      <div id="logo_content"></div>
       <div id="menubar">
         <ul id="menu">
           <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
@@ -37,39 +37,34 @@
       </div>
     </div>
     <div id="site_content">
-      <div id="sidebar_container">
-				<p>hello</p>
-				<div id="sidebar_content"></div>
-				<p>moto</p>
-      </div>
+      <div id="sidebar_content"></div>
       <div id="content">
         <h1>Make our systems sophisticated</h1>
-				<p>
-					I'm Ajay Tripathi. I recently graduated from UC Berkeley in
-					Electrical Engineering and Computer Science in 2015. Now, I
-					pursue my PhD at Stanford University in EE. 
-				</p>
-				<p>
-					I'm very lucky, because the world is so richly pervasive with obvious problems. Traffic control is atrocious, and so many systems are inefficient, inconvenient, and outright stupid. So much of our society is desperately in need of even a shred of machine learning or optimization. For example, wait times at the Berkeley Post Office are consistently upwards of 50 minutes, and all they give you is a waiting number. Too scared to miss your turn, you stay put in the post office. Ridiculous. If there's 15 people ahead of you, why can't you be given a 95% confidence interval on how long your wait time will be? Then you'll know that you have at least 40 minutes to get Starbucks without missing your turn. It's such a simple convenience to offer customers, and all you need to do is monitor service times.
-				</p>
-				<p>
-					Similarly, education, healthcare, the judiciary, and so many more parts of society are rife with inefficiencies because no one has the sense to apply any AI to them. I want this to change, and it is my wish to penetrate into society at large with the exceptionally potent tools in optimization, control, stochastic analysis, and machine learning. It is also my wish to develop and expand these tools even further to make them all the more powerful and capable for tackling such an unimaginably data-rich world.
         <p>
-					My research interests are
-					<ul>
-						<li>Stochastic and Random Processes</li>
-						<li>Optimization</li>
-						<li>Signal Processing</li>
-						<li>Machine Learning</li>
-						<li>Artificial Intelligence</li>
-						<li>Control Theory</li>
-						<li>Communication Theory</li>
-					</ul>
-				</p>
+          I'm Ajay Tripathi. I recently graduated from UC Berkeley in
+          Electrical Engineering and Computer Science in 2015. Now, I
+          pursue my PhD at Stanford University in EE. 
+        </p>
+        <p>
+          I'm very lucky, because the world is so richly pervasive with obvious problems. Traffic control is atrocious, and so many systems are inefficient, inconvenient, and outright stupid. So much of our society is desperately in need of even a shred of machine learning or optimization. For example, wait times at the Berkeley Post Office are consistently upwards of 50 minutes, and all they give you is a waiting number. Too scared to miss your turn, you stay put in the post office. Ridiculous. If there's 15 people ahead of you, why can't you be given a 95% confidence interval on how long your wait time will be? Then you'll know that you have at least 40 minutes to get Starbucks without missing your turn. It's such a simple convenience to offer customers, and all you need to do is monitor service times.
+        </p>
+        <p>
+          Similarly, education, healthcare, the judiciary, and so many more parts of society are rife with inefficiencies because no one has the sense to apply any AI to them. I want this to change, and it is my wish to penetrate into society at large with the exceptionally potent tools in optimization, control, stochastic analysis, and machine learning. It is also my wish to develop and expand these tools even further to make them all the more powerful and capable for tackling such an unimaginably data-rich world.
+        <p>
+          My research interests are
+          <ul>
+            <li>Stochastic and Random Processes</li>
+            <li>Optimization</li>
+            <li>Signal Processing</li>
+            <li>Machine Learning</li>
+            <li>Artificial Intelligence</li>
+            <li>Control Theory</li>
+            <li>Communication Theory</li>
+          </ul>
+        </p>
       </div>
     </div>
-    <div id="footer">
-    </div>
+    <div id="footer_content"></div>
   </div>
 </body>
 </html>
