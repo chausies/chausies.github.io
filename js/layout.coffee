@@ -22,9 +22,9 @@ $(document).ready ->
     <ul id="menu">
       <li><a href="index.html">About Me</a></li>
       <li><a href="academic_record.html">Academic Record</a></li>
-      <li><a href="#">CV</a></li>
-      <li><a href="#">My Projects</a></li>
-      <li><a href="#">Silly Things</a></li>
+      <li><a href="cv.html">CV</a></li>
+      <li><a href="projects.html">My Projects</a></li>
+      <li><a href="silly_things.html">Silly Things</a></li>
       <li><a href="find_me.html">Find Me</a></li>
     </ul>
   </div>
