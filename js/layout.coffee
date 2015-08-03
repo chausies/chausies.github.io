@@ -1,13 +1,21 @@
 $(document).ready ->
-  $ ->
-    $('#sidebar_content').load 'html_snips/sidebar.html'
-    return
-  $ ->
-    $('#logo_content').load 'html_snips/logo.html'
-    return
-  $ ->
-    $('#footer_content').load 'html_snips/footer.html'
-    return
+  document.getElementById('logo_content').innerHTML = \
+    """
+    <div id="logo">
+      <h1>Ajay Shanker Tripathi</h1>
+      <div class="slogan">rhythm in randomness, melody in entropy</div>
+    </div>
+    """
+  document.getElementById('footer_content').innerHTML = \
+    """
+    <div id="footer">
+    </div>
+    """
+  document.getElementById('sidebar_content').innerHTML = \
+    """
+    <div id="sidebar_container">
+    </div>
+    """
   navbar = \
   """
   <div id="menubar">
