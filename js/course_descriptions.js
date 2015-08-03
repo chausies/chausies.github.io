@@ -10,9 +10,9 @@
   };
 
   $(document).ready(function() {
-    make_popover('phys7a', "Mechanics and wave motion.");
-    make_popover('phys7b', "Heat, electricity, and magnetism.");
-    make_popover('phys7c', "Electromagnetic waves, optics, relativity, and quantum physics.");
+    make_popover('phys7a', "Physics for Scientists and Engineers: Mechanics and wave motion.");
+    make_popover('phys7b', "Physics for Scientists and Engineers: Heat, electricity, and magnetism.");
+    make_popover('phys7c', "Physics for Scientists and Engineers: Electromagnetic waves, optics, relativity, and quantum physics.");
     make_popover('phys137a', "Introduction to the methods of quantum mechanics with applications to atomic, molecular, solid state, nuclear and elementary particle physics.");
     make_popover('math53', "Parametric equations and polar coordinates. Vectors in 2- and 3-dimensional Euclidean spaces. Partial derivatives. Multiple integrals. Vector calculus. Theorems of Green, Gauss, and Stokes.");
     make_popover('math54', "Basic linear algebra; matrix arithmetic and determinants. Vector spaces; inner product as spaces. Eigenvalues and eigenvectors; linear transformations. Homogeneous ordinary differential equations; first-order differential equations with constant coefficients. Fourier series and partial differential equations.");

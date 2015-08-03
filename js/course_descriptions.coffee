@@ -8,15 +8,16 @@ make_popover = (id, content) ->
 $(document).ready ->
   make_popover 'phys7a',
     "
-    Mechanics and wave motion.
+    Physics for Scientists and Engineers: Mechanics and wave motion.
     "
   make_popover 'phys7b',
     "
-    Heat, electricity, and magnetism.
+    Physics for Scientists and Engineers: Heat, electricity, and magnetism.
     "
   make_popover 'phys7c',
     "
-    Electromagnetic waves, optics, relativity, and quantum physics.
+    Physics for Scientists and Engineers: Electromagnetic waves, optics,
+    relativity, and quantum physics.
     "
   make_popover 'phys137a',
     "
