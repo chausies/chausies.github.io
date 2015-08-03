@@ -208,6 +208,22 @@ ul#menu li a:hover
   padding: 25px 0 5px 25px;
   margin: 0;}
 
+#full_content
+{ text-align: left;
+  width: 900px;
+  padding: 25px 0 5px 25px;
+  margin: 0;}
+  
+#full_content ul
+{ margin: 2px 0 22px 0px;}
+
+#full_content ul li
+{ list-style-type: none;
+  background: url(bullet.png) no-repeat;
+  margin: 0 0 6px 0; 
+  padding: 0 0 4px 25px;
+  line-height: 1.5em;}
+
 #content ul
 { margin: 2px 0 22px 0px;}
 
