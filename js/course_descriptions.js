@@ -4,7 +4,6 @@
 
   make_popover = function(id, content) {
     document.getElementById(id).setAttribute("data-toggle", "popover");
-    document.getElementById(id).setAttribute("data-trigger", "focus");
     document.getElementById(id).setAttribute("data-placement", "bottom");
     document.getElementById(id).setAttribute("data-container", "body");
     return document.getElementById(id).setAttribute("data-content", content);
