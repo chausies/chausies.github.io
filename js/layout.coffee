@@ -20,12 +20,12 @@ $(document).ready ->
   """
   <div id="menubar">
     <ul id="menu">
-      <li><a href="index.html">About Me</a></li>
-      <li><a href="academic_record.html">Academic Record</a></li>
-      <li><a href="cv.html">CV</a></li>
-      <li><a href="projects.html">My Projects</a></li>
-      <li><a href="silly_things.html">Silly Things</a></li>
-      <li><a href="find_me.html">Find Me</a></li>
+      <li><a href="index">About Me</a></li>
+      <li><a href="academic_record">Academic Record</a></li>
+      <li><a href="cv">CV</a></li>
+      <li><a href="projects">My Projects</a></li>
+      <li><a href="silly_things">Silly Things</a></li>
+      <li><a href="find_me">Find Me</a></li>
     </ul>
   </div>
   """
