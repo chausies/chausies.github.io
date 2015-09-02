@@ -4,7 +4,6 @@
     var curr, navbar, reg, tag;
     document.getElementById('logo_content').innerHTML = "<div id=\"logo\">\n  <h1>Ajay Shanker Tripathi</h1>\n  <div class=\"slogan\">rhythm in randomness, melody in entropy</div>\n</div>";
     document.getElementById('footer_content').innerHTML = "<div id=\"footer\">\n</div>";
-    document.getElementById('sidebar_content').innerHTML = "<div id=\"sidebar_container\">\n</div>";
     navbar = "<div id=\"menubar\">\n  <ul id=\"menu\">\n    <li><a href=\"index\">About Me</a></li>\n    <li><a href=\"academic_record\">Academic Record</a></li>\n    <li><a href=\"cv\">CV</a></li>\n    <li><a href=\"projects\">My Projects</a></li>\n    <li><a href=\"silly_things\">Silly Things</a></li>\n    <li><a href=\"find_me\">Find Me</a></li>\n  </ul>\n</div>";
     tag = document.getElementById('navbar');
     curr = tag.getAttribute("curr");

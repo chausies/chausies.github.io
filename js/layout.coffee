@@ -11,11 +11,11 @@ $(document).ready ->
     <div id="footer">
     </div>
     """
-  document.getElementById('sidebar_content').innerHTML = \
-    """
-    <div id="sidebar_container">
-    </div>
-    """
+  # document.getElementById('sidebar_content').innerHTML = \
+  #   """
+  #   <div id="sidebar_container">
+  #   </div>
+  #   """
   navbar = \
   """
   <div id="menubar">
