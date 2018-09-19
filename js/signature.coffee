@@ -38,6 +38,21 @@ getRandIntNBits = ->
     n = n.shiftLeft(8).plus(byte)
   return n
 
+hexToBase64 = (hexstring) ->
+  return btoa hexstring.match(/\w{2}/g).map((a) ->
+    return String.fromCharCode parseInt(a, 16)
+  ).join('')
+ 
+base64ToHex = (base64) ->
+  raw = atob(base64)
+  Hex = ''
+  i = 0
+  while i < raw.length
+    _hex = raw.charCodeAt(i).toString(16)
+    Hex += if _hex.length == 2 then _hex else '0' + _hex
+    i++
+  return Hex.toUpperCase()
+
 signMessage = (mess, pass) ->
   x = bigInt(sha256(pass), 16)
   y = g.modPow(x,p)
@@ -78,17 +93,17 @@ myFunction = ->
     mess = ""
   if pass.length != 0
     [id, sig] = signMessage(mess, pass)
-    document.getElementById('id').value = id.toString(16)
+    document.getElementById('id').value = hexToBase64(id.toString(16))
     if mess == ""
       output = "Success! Here's the unique ID corresponding to your Password."
       document.getElementById('sig').value = ""
     else
-      document.getElementById('sig').value = sig.toString(16)
       output = "Success! Send the message, along with the Signature+ID so \
       they can verify the message is indeed from you."
+      document.getElementById('sig').value = hexToBase64(sig.toString(16))
     col = "green"
   else if id.length > 0 and sig.length > 0
-    verified = verifySig(mess, id, sig)
+    verified = verifySig(mess, base64ToHex(id), base64ToHex(sig))
     if verified
       output = "Verification SUCCESS! The signature does indeed match \
       the message from this ID. The other party used the correct password \
