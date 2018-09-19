@@ -4,24 +4,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/big-integer/1.6.36/BigInteger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 <script src="js/signature.js"></script>
+<style>
+  li {
+    width: 200px;
+    word-wrap: break-word;
+  }
+  p {
+    width: 200px;
+    word-wrap: break-word;
+  }
+</style>
 
 <h1>
-Perform secure message signing / verification!
+  Perform secure message signing / verification!
 </h1>
 <p>
-Enter a Password to get your unique ID!
-</p>
-<p>
-OR
-</p>
-<p>
-Enter a Password+Message, to get an ID+Signature verifying the Message was sent by you.
-</p>
-<p>
-OR
-</p>
-<p>
-Enter a Message+ID+Signature to verify if the Signature matches the Message+ID of the sender.
+  Uses:
+  <ul>
+    <li>Enter a Password to get your unique ID!</li>
+    <li>Enter a Password+Message, to get an ID+Signature verifying the Message was sent by you.</li>
+    <li>Enter a Message+ID+Signature to verify if the Signature matches the Message+ID of the sender.</li>
+  </ul>
 </p>
 <p>
 Unless they know your password, no one can produce a correct signature for a message from your ID. 
@@ -54,6 +57,11 @@ Signature:
 <button onclick="myFunction()">Go!</button>
 
 <p id="out"></p>
+<br><br>
+<p>
+  This website uses the <a href="https://en.wikipedia.org/wiki/Digital_Signature_Algorithm">Digital Signature Algorithm</a> 
+  with the highest 3072-bit security and SHA-256.
+</p>
 
 </body>
 </html>
