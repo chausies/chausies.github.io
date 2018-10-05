@@ -139,3 +139,19 @@ myFunction = ->
   out.innerHTML = output
   out.style.color = col
   return
+
+blurAll = ->
+  tmp = document.createElement("input")
+  document.body.appendChild(tmp)
+  tmp.focus()
+  document.body.removeChild(tmp)
+  return
+
+for id in ['pass', 'id', 'sig']
+  input = document.getElementById(id)
+  input.addEventListener 'keydown', (event) ->
+    if event.keyCode == 13
+      event.preventDefault()
+      blurAll()
+      myFunction()
+    return

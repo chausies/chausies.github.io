@@ -7,7 +7,6 @@
    type="text/javascript"
    src="https://rawgit.com/davidshimjs/qrcodejs/master/qrcode.min.js"
 ></script>
-<script src="js/signature.js"></script>
 <style>
   li {
     width: 420px;
@@ -74,20 +73,7 @@ Signature:
   ID QR codes can be scanned to get the base64 ID.
 </p>
 
-<script>
-var ref, input;
-ref = ["pass", "id", "sig"];
-for (j = 0, len = ref.length; j < len; j++) {
-  id = ref[j];
-  input = document.getElementById(id);
-  input.addEventListener('keydown', function(event) {
-    if (event.keyCode === 13) {
-      event.preventDefault();
-      myFunction();
-    }
-  });
-}
-</script>
+<script src="js/signature.js"></script>
 
 </body>
 </html>
