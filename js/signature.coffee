@@ -84,16 +84,32 @@ verifySig = (mess, id, sig) ->
     verified = v.eq(r)
   return verified
 
+makeCode = (text) ->
+  document.getElementById('qrcode').innerHTML = ''
+  if !text
+    document.getElementById('idqr').innerHTML = ''
+    return
+  document.getElementById('idqr').innerHTML = 'ID (QR code):'
+  qrcode = new QRCode('qrcode',
+    width: 240
+    height: 240
+    correctLevel: QRCode.CorrectLevel.H)
+  qrcode.makeCode text
+  return
+
 myFunction = ->
   mess = document.getElementById('mess').value
   id   = document.getElementById('id').value
   sig  = document.getElementById('sig').value
   pass = document.getElementById('pass').value
+  makeCode()
   if mess.length == 0
     mess = ""
   if pass.length != 0
     [id, sig] = signMessage(mess, pass)
-    document.getElementById('id').value = hexToBase64(id.toString(16))
+    idString = hexToBase64(id.toString(16))
+    document.getElementById('id').value = idString
+    makeCode(idString)
     if mess == ""
       output = "Success! Here's the unique ID corresponding to your Password."
       document.getElementById('sig').value = ""

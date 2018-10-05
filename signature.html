@@ -3,6 +3,10 @@
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/big-integer/1.6.36/BigInteger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+<script
+   type="text/javascript"
+   src="https://rawgit.com/davidshimjs/qrcodejs/master/qrcode.min.js"
+></script>
 <script src="js/signature.js"></script>
 <style>
   li {
@@ -13,6 +17,9 @@
     width: 420px;
     word-wrap: break-word;
   }
+  #qrcode {
+    margin-top:15px;
+  }
 </style>
 
 <h1>
@@ -20,12 +27,12 @@
 </h1>
 <p>
   Uses:
-  <ul>
-    <li>Enter a Password to get your unique ID!</li>
-    <li>Enter a Password+Message, to get an ID+Signature verifying the Message was sent by you.</li>
-    <li>Enter a Message+ID+Signature to verify if the Signature matches the Message+ID of the sender.</li>
-  </ul>
 </p>
+<ul>
+  <li>Enter a Password to get your unique ID!</li>
+  <li>Enter a Password+Message, to get an ID+Signature verifying the Message was sent by you.</li>
+  <li>Enter a Message+ID+Signature to verify if the Signature matches the Message+ID of the sender.</li>
+</ul>
 <p>
 Unless they know your password, no one can produce a correct signature for a message from your ID. 
 </p>
@@ -47,6 +54,8 @@ Password: <input type="password" id="pass", size=40>
 ID:
 </p>
 <textarea rows="4" cols="50" id="id"></textarea>
+<p id="idqr"></p>
+<div id="qrcode"></div>
 <p>
 Signature: 
 </p>
@@ -61,8 +70,24 @@ Signature:
 <p>
   This website uses the <a href="https://en.wikipedia.org/wiki/Digital_Signature_Algorithm">Digital Signature Algorithm</a> 
   with the highest 3072-bit security and SHA-256 hashing. 
-  ID's and Signatures are provided and accepted in base64.
+  ID's and Signatures are provided and accepted in base64. 
+  ID QR codes can be scanned to get the base64 ID.
 </p>
+
+<script>
+var ref, input;
+ref = ["pass", "id", "sig"];
+for (j = 0, len = ref.length; j < len; j++) {
+  id = ref[j];
+  input = document.getElementById(id);
+  input.addEventListener('keydown', function(event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      myFunction();
+    }
+  });
+}
+</script>
 
 </body>
 </html>
