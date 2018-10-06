@@ -97,7 +97,7 @@ makeCode = function(text) {
 };
 
 myFunction = function() {
-  var col, id, idString, mess, out, output, pass, ref, sig, verified;
+  var col, id, idString, mess, out, output, pass, ref, scrollToOut, sig, verified;
   mess = document.getElementById('mess').value;
   id = document.getElementById('id').value;
   sig = document.getElementById('sig').value;
@@ -135,6 +135,10 @@ myFunction = function() {
   out = document.getElementById("out");
   out.innerHTML = output;
   out.style.color = col;
+  scrollToOut = function() {
+    return out.scrollIntoView(false);
+  };
+  setTimeout(scrollToOut, 100);
 };
 
 blurAll = function() {
