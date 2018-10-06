@@ -138,6 +138,9 @@ myFunction = ->
   out = document.getElementById("out")
   out.innerHTML = output
   out.style.color = col
+  scrollToOut = ->
+    out.scrollIntoView(false)
+  setTimeout(scrollToOut, 100)
   return
 
 blurAll = ->
