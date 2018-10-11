@@ -39,6 +39,11 @@ getRandIntNBits = ->
   return n
 
 hexToBase64 = (hexstring) ->
+  r = hexstring.length % 3
+  if r == 1
+    hexstring = '0' + hexstring
+  if r == 2
+    hexstring = '00' + hexstring
   return btoa hexstring.match(/\w{2}/g).map((a) ->
     return String.fromCharCode parseInt(a, 16)
   ).join('')
