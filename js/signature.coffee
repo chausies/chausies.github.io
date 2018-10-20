@@ -103,6 +103,14 @@ makeCode = (text) ->
   return
 
 myFunction = ->
+  out = document.getElementById("out")
+  out.innerHTML = "Working..."
+  out.style.color = 'blue'
+  out.scrollIntoView(false)
+  setTimeout(runVerification, 20)
+  return
+
+runVerification = ->
   mess = document.getElementById('mess').value
   id   = document.getElementById('id').value
   sig  = document.getElementById('sig').value
@@ -145,6 +153,7 @@ myFunction = ->
   out.style.color = col
   scrollToOut = ->
     out.scrollIntoView(false)
+    return
   setTimeout(scrollToOut, 100)
   return
 
