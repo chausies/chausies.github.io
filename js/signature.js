@@ -1,4 +1,4 @@
-var L, N, base64ToHex, blurAll, g, getRandIntNBits, hexToBase64, id, input, j, len, makeCode, myFunction, p, q, ref, signMessage, verifySig;
+var L, N, base64ToHex, blurAll, g, getRandIntNBits, hexToBase64, id, input, j, len, makeCode, myFunction, p, q, ref, runVerification, signMessage, verifySig;
 
 N = 256;
 
@@ -105,6 +105,15 @@ makeCode = function(text) {
 };
 
 myFunction = function() {
+  var out;
+  out = document.getElementById("out");
+  out.innerHTML = "Working...";
+  out.style.color = 'blue';
+  out.scrollIntoView(false);
+  setTimeout(runVerification, 20);
+};
+
+runVerification = function() {
   var col, id, idString, mess, out, output, pass, ref, scrollToOut, sig, verified;
   mess = document.getElementById('mess').value;
   id = document.getElementById('id').value;
@@ -144,7 +153,7 @@ myFunction = function() {
   out.innerHTML = output;
   out.style.color = col;
   scrollToOut = function() {
-    return out.scrollIntoView(false);
+    out.scrollIntoView(false);
   };
   setTimeout(scrollToOut, 100);
 };
