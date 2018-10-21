@@ -31,7 +31,7 @@ g = bigInt("18089788951392532911776043690799320520661341667213451537940756220295
 9633240180370391695859886228990113737418763820851671056483908727767604\
 178598696985554")
 
-base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"
 charsToBinary = {}
 for i in [0...base64urlChars.length]
   st = i.toString(2)
@@ -111,6 +111,14 @@ makeCode = (text) ->
   return
 
 myFunction = ->
+  out = document.getElementById("out")
+  out.innerHTML = "Working..."
+  out.style.color = 'blue'
+  out.scrollIntoView(false)
+  setTimeout(runVerification, 20)
+  return
+
+runVerification = ->
   mess = document.getElementById('mess').value
   id   = document.getElementById('id').value
   sig  = document.getElementById('sig').value
@@ -153,6 +161,7 @@ myFunction = ->
   out.style.color = col
   scrollToOut = ->
     out.scrollIntoView(false)
+    return
   setTimeout(scrollToOut, 100)
   return
 
@@ -163,6 +172,7 @@ blurAll = ->
   document.body.removeChild(tmp)
   return
 
+# Make enter key work to run things
 for id in ['pass', 'id', 'sig']
   input = document.getElementById(id)
   input.addEventListener 'keydown', (event) ->
@@ -171,3 +181,14 @@ for id in ['pass', 'id', 'sig']
       blurAll()
       myFunction()
     return
+  
+# Tooltip in ending blurb explaining custom base64  
+tippy '#base64',
+  content: 'Zero-padding is done in the front. + and / are replaced with ~ and _'
+  trigger: 'click'
+  delay: 100
+  arrow: true
+  arrowType: 'round'
+  size: 'large'
+  duration: 500
+  animation: 'scale'
