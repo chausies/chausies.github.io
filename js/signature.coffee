@@ -31,6 +31,14 @@ g = bigInt("18089788951392532911776043690799320520661341667213451537940756220295
 9633240180370391695859886228990113737418763820851671056483908727767604\
 178598696985554")
 
+base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_"
+charsToBinary = {}
+for i in [0...base64urlChars.length]
+  st = i.toString(2)
+  st = "000000".substr(st.length) + st # 0-pad to get sextets (64 = 2^6)
+  charsToBinary[base64urlChars[i]] = st
+
+
 getRandIntNBits = ->
   n = bigInt(0)
   bytes =  window.crypto.getRandomValues new Uint8Array(N/8)
@@ -38,25 +46,23 @@ getRandIntNBits = ->
     n = n.shiftLeft(8).plus(byte)
   return n
 
-hexToBase64 = (hexstring) ->
-  r = hexstring.length % 3
-  if r == 1
-    hexstring = '0' + hexstring
-  if r == 2
-    hexstring = '00' + hexstring
-  return btoa hexstring.match(/\w{2}/g).map((a) ->
-    return String.fromCharCode parseInt(a, 16)
-  ).join('')
- 
-base64ToHex = (base64) ->
-  raw = atob(base64)
-  Hex = ''
-  i = 0
-  while i < raw.length
-    _hex = raw.charCodeAt(i).toString(16)
-    Hex += if _hex.length == 2 then _hex else '0' + _hex
-    i++
-  return Hex.toUpperCase()
+base64urlToBin = (base64url) ->
+  bin = ''
+  for char in base64url
+    if not (char in base64urlChars)
+      return null
+    bin = bin + charsToBinary[char]
+  return bin
+
+binToBase64url = (bin) ->
+  base64url = ''
+  i = bin.length - 6
+  while i > 0
+    # process in sextets because 64 = 2^6
+    base64url = base64urlChars[parseInt(bin[i...i+6], 2)] + base64url
+    i -= 6
+  base64url = base64urlChars[parseInt(bin[0...i+6], 2)] + base64url
+  return base64url
 
 signMessage = (mess, pass) ->
   x = bigInt(sha256(pass), 16)
@@ -75,9 +81,11 @@ signMessage = (mess, pass) ->
   return [y, sig]
 
 verifySig = (mess, id, sig) ->
+  if (id == null) or (sig == null)
+    return false
   h = bigInt(sha256(mess), 16)
-  y = bigInt(id, 16)
-  sig = bigInt(sig, 16)
+  y = bigInt(id, 2)
+  sig = bigInt(sig, 2)
   r = sig.shiftRight(N)
   s = sig.minus(r.shiftLeft(N))
   verified = false
@@ -103,14 +111,6 @@ makeCode = (text) ->
   return
 
 myFunction = ->
-  out = document.getElementById("out")
-  out.innerHTML = "Working..."
-  out.style.color = 'blue'
-  out.scrollIntoView(false)
-  setTimeout(runVerification, 20)
-  return
-
-runVerification = ->
   mess = document.getElementById('mess').value
   id   = document.getElementById('id').value
   sig  = document.getElementById('sig').value
@@ -120,7 +120,7 @@ runVerification = ->
     mess = ""
   if pass.length != 0
     [id, sig] = signMessage(mess, pass)
-    idString = hexToBase64(id.toString(16))
+    idString = binToBase64url(id.toString(2))
     document.getElementById('id').value = idString
     makeCode(idString)
     if mess == ""
@@ -129,10 +129,10 @@ runVerification = ->
     else
       output = "Success! Send the message, along with the Signature+ID so \
       they can verify the message is indeed from you."
-      document.getElementById('sig').value = hexToBase64(sig.toString(16))
+      document.getElementById('sig').value = binToBase64url(sig.toString(2))
     col = "green"
   else if id.length > 0 and sig.length > 0
-    verified = verifySig(mess, base64ToHex(id), base64ToHex(sig))
+    verified = verifySig(mess, base64urlToBin(id), base64urlToBin(sig))
     if verified
       output = "Verification SUCCESS! The signature does indeed match \
       the message from this ID. The other party used the correct password \
@@ -153,7 +153,6 @@ runVerification = ->
   out.style.color = col
   scrollToOut = ->
     out.scrollIntoView(false)
-    return
   setTimeout(scrollToOut, 100)
   return
 
