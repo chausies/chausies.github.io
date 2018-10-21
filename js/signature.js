@@ -1,4 +1,5 @@
-var L, N, base64ToHex, blurAll, g, getRandIntNBits, hexToBase64, id, input, j, len, makeCode, myFunction, p, q, ref, runVerification, signMessage, verifySig;
+var L, N, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, g, getRandIntNBits, i, id, input, j, l, len, makeCode, myFunction, p, q, ref, ref1, signMessage, st, verifySig,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 N = 256;
 
@@ -10,42 +11,50 @@ p = bigInt("19595941373362720799002952304532452302322831381276961536582029029482
 
 g = bigInt("1808978895139253291177604369079932052066134166721345153794075622029518665386563996205328937918210230542097401932921022862848530434415556273819709447374554647913381010895013237008734425065956455445156180453994714737279595156717931860425117350741663664350267313127049623997517241945129206195271017471514332959174909981906073571177218527209160776531534688264636561880208353239778596147942855320577213988275525316476460328605863082737419756304037603085043514087590383589103128152735289910584622911150453482649604508516918006756782126018592034681269851361449700639859514602488451449854827124264805903465814764997123513891324185537282768147198485965971512959876668076650580440225244089311685177043096725019797507128259428618797013598025156447787896675971935758697321276982909954217432106711597060924861723215592970692094604335597904170328520658729633240180370391695859886228990113737418763820851671056483908727767604178598696985554");
 
+base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+
+charsToBinary = {};
+
+for (i = j = 0, ref = base64urlChars.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+  st = i.toString(2);
+  st = "000000".substr(st.length) + st;
+  charsToBinary[base64urlChars[i]] = st;
+}
+
 getRandIntNBits = function() {
-  var byte, bytes, j, len, n;
+  var byte, bytes, l, len, n;
   n = bigInt(0);
   bytes = window.crypto.getRandomValues(new Uint8Array(N / 8));
-  for (j = 0, len = bytes.length; j < len; j++) {
-    byte = bytes[j];
+  for (l = 0, len = bytes.length; l < len; l++) {
+    byte = bytes[l];
     n = n.shiftLeft(8).plus(byte);
   }
   return n;
 };
 
-hexToBase64 = function(hexstring) {
-  var r;
-  r = hexstring.length % 3;
-  if (r === 1) {
-    hexstring = '0' + hexstring;
+base64urlToBin = function(base64url) {
+  var bin, char, l, len;
+  bin = '';
+  for (l = 0, len = base64url.length; l < len; l++) {
+    char = base64url[l];
+    if (!(indexOf.call(base64urlChars, char) >= 0)) {
+      return null;
+    }
+    bin = bin + charsToBinary[char];
   }
-  if (r === 2) {
-    hexstring = '00' + hexstring;
-  }
-  return btoa(hexstring.match(/\w{2}/g).map(function(a) {
-    return String.fromCharCode(parseInt(a, 16));
-  }).join(''));
+  return bin;
 };
 
-base64ToHex = function(base64) {
-  var Hex, _hex, i, raw;
-  raw = atob(base64);
-  Hex = '';
-  i = 0;
-  while (i < raw.length) {
-    _hex = raw.charCodeAt(i).toString(16);
-    Hex += _hex.length === 2 ? _hex : '0' + _hex;
-    i++;
+binToBase64url = function(bin) {
+  var base64url;
+  base64url = '';
+  i = bin.length - 6;
+  while (i > 0) {
+    base64url = base64urlChars[parseInt(bin.slice(i, i + 6), 2)] + base64url;
+    i -= 6;
   }
-  return Hex.toUpperCase();
+  base64url = base64urlChars[parseInt(bin.slice(0, i + 6), 2)] + base64url;
+  return base64url;
 };
 
 signMessage = function(mess, pass) {
@@ -72,9 +81,12 @@ signMessage = function(mess, pass) {
 
 verifySig = function(mess, id, sig) {
   var h, r, s, u1, u2, v, verified, w, y;
+  if ((id === null) || (sig === null)) {
+    return false;
+  }
   h = bigInt(sha256(mess), 16);
-  y = bigInt(id, 16);
-  sig = bigInt(sig, 16);
+  y = bigInt(id, 2);
+  sig = bigInt(sig, 2);
   r = sig.shiftRight(N);
   s = sig.minus(r.shiftLeft(N));
   verified = false;
@@ -105,16 +117,7 @@ makeCode = function(text) {
 };
 
 myFunction = function() {
-  var out;
-  out = document.getElementById("out");
-  out.innerHTML = "Working...";
-  out.style.color = 'blue';
-  out.scrollIntoView(false);
-  setTimeout(runVerification, 20);
-};
-
-runVerification = function() {
-  var col, id, idString, mess, out, output, pass, ref, scrollToOut, sig, verified;
+  var col, id, idString, mess, out, output, pass, ref1, scrollToOut, sig, verified;
   mess = document.getElementById('mess').value;
   id = document.getElementById('id').value;
   sig = document.getElementById('sig').value;
@@ -124,8 +127,8 @@ runVerification = function() {
     mess = "";
   }
   if (pass.length !== 0) {
-    ref = signMessage(mess, pass), id = ref[0], sig = ref[1];
-    idString = hexToBase64(id.toString(16));
+    ref1 = signMessage(mess, pass), id = ref1[0], sig = ref1[1];
+    idString = binToBase64url(id.toString(2));
     document.getElementById('id').value = idString;
     makeCode(idString);
     if (mess === "") {
@@ -133,11 +136,11 @@ runVerification = function() {
       document.getElementById('sig').value = "";
     } else {
       output = "Success! Send the message, along with the Signature+ID so they can verify the message is indeed from you.";
-      document.getElementById('sig').value = hexToBase64(sig.toString(16));
+      document.getElementById('sig').value = binToBase64url(sig.toString(2));
     }
     col = "green";
   } else if (id.length > 0 && sig.length > 0) {
-    verified = verifySig(mess, base64ToHex(id), base64ToHex(sig));
+    verified = verifySig(mess, base64urlToBin(id), base64urlToBin(sig));
     if (verified) {
       output = "Verification SUCCESS! The signature does indeed match the message from this ID. The other party used the correct password for their ID.";
       col = "green";
@@ -153,7 +156,7 @@ runVerification = function() {
   out.innerHTML = output;
   out.style.color = col;
   scrollToOut = function() {
-    out.scrollIntoView(false);
+    return out.scrollIntoView(false);
   };
   setTimeout(scrollToOut, 100);
 };
@@ -166,9 +169,9 @@ blurAll = function() {
   document.body.removeChild(tmp);
 };
 
-ref = ['pass', 'id', 'sig'];
-for (j = 0, len = ref.length; j < len; j++) {
-  id = ref[j];
+ref1 = ['pass', 'id', 'sig'];
+for (l = 0, len = ref1.length; l < len; l++) {
+  id = ref1[l];
   input = document.getElementById(id);
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
