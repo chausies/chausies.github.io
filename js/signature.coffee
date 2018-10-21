@@ -192,3 +192,17 @@ tippy '#base64',
   size: 'large'
   duration: 500
   animation: 'scale'
+
+# Highlight ID/Signature on first click (for ease of copying/deleting)
+do ->
+  area = document.querySelector('.highlight')
+  clicked = false
+  area.addEventListener 'click', ->
+    if !clicked
+      area.select()
+      clicked = true
+    return
+  area.addEventListener 'blur', ->
+    clicked = false
+    return
+  return
