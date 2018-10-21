@@ -7,6 +7,7 @@
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/big-integer/1.6.36/BigInteger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tippy.js/3.0.6/tippy.all.min.js"></script>
 <script
    type="text/javascript"
    src="https://rawgit.com/davidshimjs/qrcodejs/master/qrcode.min.js"
@@ -81,8 +82,8 @@ Signature:
 <p>
   This website uses the <a href="https://en.wikipedia.org/wiki/Digital_Signature_Algorithm">Digital Signature Algorithm</a> 
   with the highest 3072-bit security and SHA-256 hashing. 
-  ID's and Signatures are provided and accepted in <a href="https://en.wikipedia.org/wiki/Base64#URL_applications">base64url</a>, 
-  with 0-padding in the front. ID QR codes can be scanned to get the base64url ID.
+  ID's and Signatures are provided and accepted in <span id="base64" style="border-bottom: 1px dotted">a custom base64</span>. 
+  ID QR codes can be scanned to get the base64 ID.
 </p>
 <p>
   This webapp is released under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause license</a>.
