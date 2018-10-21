@@ -195,14 +195,18 @@ tippy '#base64',
 
 # Highlight ID/Signature on first click (for ease of copying/deleting)
 do ->
-  area = document.querySelector('.highlight')
-  clicked = false
-  area.addEventListener 'click', ->
-    if !clicked
-      area.select()
-      clicked = true
-    return
-  area.addEventListener 'blur', ->
-    clicked = false
-    return
+  areas = document.querySelectorAll('.highlight')
+  clicked = Array(areas.length).fill(false)
+  for i in [0...areas.length]
+    do ->
+      j = i
+      area = areas[j]
+      area.addEventListener 'click', ->
+        if !clicked[j]
+          area.select()
+          clicked[j] = true
+        return
+      area.addEventListener 'blur', ->
+        clicked[j] = false
+        return
   return

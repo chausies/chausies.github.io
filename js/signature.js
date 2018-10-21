@@ -1,4 +1,4 @@
-var L, N, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, g, getRandIntNBits, i, id, input, j, l, len, makeCode, myFunction, p, q, ref, ref1, runVerification, signMessage, st, verifySig,
+var L, N, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, g, getRandIntNBits, i, id, input, l, len, m, makeCode, myFunction, p, q, ref, ref1, runVerification, signMessage, st, verifySig,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 N = 256;
@@ -15,28 +15,28 @@ base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789
 
 charsToBinary = {};
 
-for (i = j = 0, ref = base64urlChars.length; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+for (i = l = 0, ref = base64urlChars.length; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
   st = i.toString(2);
   st = "000000".substr(st.length) + st;
   charsToBinary[base64urlChars[i]] = st;
 }
 
 getRandIntNBits = function() {
-  var byte, bytes, l, len, n;
+  var byte, bytes, len, m, n;
   n = bigInt(0);
   bytes = window.crypto.getRandomValues(new Uint8Array(N / 8));
-  for (l = 0, len = bytes.length; l < len; l++) {
-    byte = bytes[l];
+  for (m = 0, len = bytes.length; m < len; m++) {
+    byte = bytes[m];
     n = n.shiftLeft(8).plus(byte);
   }
   return n;
 };
 
 base64urlToBin = function(base64url) {
-  var bin, char, l, len;
+  var bin, char, len, m;
   bin = '';
-  for (l = 0, len = base64url.length; l < len; l++) {
-    char = base64url[l];
+  for (m = 0, len = base64url.length; m < len; m++) {
+    char = base64url[m];
     if (!(indexOf.call(base64urlChars, char) >= 0)) {
       return null;
     }
@@ -179,8 +179,8 @@ blurAll = function() {
 };
 
 ref1 = ['pass', 'id', 'sig'];
-for (l = 0, len = ref1.length; l < len; l++) {
-  id = ref1[l];
+for (m = 0, len = ref1.length; m < len; m++) {
+  id = ref1[m];
   input = document.getElementById(id);
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
@@ -203,18 +203,26 @@ tippy('#base64', {
 });
 
 (function() {
-  var area, clicked;
-  area = document.querySelector('.highlight');
-  clicked = false;
-  area.addEventListener('click', function() {
-    if (!clicked) {
-      area.select();
-      clicked = true;
-    }
-  });
-  area.addEventListener('blur', function() {
-    clicked = false;
-  });
+  var areas, clicked, fn, o, ref2;
+  areas = document.querySelectorAll('.highlight');
+  clicked = Array(areas.length).fill(false);
+  fn = function() {
+    var area, j;
+    j = i;
+    area = areas[j];
+    area.addEventListener('click', function() {
+      if (!clicked[j]) {
+        area.select();
+        clicked[j] = true;
+      }
+    });
+    return area.addEventListener('blur', function() {
+      clicked[j] = false;
+    });
+  };
+  for (i = o = 0, ref2 = areas.length; 0 <= ref2 ? o < ref2 : o > ref2; i = 0 <= ref2 ? ++o : --o) {
+    fn();
+  }
 })();
 
 // ---
