@@ -81,8 +81,11 @@ Signature:
 <p>
   This website uses the <a href="https://en.wikipedia.org/wiki/Digital_Signature_Algorithm">Digital Signature Algorithm</a> 
   with the highest 3072-bit security and SHA-256 hashing. 
-  ID's and Signatures are provided and accepted in base64. 
-  ID QR codes can be scanned to get the base64 ID.
+  ID's and Signatures are provided and accepted in <a href="https://en.wikipedia.org/wiki/Base64#URL_applications">base64url</a>, 
+  with 0-padding in the front. ID QR codes can be scanned to get the base64url ID.
+</p>
+<p>
+  This webapp is released under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause license</a>.
 </p>
 
 <script src="js/signature.js"></script>
