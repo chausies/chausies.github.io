@@ -184,9 +184,9 @@ makeCode = function(text) {
   }
   document.getElementById('idqr').innerHTML = 'ID (QR code):';
   qrcode = new QRCode('qrcode', {
-    width: 180,
-    height: 180,
-    correctLevel: QRCode.CorrectLevel.H
+    width: 100,
+    height: 100,
+    correctLevel: QRCode.CorrectLevel.M
   });
   qrcode.makeCode(text);
 };
