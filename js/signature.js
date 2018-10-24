@@ -1,15 +1,5 @@
-var L, N, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, g, getRandIntNBits, i, id, input, l, len, m, makeCode, myFunction, p, q, ref, ref1, runVerification, signMessage, st, verifySig,
+var C, L, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, elAdd, elTimes, getRandIntNBits, hash, i, id, input, l, len, makeCode, myFunction, neg, o, onCurve, ref, ref1, runVerification, signMessage, st, verifySig,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
-
-N = 256;
-
-L = 3072;
-
-q = bigInt("49033245831086025454248374804313550553890476843957890600488261886959243458577");
-
-p = bigInt("1959594137336272079900295230453245230232283138127696153658202902948229752004244921442047844636785036005010768857345906862213545610698056468291443530544652617138971818247496754436444432216110151705642414039689451881699712467175999435306350274792539382973437402400695463411949654639768727536719625723161945068103294061530322573714821021804938183897023191772676505064921119304536453461109499449391925673827865235939224457837031681778359095714607269291571835800126619946098391763668941090158691540911011595705968610440958742069714835690036601632748056285082956092470267193211142954828689196965324708483033700674554749014546589645227093855318162430637658106618782395912187022895651324254571622863375452295307070076028880744889966612244847778762339190021445171790417439325557157981841089305267299764941504636387469977687465858479715402322538708314995237534877498553843234644629587594098254519918894765294860700515304583554234869667");
-
-g = bigInt("1808978895139253291177604369079932052066134166721345153794075622029518665386563996205328937918210230542097401932921022862848530434415556273819709447374554647913381010895013237008734425065956455445156180453994714737279595156717931860425117350741663664350267313127049623997517241945129206195271017471514332959174909981906073571177218527209160776531534688264636561880208353239778596147942855320577213988275525316476460328605863082737419756304037603085043514087590383589103128152735289910584622911150453482649604508516918006756782126018592034681269851361449700639859514602488451449854827124264805903465814764997123513891324185537282768147198485965971512959876668076650580440225244089311685177043096725019797507128259428618797013598025156447787896675971935758697321276982909954217432106711597060924861723215592970692094604335597904170328520658729633240180370391695859886228990113737418763820851671056483908727767604178598696985554");
 
 base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_";
 
@@ -21,22 +11,87 @@ for (i = l = 0, ref = base64urlChars.length; 0 <= ref ? l < ref : l > ref; i = 0
   charsToBinary[base64urlChars[i]] = st;
 }
 
+hash = sha256;
+
+L = 256;
+
+C = {
+  P: bigInt("FFFFFFFF 00000001 00000000 00000000 00000000 FFFFFFFF FFFFFFFF FFFFFFFF".replace(/\s+/g, ''), 16),
+  A: bigInt("FFFFFFFF 00000001 00000000 00000000 00000000 FFFFFFFF FFFFFFFF FFFFFFFC".replace(/\s+/g, ''), 16),
+  B: bigInt("5AC635D8 AA3A93E7 B3EBBD55 769886BC 651D06B0 CC53B0F6 3BCE3C3E 27D2604B".replace(/\s+/g, ''), 16),
+  G: [bigInt("6B17D1F2 E12C4247 F8BCE6E5 63A440F2 77037D81 2DEB33A0 F4A13945 D898C296".replace(/\s+/g, ''), 16), bigInt("4FE342E2 FE1A7F9B 8EE7EB4A 7C0F9E16 2BCE3357 6B315ECE CBB64068 37BF51F5".replace(/\s+/g, ''), 16)],
+  N: bigInt("FFFFFFFF 00000000 FFFFFFFF FFFFFFFF BCE6FAAD A7179E84 F3B9CAC2 FC632551".replace(/\s+/g, ''), 16),
+  Inf: "O"
+};
+
+neg = function(a, p) {
+  if (bigInt(a).mod(p).isZero()) {
+    return bigInt.zero;
+  }
+  return bigInt(a).divide(p).plus(1).times(p).minus(a);
+};
+
+onCurve = function(p) {
+  var test, y2;
+  y2 = p[1].modPow(2, C.P);
+  test = p[0].modPow(3, C.P).plus(C.A.times(p[0])).plus(C.B).mod(C.P);
+  return y2.eq(test);
+};
+
+elAdd = function(p1, p2) {
+  var m, xr, yr;
+  if (p1 === C.Inf) {
+    return p2;
+  }
+  if (p2 === C.Inf) {
+    return p1;
+  }
+  p1 = [p1[0].mod(C.P), p1[1].mod(C.P)];
+  p2 = [p2[0].mod(C.P), p2[1].mod(C.P)];
+  if (p1[0].eq(p2[0])) {
+    if (p1[1].plus(p2[1]).mod(C.P).isZero()) {
+      return C.Inf;
+    }
+    m = p1[0].modPow(2, C.P).times(3).plus(C.A).times(p1[1].times(2).modInv(C.P)).mod(C.P);
+  } else {
+    m = (p2[1].plus(neg(p1[1], C.P))).times((p2[0].plus(neg(p1[0], C.P))).modInv(C.P)).mod(C.P);
+  }
+  xr = m.modPow(2, C.P).plus(neg(p1[0], C.P)).plus(neg(p2[0], C.P)).mod(C.P);
+  yr = p1[1].plus(m.times(xr.plus(neg(p1[0], C.P))));
+  return [xr, neg(yr, C.P)];
+};
+
+elTimes = function(p, n) {
+  var dub, res;
+  n = bigInt(n);
+  res = C.Inf;
+  dub = p;
+  while (!n.isZero()) {
+    if (n.and(1).eq(1)) {
+      res = elAdd(res, dub);
+    }
+    dub = elAdd(dub, dub);
+    n = n.shiftRight(1);
+  }
+  return res;
+};
+
 getRandIntNBits = function() {
-  var byte, bytes, len, m, n;
+  var byte, bytes, len, n, o;
   n = bigInt(0);
   bytes = window.crypto.getRandomValues(new Uint8Array(N / 8));
-  for (m = 0, len = bytes.length; m < len; m++) {
-    byte = bytes[m];
+  for (o = 0, len = bytes.length; o < len; o++) {
+    byte = bytes[o];
     n = n.shiftLeft(8).plus(byte);
   }
   return n;
 };
 
 base64urlToBin = function(base64url) {
-  var bin, char, len, m;
+  var bin, char, len, o;
   bin = '';
-  for (m = 0, len = base64url.length; m < len; m++) {
-    char = base64url[m];
+  for (o = 0, len = base64url.length; o < len; o++) {
+    char = base64url[o];
     if (!(indexOf.call(base64urlChars, char) >= 0)) {
       return null;
     }
@@ -58,44 +113,64 @@ binToBase64url = function(bin) {
 };
 
 signMessage = function(mess, pass) {
-  var done, h, k, r, s, sig, x, y;
-  x = bigInt(sha256(pass), 16);
-  y = g.modPow(x, p);
-  h = bigInt(sha256(mess), 16);
+  var d, done, id, k, p, phrase, q, r, s, sig, z;
+  z = bigInt(hash(mess), 16);
+  d = bigInt(hash(pass), 16);
+  while (d.geq(C.N) || d.leq(1)) {
+    pass = pass + "extra";
+    d = bigInt(hash(pass), 16);
+  }
+  q = elTimes(C.G, d);
+  id = q[0].shiftLeft(L).plus(q[1]);
+  phrase = mess + pass;
   done = false;
   while (!done) {
-    k = getRandIntNBits();
-    if (k.greater(0)) {
-      r = g.modPow(k, p).mod(q);
+    phrase = phrase + 'extra';
+    k = bigInt(hash(phrase), 16);
+    if (k.greater(1) && k.lesser(C.N)) {
+      p = elTimes(C.G, k);
+      r = p[0].mod(C.N);
       if (r.greater(0)) {
-        s = k.modInv(q).times(h.plus(x.times(r))).mod(q);
+        s = z.plus(r.times(d)).times(k.modInv(C.N)).mod(C.N);
         if (s.greater(0)) {
-          sig = r.shiftLeft(N).plus(s);
+          sig = r.shiftLeft(L).plus(s);
           done = true;
         }
       }
     }
   }
-  return [y, sig];
+  return [id, sig];
 };
 
 verifySig = function(mess, id, sig) {
-  var h, r, s, u1, u2, v, verified, w, y;
+  var p, q, r, s, temp, u1, u2, verified, w, z;
   if ((id === null) || (sig === null)) {
     return false;
   }
-  h = bigInt(sha256(mess), 16);
-  y = bigInt(id, 2);
+  id = bigInt(id, 2);
+  temp = id.shiftRight(L);
+  q = [temp, id.minus(temp.shiftLeft(L))];
+  if (!onCurve(q)) {
+    return false;
+  }
+  if (!(elTimes(q, C.N) === C.Inf)) {
+    return false;
+  }
+  z = bigInt(hash(mess), 16);
   sig = bigInt(sig, 2);
-  r = sig.shiftRight(N);
-  s = sig.minus(r.shiftLeft(N));
+  r = sig.shiftRight(L);
+  s = sig.minus(r.shiftLeft(L));
   verified = false;
-  if (r.greater(0) && r.lesser(q) && s.greater(0) && s.lesser(q)) {
-    w = s.modInv(q);
-    u1 = h.times(w).mod(q);
-    u2 = r.times(w).mod(q);
-    v = g.modPow(u1, p).times(y.modPow(u2, p)).mod(p).mod(q);
-    verified = v.eq(r);
+  if (r.greater(0) && r.lesser(C.N) && s.greater(0) && s.lesser(C.N)) {
+    w = s.modInv(C.N);
+    u1 = z.times(w).mod(C.N);
+    u2 = r.times(w).mod(C.N);
+    p = elAdd(elTimes(C.G, u1), elTimes(q, u2));
+    if (p !== C.Inf) {
+      if (r.eq(p[0])) {
+        verified = true;
+      }
+    }
   }
   return verified;
 };
@@ -109,8 +184,8 @@ makeCode = function(text) {
   }
   document.getElementById('idqr').innerHTML = 'ID (QR code):';
   qrcode = new QRCode('qrcode', {
-    width: 240,
-    height: 240,
+    width: 180,
+    height: 180,
     correctLevel: QRCode.CorrectLevel.H
   });
   qrcode.makeCode(text);
@@ -179,8 +254,8 @@ blurAll = function() {
 };
 
 ref1 = ['pass', 'id', 'sig'];
-for (m = 0, len = ref1.length; m < len; m++) {
-  id = ref1[m];
+for (o = 0, len = ref1.length; o < len; o++) {
+  id = ref1[o];
   input = document.getElementById(id);
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
@@ -203,7 +278,7 @@ tippy('#base64', {
 });
 
 (function() {
-  var areas, clicked, fn, o, ref2;
+  var areas, clicked, fn, ref2, t;
   areas = document.querySelectorAll('.highlight');
   clicked = Array(areas.length).fill(false);
   fn = function() {
@@ -220,7 +295,7 @@ tippy('#base64', {
       clicked[j] = false;
     });
   };
-  for (i = o = 0, ref2 = areas.length; 0 <= ref2 ? o < ref2 : o > ref2; i = 0 <= ref2 ? ++o : --o) {
+  for (i = t = 0, ref2 = areas.length; 0 <= ref2 ? t < ref2 : t > ref2; i = 0 <= ref2 ? ++t : --t) {
     fn();
   }
 })();

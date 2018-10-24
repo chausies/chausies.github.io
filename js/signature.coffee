@@ -1,36 +1,3 @@
-N = 256
-L = 3072
-q = bigInt("4903324583108602545424837480431355055389047684395789060048826188695924\
-3458577")
-p = bigInt("1959594137336272079900295230453245230232283138127696153658202902948229\
-7520042449214420478446367850360050107688573459068622135456106980564682\
-9144353054465261713897181824749675443644443221611015170564241403968945\
-1881699712467175999435306350274792539382973437402400695463411949654639\
-7687275367196257231619450681032940615303225737148210218049381838970231\
-9177267650506492111930453645346110949944939192567382786523593922445783\
-7031681778359095714607269291571835800126619946098391763668941090158691\
-5409110115957059686104409587420697148356900366016327480562850829560924\
-7026719321114295482868919696532470848303370067455474901454658964522709\
-3855318162430637658106618782395912187022895651324254571622863375452295\
-3070700760288807448899666122448477787623391900214451717904174393255571\
-5798184108930526729976494150463638746997768746585847971540232253870831\
-4995237534877498553843234644629587594098254519918894765294860700515304\
-583554234869667")
-g = bigInt("1808978895139253291177604369079932052066134166721345153794075622029518\
-6653865639962053289379182102305420974019329210228628485304344155562738\
-1970944737455464791338101089501323700873442506595645544515618045399471\
-4737279595156717931860425117350741663664350267313127049623997517241945\
-1292061952710174715143329591749099819060735711772185272091607765315346\
-8826463656188020835323977859614794285532057721398827552531647646032860\
-5863082737419756304037603085043514087590383589103128152735289910584622\
-9111504534826496045085169180067567821260185920346812698513614497006398\
-5951460248845144985482712426480590346581476499712351389132418553728276\
-8147198485965971512959876668076650580440225244089311685177043096725019\
-7975071282594286187970135980251564477878966759719357586973212769829099\
-5421743210671159706092486172321559297069209460433559790417032852065872\
-9633240180370391695859886228990113737418763820851671056483908727767604\
-178598696985554")
-
 base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"
 charsToBinary = {}
 for i in [0...base64urlChars.length]
@@ -38,6 +5,87 @@ for i in [0...base64urlChars.length]
   st = "000000".substr(st.length) + st # 0-pad to get sextets (64 = 2^6)
   charsToBinary[base64urlChars[i]] = st
 
+
+hash = sha256
+L = 256
+
+# Elliptic curve parameters (secp256r1)
+C = {
+  P: bigInt(
+   "FFFFFFFF 00000001 00000000 00000000
+    00000000 FFFFFFFF FFFFFFFF FFFFFFFF".replace(/\s+/g, '')
+    , 16),
+  A: bigInt(
+   "FFFFFFFF 00000001 00000000 00000000
+    00000000 FFFFFFFF FFFFFFFF FFFFFFFC".replace(/\s+/g, '')
+    , 16),
+  B: bigInt(
+   "5AC635D8 AA3A93E7 B3EBBD55 769886BC 
+    651D06B0 CC53B0F6 3BCE3C3E 27D2604B".replace(/\s+/g, '')
+    , 16),
+  G: [ bigInt(
+   "6B17D1F2 E12C4247 F8BCE6E5 63A440F2 
+    77037D81 2DEB33A0 F4A13945 D898C296".replace(/\s+/g, ''), 16)
+      , bigInt(
+   "4FE342E2 FE1A7F9B 8EE7EB4A 7C0F9E16 
+    2BCE3357 6B315ECE CBB64068 37BF51F5".replace(/\s+/g, '')
+    , 16) ],
+  N: bigInt(
+   "FFFFFFFF 00000000 FFFFFFFF FFFFFFFF 
+    BCE6FAAD A7179E84 F3B9CAC2 FC632551".replace(/\s+/g, '')
+    , 16)
+  Inf: "O"
+}
+
+neg = (a, p) ->
+  # returns -a mod p
+  if bigInt(a).mod(p).isZero()
+    return bigInt.zero
+  return bigInt(a).divide(p).plus(1).times(p).minus(a)
+
+onCurve = (p) ->
+  # checks if the point `p` is on the curve
+  y2 = p[1].modPow(2, C.P)
+  test = p[0].modPow(3, C.P)
+    .plus(C.A.times(p[0]))
+    .plus(C.B).mod(C.P)
+  return y2.eq(test)
+
+elAdd = (p1, p2) ->
+  # does the elliptical add for `p1` and `p2`
+  if p1 == C.Inf
+    return p2
+  if p2 == C.Inf
+    return p1
+  p1 = [p1[0].mod(C.P), p1[1].mod(C.P)]
+  p2 = [p2[0].mod(C.P), p2[1].mod(C.P)]
+  if p1[0].eq(p2[0])
+    if p1[1].plus(p2[1]).mod(C.P).isZero()
+      return C.Inf
+    m = p1[0].modPow(2, C.P).times(3).plus(C.A).times(
+      p1[1].times(2).modInv(C.P)
+    ).mod(C.P)
+  else
+    m = (p2[1].plus(neg(p1[1], C.P))).times(
+      (p2[0].plus(neg(p1[0], C.P))).modInv(C.P)
+    ).mod(C.P)
+  xr = m.modPow(2, C.P)
+    .plus(neg(p1[0], C.P))
+    .plus(neg(p2[0], C.P)).mod(C.P)
+  yr = p1[1].plus(m.times(xr.plus(neg(p1[0], C.P))))
+  return [xr, neg(yr, C.P)]
+
+elTimes = (p, n) ->
+  # does the elliptical multiplication of point `p` by `n`
+  n = bigInt(n)
+  res = C.Inf
+  dub = p
+  while not n.isZero()
+    if n.and(1).eq(1)
+      res = elAdd(res, dub)
+    dub = elAdd(dub, dub)
+    n = n.shiftRight(1)
+  return res
 
 getRandIntNBits = ->
   n = bigInt(0)
@@ -65,36 +113,53 @@ binToBase64url = (bin) ->
   return base64url
 
 signMessage = (mess, pass) ->
-  x = bigInt(sha256(pass), 16)
-  y = g.modPow(x,p)
-  h = bigInt(sha256(mess), 16)
+  z = bigInt(hash(mess), 16)
+  d = bigInt(hash(pass), 16)
+  while d.geq(C.N) or d.leq(1) # outrageously unlikely
+    pass = pass + "extra"
+    d = bigInt(hash(pass), 16)
+  q = elTimes(C.G, d)
+  id = q[0].shiftLeft(L).plus(q[1])
+  phrase = mess + pass
   done = false
   while not done
-    k = getRandIntNBits()
-    if k.greater(0)
-      r = g.modPow(k, p).mod(q)
+    phrase = phrase + 'extra'
+    k = bigInt(hash(phrase), 16)
+    if k.greater(1) and k.lesser(C.N)
+      p = elTimes(C.G, k)
+      r = p[0].mod(C.N)
       if r.greater(0)
-        s = k.modInv(q).times(h.plus(x.times(r))).mod(q)
+        s = z.plus(r.times(d))
+          .times(k.modInv(C.N))
+          .mod(C.N)
         if s.greater(0)
-          sig = r.shiftLeft(N).plus(s)
+          sig = r.shiftLeft(L).plus(s)
           done = true
-  return [y, sig]
+  return [id, sig]
 
 verifySig = (mess, id, sig) ->
   if (id == null) or (sig == null)
     return false
-  h = bigInt(sha256(mess), 16)
-  y = bigInt(id, 2)
+  id = bigInt(id, 2)
+  temp = id.shiftRight(L)
+  q = [temp, id.minus(temp.shiftLeft(L))]
+  if not onCurve(q)
+    return false
+  if not (elTimes(q, C.N) == C.Inf)
+    return false
+  z = bigInt(hash(mess), 16)
   sig = bigInt(sig, 2)
-  r = sig.shiftRight(N)
-  s = sig.minus(r.shiftLeft(N))
+  r = sig.shiftRight(L)
+  s = sig.minus(r.shiftLeft(L))
   verified = false
-  if r.greater(0) and r.lesser(q) and s.greater(0) and s.lesser(q)
-    w = s.modInv(q)
-    u1 = h.times(w).mod(q)
-    u2 = r.times(w).mod(q)
-    v = g.modPow(u1, p).times(y.modPow(u2, p)).mod(p).mod(q)
-    verified = v.eq(r)
+  if r.greater(0) and r.lesser(C.N) and s.greater(0) and s.lesser(C.N)
+    w = s.modInv(C.N)
+    u1 = z.times(w).mod(C.N)
+    u2 = r.times(w).mod(C.N)
+    p = elAdd( elTimes(C.G, u1) , elTimes(q, u2) )
+    if p != C.Inf
+      if r.eq(p[0])
+        verified = true
   return verified
 
 makeCode = (text) ->
@@ -104,8 +169,8 @@ makeCode = (text) ->
     return
   document.getElementById('idqr').innerHTML = 'ID (QR code):'
   qrcode = new QRCode('qrcode',
-    width: 240
-    height: 240
+    width: 180
+    height: 180
     correctLevel: QRCode.CorrectLevel.H)
   qrcode.makeCode text
   return
