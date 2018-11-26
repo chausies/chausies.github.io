@@ -229,7 +229,7 @@ runVerification = ->
       id = idp[0].shiftLeft(L).plus(idp[1])
       idString = binToBase64url(id.toString(2))
       document.getElementById('id').value = idString
-      output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
+      output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
       makeCode(idString)
     else
       encrypted = bigInt(base64urlToBin(enc), 2)
