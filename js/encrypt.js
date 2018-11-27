@@ -1,4 +1,4 @@
-var C, GET, L, aes_dec, aes_enc, base64ToHex, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, decrypt, elAdd, elTimes, encrypt, getKey, getRandIntLBits, hash, hexToBase64, i, id, input, k, l, len, makeCode, myFunction, neg, onCurve, param, q, query, ref, ref1, ref2, runVerification, st,
+var C, GET, L, aes_dec, aes_enc, base64ToHex, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, decrypt, elAdd, elTimes, encrypt, getKey, getRandIntLBits, hash, hexToBase64, i, id, input, k, l, len, makeCode, myFunction, neg, onCurve, out, param, q, query, ref, ref1, ref2, runVerification, sha256, st,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 GET = {};
@@ -17,9 +17,9 @@ for (i = k = 0, ref = query.length; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ?
 
 if ("id" in GET) {
   document.getElementById("id").value = GET["id"];
-  out = document.getElementById("out")
-  out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
-  out.style.color = "green"
+  out = document.getElementById("out");
+  out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!";
+  out.style.color = "green";
 }
 
 base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_";
@@ -31,6 +31,10 @@ for (i = l = 0, ref1 = base64urlChars.length; 0 <= ref1 ? l < ref1 : l > ref1; i
   st = "000000".substr(st.length) + st;
   charsToBinary[base64urlChars[i]] = st;
 }
+
+sha256 = function(input) {
+  return bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256);
+};
 
 hash = sha256;
 
@@ -126,25 +130,11 @@ hexToBase64 = function(hexstring) {
 };
 
 aes_enc = function(pass, data) {
-  var ct, encoded, iv, salt, x;
-  encoded = sjcl.encrypt(pass, data);
-  eval('e = ' + encoded);
-  ct = bigInt(base64ToHex(e.ct), 16);
-  iv = bigInt(base64ToHex(e.iv), 16);
-  salt = bigInt(base64ToHex(e.salt), 16);
-  x = ct.shiftLeft(128).plus(iv).shiftLeft(64).plus(salt);
-  return x;
+  return bigInt(base64ToHex(CryptoJS.AES.encrypt(data, pass).toString()), 16);
 };
 
 aes_dec = function(pass, x) {
-  var ct, data, encoded, iv, o, salt;
-  o = bigInt(1);
-  salt = hexToBase64(x.mod(o.shiftLeft(64)).toString(16));
-  iv = hexToBase64(x.shiftRight(64).mod(o.shiftLeft(128)).toString(16));
-  ct = hexToBase64(x.shiftRight(64 + 128).toString(16));
-  encoded = "{\"iv\":\"" + iv + "\",\"v\":1,\"iter\":10000,\"ks\":128,\"ts\":64,\"mode\":\"ccm\",\"adata\":\"\",\"cipher\":\"aes\",\"salt\":\"" + salt + "\",\"ct\":\"" + ct + "\"}";
-  data = sjcl.decrypt(pass, encoded);
-  return data;
+  return CryptoJS.AES.decrypt(hexToBase64(x.toString(16)), pass).toString(CryptoJS.enc.Utf8);
 };
 
 base64urlToBin = function(base64url) {
@@ -174,10 +164,10 @@ binToBase64url = function(bin) {
 
 getKey = function(pass) {
   var a, key;
-  a = bigInt(hash(pass), 16);
+  a = hash(pass);
   while (a.geq(C.N) || a.leq(1)) {
     pass = pass + "extra";
-    a = bigInt(hash(pass), 16);
+    a = hash(pass);
   }
   key = elTimes(C.G, a);
   return key;
@@ -188,10 +178,10 @@ encrypt = function(mess, id) {
   o = bigInt(1);
   key = [id.shiftRight(L), id.mod(o.shiftLeft(L))];
   r = getRandIntLBits();
-  b = bigInt(hash(mess + r.toString(2)), 16);
+  b = hash(mess + r.toString(2));
   while (b.geq(C.N) || b.leq(1)) {
     r = getRandIntLBits();
-    b = bigInt(hash(mess + r.toString(2)), 16);
+    b = hash(mess + r.toString(2));
   }
   B = elTimes(C.G, b);
   id = B[0].shiftLeft(L).plus(B[1]);
@@ -205,10 +195,10 @@ encrypt = function(mess, id) {
 
 decrypt = function(pass, encrypted) {
   var B, a, e, id, mess, o, sharedKey;
-  a = bigInt(hash(pass), 16);
+  a = hash(pass);
   while (a.geq(C.N) || a.leq(1)) {
     pass = pass + "extra";
-    a = bigInt(hash(pass), 16);
+    a = hash(pass);
   }
   o = bigInt(1);
   id = encrypted.mod(o.shiftLeft(2 * L));
@@ -230,15 +220,14 @@ makeCode = function(text) {
   }
   document.getElementById('idqr').innerHTML = 'ID (QR code):';
   qrcode = new QRCode('qrcode', {
-    width: 100,
-    height: 100,
+    width: 128,
+    height: 128,
     correctLevel: QRCode.CorrectLevel.M
   });
   qrcode.makeCode(text);
 };
 
 myFunction = function() {
-  var out;
   out = document.getElementById("out");
   out.innerHTML = "Working...";
   out.style.color = 'blue';
@@ -247,7 +236,7 @@ myFunction = function() {
 };
 
 runVerification = function() {
-  var col, eString, enc, encrypted, id, idString, idp, mess, out, output, pass, scrollToOut;
+  var col, eString, enc, encrypted, id, idString, idp, mess, output, pass, scrollToOut;
   mess = document.getElementById('mess').value;
   id = document.getElementById('id').value;
   enc = document.getElementById('enc').value;
@@ -261,14 +250,20 @@ runVerification = function() {
       idString = binToBase64url(id.toString(2));
       document.getElementById('id').value = idString;
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>.";
-      makeCode(idString);
+      col = "green";
+      makeCode('https://www.chausies.xyz/encrypt?id=' + idString);
     } else {
       encrypted = bigInt(base64urlToBin(enc), 2);
       mess = decrypt(pass, encrypted);
-      document.getElementById('mess').value = mess;
-      output = "Success! The Encrypted Message has been decrypted!";
+      if (mess.length === 0) {
+        output = "Error! The Password likely doesn't match the Encrypted Message.";
+        col = "red";
+      } else {
+        document.getElementById('mess').value = mess;
+        output = "Success! The Encrypted Message has been decrypted!";
+        col = "green";
+      }
     }
-    col = "green";
   } else {
     if (id.length === 0) {
       if (mess.length === 0) {

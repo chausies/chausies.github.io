@@ -21,6 +21,9 @@ for i in [0...base64urlChars.length]
   charsToBinary[base64urlChars[i]] = st
 
 
+sha256 = (input) ->
+  bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256)
+
 hash = sha256
 L = 256
 
@@ -123,22 +126,16 @@ hexToBase64 = (hexstring) ->
   ).join('')
 
 aes_enc = (pass, data) ->
-  encoded = sjcl.encrypt(pass, data)
-  eval('e = ' + encoded)
-  ct = bigInt(base64ToHex(e.ct), 16)     # variable length
-  iv = bigInt(base64ToHex(e.iv), 16)     # 128-bit
-  salt = bigInt(base64ToHex(e.salt), 16) # 64-bit
-  x = ct.shiftLeft(128).plus(iv).shiftLeft(64).plus(salt)
-  return x
+  return bigInt(
+    base64ToHex(
+      CryptoJS.AES.encrypt(data, pass).toString()
+    )
+    , 16)
 
 aes_dec = (pass, x) ->
-  o = bigInt(1)
-  salt = hexToBase64(x.mod(o.shiftLeft(64)).toString(16))
-  iv = hexToBase64(x.shiftRight(64).mod(o.shiftLeft(128)).toString(16))
-  ct = hexToBase64(x.shiftRight(64+128).toString(16))
-  encoded = "{\"iv\":\"" + iv + "\",\"v\":1,\"iter\":10000,\"ks\":128,\"ts\":64,\"mode\":\"ccm\",\"adata\":\"\",\"cipher\":\"aes\",\"salt\":\"" + salt + "\",\"ct\":\"" + ct + "\"}"
-  data = sjcl.decrypt(pass, encoded)
-  return data
+  return CryptoJS.AES.decrypt(
+    hexToBase64(x.toString(16))
+    , pass).toString(CryptoJS.enc.Utf8)
 
 base64urlToBin = (base64url) ->
   bin = ''
@@ -159,10 +156,10 @@ binToBase64url = (bin) ->
   return base64url
 
 getKey = (pass) ->
-  a = bigInt(hash(pass), 16)
+  a = hash(pass)
   while a.geq(C.N) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    a = bigInt(hash(pass), 16)
+    a = hash(pass)
   key = elTimes(C.G, a)
   return key
 
@@ -170,10 +167,10 @@ encrypt = (mess, id) ->
   o = bigInt(1)
   key = [id.shiftRight(L), id.mod(o.shiftLeft(L))]
   r = getRandIntLBits()
-  b = bigInt(hash(mess + r.toString(2)), 16) # Add random bits to obfuscate
+  b = hash(mess + r.toString(2)) # Add random bits to obfuscate
   while b.geq(C.N) or b.leq(1) # outrageously unlikely
     r = getRandIntLBits()
-    b = bigInt(hash(mess + r.toString(2)), 16)
+    b = hash(mess + r.toString(2))
   B = elTimes(C.G, b)
   id = B[0].shiftLeft(L).plus(B[1])
   sharedKey = elTimes(key, b)
@@ -184,10 +181,10 @@ encrypt = (mess, id) ->
   return encrypted
 
 decrypt = (pass, encrypted) ->
-  a = bigInt(hash(pass), 16)
+  a = hash(pass)
   while a.geq(C.N) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    a = bigInt(hash(pass), 16)
+    a = hash(pass)
   o = bigInt(1)
   id = encrypted.mod(o.shiftLeft(2*L))
   e = encrypted.shiftRight(2*L)
@@ -205,8 +202,8 @@ makeCode = (text) ->
     return
   document.getElementById('idqr').innerHTML = 'ID (QR code):'
   qrcode = new QRCode('qrcode',
-    width: 100
-    height: 100
+    width: 128
+    height: 128
     correctLevel: QRCode.CorrectLevel.M)
   qrcode.makeCode text
   return
@@ -233,13 +230,18 @@ runVerification = ->
       idString = binToBase64url(id.toString(2))
       document.getElementById('id').value = idString
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
-      makeCode(idString)
+      col = "green"
+      makeCode('https://www.chausies.xyz/encrypt?id=' + idString)
     else
       encrypted = bigInt(base64urlToBin(enc), 2)
       mess = decrypt(pass, encrypted)
-      document.getElementById('mess').value = mess
-      output = "Success! The Encrypted Message has been decrypted!"
-    col = "green"
+      if mess.length == 0
+        output = "Error! The Password likely doesn't match the Encrypted Message."
+        col = "red"
+      else
+        document.getElementById('mess').value = mess
+        output = "Success! The Encrypted Message has been decrypted!"
+        col = "green"
   else
     if id.length == 0
       if mess.length == 0
