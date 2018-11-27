@@ -116,18 +116,18 @@ binToBase64url = (bin) ->
   return base64url
 
 signMessage = (mess, pass) ->
-  z = bigInt(hash(mess), 16)
-  d = bigInt(hash(pass), 16)
+  z = hash(mess)
+  d = hash(pass)
   while d.geq(C.N) or d.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    d = bigInt(hash(pass), 16)
+    d = hash(pass)
   q = elTimes(C.G, d)
   id = q[0].shiftLeft(L).plus(q[1])
   phrase = mess + pass
   done = false
   while not done
     phrase = phrase + 'extra'
-    k = bigInt(hash(phrase), 16)
+    k = hash(phrase)
     if k.greater(1) and k.lesser(C.N)
       p = elTimes(C.G, k)
       r = p[0].mod(C.N)
@@ -150,7 +150,7 @@ verifySig = (mess, id, sig) ->
     return false
   if not (elTimes(q, C.N) == C.Inf)
     return false
-  z = bigInt(hash(mess), 16)
+  z = hash(mess)
   sig = bigInt(sig, 2)
   r = sig.shiftRight(L)
   s = sig.minus(r.shiftLeft(L))
