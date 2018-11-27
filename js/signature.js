@@ -1,4 +1,4 @@
-var C, L, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, elAdd, elTimes, getRandIntNBits, hash, i, id, input, l, len, makeCode, myFunction, neg, o, onCurve, ref, ref1, runVerification, signMessage, st, verifySig,
+var C, L, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, elAdd, elTimes, getRandIntNBits, hash, i, id, input, l, len, makeCode, myFunction, neg, o, onCurve, ref, ref1, runVerification, sha256, signMessage, st, verifySig,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_";
@@ -10,6 +10,10 @@ for (i = l = 0, ref = base64urlChars.length; 0 <= ref ? l < ref : l > ref; i = 0
   st = "000000".substr(st.length) + st;
   charsToBinary[base64urlChars[i]] = st;
 }
+
+sha256 = function(input) {
+  return bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256);
+};
 
 hash = sha256;
 

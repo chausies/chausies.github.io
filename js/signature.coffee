@@ -6,6 +6,9 @@ for i in [0...base64urlChars.length]
   charsToBinary[base64urlChars[i]] = st
 
 
+sha256 = (input) ->
+  bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256)
+
 hash = sha256
 L = 256
 
