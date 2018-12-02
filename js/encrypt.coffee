@@ -213,10 +213,10 @@ myFunction = ->
   out.innerHTML = "Working..."
   out.style.color = 'blue'
   out.scrollIntoView(false)
-  setTimeout(runVerification, 40)
+  setTimeout(runEncryption, 40)
   return
 
-runVerification = ->
+runEncryption = ->
   mess = document.getElementById('mess').value
   id   = document.getElementById('id').value
   enc  = document.getElementById('enc').value

@@ -1,4 +1,4 @@
-var C, GET, L, aes_dec, aes_enc, base64ToHex, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, decrypt, elAdd, elTimes, encrypt, getKey, getRandIntLBits, hash, hexToBase64, i, id, input, k, l, len, makeCode, myFunction, neg, onCurve, out, param, q, query, ref, ref1, ref2, runVerification, sha256, st,
+var C, GET, L, aes_dec, aes_enc, base64ToHex, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, decrypt, elAdd, elTimes, encrypt, getKey, getRandIntLBits, hash, hexToBase64, i, id, input, k, l, len, makeCode, myFunction, neg, onCurve, out, param, q, query, ref, ref1, ref2, runEncryption, sha256, st,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 GET = {};
@@ -232,10 +232,10 @@ myFunction = function() {
   out.innerHTML = "Working...";
   out.style.color = 'blue';
   out.scrollIntoView(false);
-  setTimeout(runVerification, 40);
+  setTimeout(runEncryption, 40);
 };
 
-runVerification = function() {
+runEncryption = function() {
   var col, eString, enc, encrypted, id, idString, idp, mess, output, pass, scrollToOut;
   mess = document.getElementById('mess').value;
   id = document.getElementById('id').value;
