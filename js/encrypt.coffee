@@ -90,21 +90,23 @@ C = {
   Inf: "O"
 }
 
-getY = (x, firstHalfQ) ->
+getY = (x, smallerRootQ) ->
   # returns the y coordinate corresponding to the x coordinate. If
-  # firstHalfQ is true, then returns y < C.P/2, else returns y > C.P/2
-  firstHalfQ = bigInt(firstHalfQ)
+  # smallerRootQ is 1, then returns the smaller square root, else returns
+  # the larger one.
+  smallerRootQ = bigInt(smallerRootQ)
   y2 = x.modPow(3, C.P)
     .plus(C.A.times(x.modPow(2, C.P)))
     .plus(x).mod(C.P)
-  y = modsqrt(y2, C.P)
-  if y == -1 # Some error occurred
+  y1 = modsqrt(y2, C.P)
+  if y1 == -1 # Some error occurred
     return -1
-  if firstHalfQ.value==1 and C.P.shiftRight(1).lesser(y)
-    y = neg(y, C.P)
-  else if C.P.shiftRight(1).geq(y)
-    y = neg(y, C.P)
-  return y
+  y2 = neg(y1, C.P)
+  if y2.lesser(y1)
+    [y2, y1] = [y1, y2] # swap
+  if smallerRootQ.value == 1
+    return y1
+  return y2
 
 onCurve = (p) ->
   # checks if the point `p` is on the curve
@@ -221,17 +223,17 @@ getID = (pass) ->
     pass = pass + "extra"
     a = hash(pass)
   key = elTimes(C.G, a)
-  if C.P.shiftRight(1).geq(key[1])
-    firstHalfQ = 1
+  if key[1].lesser(neg(key[1], C.P))
+    smallerRootQ = 1
   else
-    firstHalfQ = 0
-  id = key[0].shiftLeft(1).plus(firstHalfQ)
+    smallerRootQ = 0
+  id = key[0].shiftLeft(1).plus(smallerRootQ)
   return id
 
 encrypt = (mess, id) ->
-  firstHalfQ = id.and(1)
+  smallerRootQ = id.and(1)
   keyx = id.shiftRight(1)
-  keyy = getY(keyx, firstHalfQ)
+  keyy = getY(keyx, smallerRootQ)
   if keyy == -1
     return -1
   key = [keyx, keyy]
@@ -243,11 +245,11 @@ encrypt = (mess, id) ->
     r = getRandIntLBits()
     b = hash(mess + r.toString(2))
   B = elTimes(C.G, b)
-  if C.P.shiftRight(1).geq(B[1])
-    firstHalfQ = 1
+  if B[1].lesser(neg(B[1], C.P))
+    smallerRootQ = 1
   else
-    firstHalfQ = 0
-  id = B[0].shiftLeft(1).plus(firstHalfQ)
+    smallerRootQ = 0
+  id = B[0].shiftLeft(1).plus(smallerRootQ)
   sharedKey = elTimes(key, b)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
   pass = binToBase64url(sharedKey.toString(2))
@@ -263,9 +265,9 @@ decrypt = (pass, encrypted) ->
   o = bigInt(1)
   id = encrypted.mod(o.shiftLeft(L+1))
   e = encrypted.shiftRight(L+1)
-  firstHalfQ = id.and(1)
+  smallerRootQ = id.and(1)
   Bx = id.shiftRight(1)
-  By = getY(Bx, firstHalfQ)
+  By = getY(Bx, smallerRootQ)
   if By == -1
     return ""
   B = [Bx, By]

@@ -75,21 +75,23 @@ C = {
   Inf: "O"
 }
 
-getY = (x, firstHalfQ) ->
+getY = (x, smallerRootQ) ->
   # returns the y coordinate corresponding to the x coordinate. If
-  # firstHalfQ is true, then returns y < C.P/2, else returns y > C.P/2
-  firstHalfQ = bigInt(firstHalfQ)
+  # smallerRootQ is 1, then returns the smaller square root, else returns
+  # the larger one.
+  smallerRootQ = bigInt(smallerRootQ)
   y2 = x.modPow(3, C.P)
     .plus(C.A.times(x.modPow(2, C.P)))
     .plus(x).mod(C.P)
-  y = modsqrt(y2, C.P)
-  if y == -1 # Some error occurred
+  y1 = modsqrt(y2, C.P)
+  if y1 == -1 # Some error occurred
     return -1
-  if firstHalfQ.value==1 and C.P.shiftRight(1).lesser(y)
-    y = neg(y, C.P)
-  else if C.P.shiftRight(1).geq(y)
-    y = neg(y, C.P)
-  return y
+  y2 = neg(y1, C.P)
+  if y2.lesser(y1)
+    [y2, y1] = [y1, y2] # swap
+  if smallerRootQ.value == 1
+    return y1
+  return y2
 
 onCurve = (p) ->
   # checks if the point `p` is on the curve
@@ -182,11 +184,11 @@ signMessage = (mess, pass) ->
     pass = pass + "extra"
     d = hash(pass)
   q = elTimes(C.G, d)
-  if C.P.shiftRight(1).geq(q[1])
-    firstHalfQ = 1
+  if q[1].lesser(neg(q[1], C.P))
+    smallerRootQ = 1
   else
-    firstHalfQ = 0
-  id = q[0].shiftLeft(1).plus(firstHalfQ)
+    smallerRootQ = 0
+  id = q[0].shiftLeft(1).plus(smallerRootQ)
   phrase = mess + pass
   done = false
   while not done
@@ -209,8 +211,8 @@ verifySig = (mess, id, sig) ->
     return false
   id = bigInt(id, 2)
   qx = id.shiftRight(1)
-  firstHalfQ = id.and(1)
-  qy = getY(qx, firstHalfQ)
+  smallerRootQ = id.and(1)
+  qy = getY(qx, smallerRootQ)
   if qy == -1
     return false
   q = [qx, qy]

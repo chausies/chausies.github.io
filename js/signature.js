@@ -87,20 +87,22 @@ C = {
   Inf: "O"
 };
 
-getY = function(x, firstHalfQ) {
-  var y, y2;
-  firstHalfQ = bigInt(firstHalfQ);
+getY = function(x, smallerRootQ) {
+  var ref1, y1, y2;
+  smallerRootQ = bigInt(smallerRootQ);
   y2 = x.modPow(3, C.P).plus(C.A.times(x.modPow(2, C.P))).plus(x).mod(C.P);
-  y = modsqrt(y2, C.P);
-  if (y === -1) {
+  y1 = modsqrt(y2, C.P);
+  if (y1 === -1) {
     return -1;
   }
-  if (firstHalfQ.value === 1 && C.P.shiftRight(1).lesser(y)) {
-    y = neg(y, C.P);
-  } else if (C.P.shiftRight(1).geq(y)) {
-    y = neg(y, C.P);
+  y2 = neg(y1, C.P);
+  if (y2.lesser(y1)) {
+    ref1 = [y1, y2], y2 = ref1[0], y1 = ref1[1];
   }
-  return y;
+  if (smallerRootQ.value === 1) {
+    return y1;
+  }
+  return y2;
 };
 
 onCurve = function(p) {
@@ -189,7 +191,7 @@ binToBase64url = function(bin) {
 };
 
 signMessage = function(mess, pass) {
-  var d, done, firstHalfQ, id, k, p, phrase, q, r, s, sig, z;
+  var d, done, id, k, p, phrase, q, r, s, sig, smallerRootQ, z;
   z = hash(mess);
   d = hash(pass);
   while (d.geq(C.N) || d.leq(1)) {
@@ -197,12 +199,12 @@ signMessage = function(mess, pass) {
     d = hash(pass);
   }
   q = elTimes(C.G, d);
-  if (C.P.shiftRight(1).geq(q[1])) {
-    firstHalfQ = 1;
+  if (q[1].lesser(neg(q[1], C.P))) {
+    smallerRootQ = 1;
   } else {
-    firstHalfQ = 0;
+    smallerRootQ = 0;
   }
-  id = q[0].shiftLeft(1).plus(firstHalfQ);
+  id = q[0].shiftLeft(1).plus(smallerRootQ);
   phrase = mess + pass;
   done = false;
   while (!done) {
@@ -224,14 +226,14 @@ signMessage = function(mess, pass) {
 };
 
 verifySig = function(mess, id, sig) {
-  var firstHalfQ, p, q, qx, qy, r, s, u1, u2, verified, w, x, z;
+  var p, q, qx, qy, r, s, smallerRootQ, u1, u2, verified, w, x, z;
   if ((id === null) || (sig === null)) {
     return false;
   }
   id = bigInt(id, 2);
   qx = id.shiftRight(1);
-  firstHalfQ = id.and(1);
-  qy = getY(qx, firstHalfQ);
+  smallerRootQ = id.and(1);
+  qy = getY(qx, smallerRootQ);
   if (qy === -1) {
     return false;
   }

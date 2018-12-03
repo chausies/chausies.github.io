@@ -107,20 +107,22 @@ C = {
   Inf: "O"
 };
 
-getY = function(x, firstHalfQ) {
-  var y, y2;
-  firstHalfQ = bigInt(firstHalfQ);
+getY = function(x, smallerRootQ) {
+  var ref2, y1, y2;
+  smallerRootQ = bigInt(smallerRootQ);
   y2 = x.modPow(3, C.P).plus(C.A.times(x.modPow(2, C.P))).plus(x).mod(C.P);
-  y = modsqrt(y2, C.P);
-  if (y === -1) {
+  y1 = modsqrt(y2, C.P);
+  if (y1 === -1) {
     return -1;
   }
-  if (firstHalfQ.value === 1 && C.P.shiftRight(1).lesser(y)) {
-    y = neg(y, C.P);
-  } else if (C.P.shiftRight(1).geq(y)) {
-    y = neg(y, C.P);
+  y2 = neg(y1, C.P);
+  if (y2.lesser(y1)) {
+    ref2 = [y1, y2], y2 = ref2[0], y1 = ref2[1];
   }
-  return y;
+  if (smallerRootQ.value === 1) {
+    return y1;
+  }
+  return y2;
 };
 
 onCurve = function(p) {
@@ -234,27 +236,27 @@ binToBase64url = function(bin) {
 };
 
 getID = function(pass) {
-  var a, firstHalfQ, id, key;
+  var a, id, key, smallerRootQ;
   a = hash(pass);
   while (a.geq(C.P) || a.leq(1)) {
     pass = pass + "extra";
     a = hash(pass);
   }
   key = elTimes(C.G, a);
-  if (C.P.shiftRight(1).geq(key[1])) {
-    firstHalfQ = 1;
+  if (key[1].lesser(neg(key[1], C.P))) {
+    smallerRootQ = 1;
   } else {
-    firstHalfQ = 0;
+    smallerRootQ = 0;
   }
-  id = key[0].shiftLeft(1).plus(firstHalfQ);
+  id = key[0].shiftLeft(1).plus(smallerRootQ);
   return id;
 };
 
 encrypt = function(mess, id) {
-  var B, b, e, encrypted, firstHalfQ, key, keyx, keyy, pass, r, sharedKey;
-  firstHalfQ = id.and(1);
+  var B, b, e, encrypted, key, keyx, keyy, pass, r, sharedKey, smallerRootQ;
+  smallerRootQ = id.and(1);
   keyx = id.shiftRight(1);
-  keyy = getY(keyx, firstHalfQ);
+  keyy = getY(keyx, smallerRootQ);
   if (keyy === -1) {
     return -1;
   }
@@ -269,12 +271,12 @@ encrypt = function(mess, id) {
     b = hash(mess + r.toString(2));
   }
   B = elTimes(C.G, b);
-  if (C.P.shiftRight(1).geq(B[1])) {
-    firstHalfQ = 1;
+  if (B[1].lesser(neg(B[1], C.P))) {
+    smallerRootQ = 1;
   } else {
-    firstHalfQ = 0;
+    smallerRootQ = 0;
   }
-  id = B[0].shiftLeft(1).plus(firstHalfQ);
+  id = B[0].shiftLeft(1).plus(smallerRootQ);
   sharedKey = elTimes(key, b);
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1]);
   pass = binToBase64url(sharedKey.toString(2));
@@ -284,7 +286,7 @@ encrypt = function(mess, id) {
 };
 
 decrypt = function(pass, encrypted) {
-  var B, Bx, By, a, e, firstHalfQ, id, mess, o, sharedKey;
+  var B, Bx, By, a, e, id, mess, o, sharedKey, smallerRootQ;
   a = hash(pass);
   while (a.geq(C.P) || a.leq(1)) {
     pass = pass + "extra";
@@ -293,9 +295,9 @@ decrypt = function(pass, encrypted) {
   o = bigInt(1);
   id = encrypted.mod(o.shiftLeft(L + 1));
   e = encrypted.shiftRight(L + 1);
-  firstHalfQ = id.and(1);
+  smallerRootQ = id.and(1);
   Bx = id.shiftRight(1);
-  By = getY(Bx, firstHalfQ);
+  By = getY(Bx, smallerRootQ);
   if (By === -1) {
     return "";
   }
