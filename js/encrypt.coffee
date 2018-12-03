@@ -1,3 +1,4 @@
+# Check if ID is already provided, and if so, fill it into the ID section
 GET = {}
 query = window.location.search.substring(1).split('&')
 i = 0
@@ -13,6 +14,7 @@ if "id" of GET
   out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
   out.style.color = "green"
 
+# Custom base64 converter
 base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"
 charsToBinary = {}
 for i in [0...base64urlChars.length]
@@ -21,53 +23,95 @@ for i in [0...base64urlChars.length]
   charsToBinary[base64urlChars[i]] = st
 
 
-sha256 = (input) ->
+sha = (input) ->
   bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256)
 
-hash = sha256
+hash = sha
 L = 256
-
-# Elliptic curve parameters (secp256r1)
-C = {
-  P: bigInt(
-   "FFFFFFFF 00000001 00000000 00000000
-    00000000 FFFFFFFF FFFFFFFF FFFFFFFF".replace(/\s+/g, '')
-    , 16),
-  A: bigInt(
-   "FFFFFFFF 00000001 00000000 00000000
-    00000000 FFFFFFFF FFFFFFFF FFFFFFFC".replace(/\s+/g, '')
-    , 16),
-  B: bigInt(
-   "5AC635D8 AA3A93E7 B3EBBD55 769886BC 
-    651D06B0 CC53B0F6 3BCE3C3E 27D2604B".replace(/\s+/g, '')
-    , 16),
-  G: [ bigInt(
-   "6B17D1F2 E12C4247 F8BCE6E5 63A440F2 
-    77037D81 2DEB33A0 F4A13945 D898C296".replace(/\s+/g, ''), 16)
-      , bigInt(
-   "4FE342E2 FE1A7F9B 8EE7EB4A 7C0F9E16 
-    2BCE3357 6B315ECE CBB64068 37BF51F5".replace(/\s+/g, '')
-    , 16) ],
-  N: bigInt(
-   "FFFFFFFF 00000000 FFFFFFFF FFFFFFFF 
-    BCE6FAAD A7179E84 F3B9CAC2 FC632551".replace(/\s+/g, '')
-    , 16)
-  Inf: "O"
-}
 
 neg = (a, p) ->
   # returns -a mod p
-  if bigInt(a).mod(p).isZero()
+  a = bigInt(a)
+  if a.mod(p).isZero()
     return bigInt.zero
-  return bigInt(a).divide(p).plus(1).times(p).minus(a)
+  return a.divide(p).plus(1).times(p).minus(a)
+
+modsqrt = (n, p) ->
+  # Computes an x such that x^2 = n mod p. Uses Tonelli-Shanks algorithm.
+  # If there is no such x, returns -1. If p is not prime, returns -1.
+  n = bigInt(n)
+  p = bigInt(p)
+  if not p.isPrime()
+    return -1
+  if n.isZero()
+    return bigInt(0)
+  if not n.modPow(p.minus(1).divide(2), p).eq(1)
+    return -1 # n is not a square mod p
+  if p.mod(4).eq(3) # Easy case
+    return n.modPow(p.plus(1).divide(4), p)
+  s = bigInt(0)
+  q = p.minus(1)
+  while q.isEven()
+    s = s.plus(1)
+    q = q.shiftRight(1)
+  z = bigInt(Math.floor(p*Math.random())) # random z
+  while z.isZero() or z.modPow(p.minus(1).divide(2), p).eq(1)
+    z = bigInt(Math.floor(p*Math.random()))
+  m = s
+  c = z.modPow(q, p)
+  t = n.modPow(q, p)
+  r = n.modPow(q.plus(1).divide(2), p)
+  while true
+    if t.eq(0)
+      return bigInt(0)
+    if t.eq(1)
+      return r
+    i = bigInt(0)
+    temp = t
+    while not temp.eq(1)
+      temp = temp.modPow(2, p)
+      i = i.plus(1)
+    b = c.modPow(bigInt(1).shiftLeft(m.minus(i).minus(1).value), p)
+    m = i
+    c = b.modPow(2, p)
+    t = t.times(c).mod(p)
+    r = r.times(b).mod(p)
+
+
+# Elliptic curve parameters (curve25519)
+C = {
+  # B y^2 = x^3 + A x^2 + x mod P
+  P: bigInt(1).shiftLeft(255).minus(19), #2^255 - 19
+  A: bigInt(486662),
+  B: bigInt(1),
+  # base or generator point
+  G: [ bigInt(9)
+      , bigInt("14781619447589544791020593568409986887264606134616475288964881837755586237401", 10) ],
+  Inf: "O"
+}
+
+getY = (x, firstHalfQ) ->
+  # returns the y coordinate corresponding to the x coordinate. If
+  # firstHalfQ is true, then returns y < C.P/2, else returns y > C.P/2
+  y2 = x.modPow(3, C.P)
+    .plus(C.A.times(x.modPow(2, C.P)))
+    .plus(x).mod(C.P)
+  y = modsqrt(y2, C.P)
+  if y == -1 # Some error occurred
+    return -1
+  if firstHalfQ and C.P.shiftRight(1).lesser(y)
+    y = neg(y, C.P)
+  else if C.P.shiftRight(1).geq(y)
+    y = neg(y, C.P)
+  return y
 
 onCurve = (p) ->
   # checks if the point `p` is on the curve
-  y2 = p[1].modPow(2, C.P)
-  test = p[0].modPow(3, C.P)
-    .plus(C.A.times(p[0]))
-    .plus(C.B).mod(C.P)
-  return y2.eq(test)
+  lhs = C.B.times(p[1].modPow(2, C.P)).mod(C.P)
+  rhs = p[0].modPow(3, C.P)
+    .plus(C.A.times(p[0].modPow(2, C.P)))
+    .plus(p[0]).mod(C.P)
+  return lhs.eq(rhs)
 
 elAdd = (p1, p2) ->
   # does the elliptical add for `p1` and `p2`
@@ -75,23 +119,38 @@ elAdd = (p1, p2) ->
     return p2
   if p2 == C.Inf
     return p1
+  if not (onCurve(p1) and onCurve(p2))
+    return -1
   p1 = [p1[0].mod(C.P), p1[1].mod(C.P)]
   p2 = [p2[0].mod(C.P), p2[1].mod(C.P)]
   if p1[0].eq(p2[0])
     if p1[1].plus(p2[1]).mod(C.P).isZero()
       return C.Inf
-    m = p1[0].modPow(2, C.P).times(3).plus(C.A).times(
-      p1[1].times(2).modInv(C.P)
-    ).mod(C.P)
+    x = p1[0].modPow(2, C.P).plus(neg(1, C.P)).modPow(2, C.P)
+      .times(p1[1].modPow(2, C.P).times(4).times(C.B).modInv(C.P)).mod(C.P)
+    temp = p1[0].modPow(2, C.P).times(3)
+      .plus(C.A.times(2).times(p1[0]))
+      .plus(1).mod(C.P)
+      .times(C.B.times(p1[1]).times(2).modInv(C.P)).mod(C.P)
+    y = p1[0].times(3).plus(C.A).times(temp)
+      .plus(neg(C.B.times(temp.modPow(3, C.P)), C.P))
+      .plus(neg(p1[1], C.P))
   else
-    m = (p2[1].plus(neg(p1[1], C.P))).times(
-      (p2[0].plus(neg(p1[0], C.P))).modInv(C.P)
+    x = C.B.times(
+      p2[0].times(p1[1]).plus(neg(p1[0].times(p2[1]), C.P))
+        .modPow(2, C.P)
+    ).times(
+      p1[0].times(p2[0]).times(p2[0].plus(neg(p1[0], C.P)).modPow(2, C.P)).modInv(C.P)
     ).mod(C.P)
-  xr = m.modPow(2, C.P)
-    .plus(neg(p1[0], C.P))
-    .plus(neg(p2[0], C.P)).mod(C.P)
-  yr = p1[1].plus(m.times(xr.plus(neg(p1[0], C.P))))
-  return [xr, neg(yr, C.P)]
+    y = p1[0].times(2).plus(p2[0]).plus(C.A).times(p2[1].plus(neg(p1[1], C.P)))
+        .times(p2[0].plus(neg(p1[0], C.P)).modInv(C.P)).mod(C.P)
+        .plus(
+          neg(
+            C.B.times(p2[1].plus(neg(p1[1], C.P)).modPow(3, C.P))
+              .times(p2[0].plus(neg(p1[0], C.P)).modPow(3, C.P).modInv(C.P))
+              , C.P)
+        ).plus(neg(p1[1], C.P)).mod(C.P)
+  return [x, y]
 
 elTimes = (p, n) ->
   # does the elliptical multiplication of point `p` by `n`
@@ -155,40 +214,62 @@ binToBase64url = (bin) ->
   base64url = base64urlChars[parseInt(bin[0...i+6], 2)] + base64url
   return base64url
 
-getKey = (pass) ->
+getID = (pass) ->
   a = hash(pass)
-  while a.geq(C.N) or a.leq(1) # outrageously unlikely
+  while a.geq(C.P) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
     a = hash(pass)
   key = elTimes(C.G, a)
-  return key
+  if C.P.shiftRight(1).geq(key[1])
+    firstHalfQ = 1
+  else
+    firstHalfQ = 0
+  id = key[0].shiftLeft(1).plus(firstHalfQ)
+  return id
 
 encrypt = (mess, id) ->
-  o = bigInt(1)
-  key = [id.shiftRight(L), id.mod(o.shiftLeft(L))]
+  firstHalfQ = id.and(1)
+  keyx = id.shiftRight(1)
+  keyy = getY(keyx, firstHalfQ)
+  if keyy == -1
+    return -1
+  key = [keyx, keyy]
+  if not onCurve(key)
+    return -1
   r = getRandIntLBits()
   b = hash(mess + r.toString(2)) # Add random bits to obfuscate
-  while b.geq(C.N) or b.leq(1) # outrageously unlikely
+  while b.geq(C.P) or b.leq(1) # outrageously unlikely
     r = getRandIntLBits()
     b = hash(mess + r.toString(2))
   B = elTimes(C.G, b)
-  id = B[0].shiftLeft(L).plus(B[1])
+  if C.P.shiftRight(1).geq(B[1])
+    firstHalfQ = 1
+  else
+    firstHalfQ = 0
+  id = B[0].shiftLeft(1).plus(firstHalfQ)
   sharedKey = elTimes(key, b)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
   pass = binToBase64url(sharedKey.toString(2))
   e = aes_enc(pass, mess)
-  encrypted = e.shiftLeft(2*L).plus(id)
+  encrypted = e.shiftLeft(L+1).plus(id)
   return encrypted
 
 decrypt = (pass, encrypted) ->
   a = hash(pass)
-  while a.geq(C.N) or a.leq(1) # outrageously unlikely
+  while a.geq(C.P) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
     a = hash(pass)
   o = bigInt(1)
-  id = encrypted.mod(o.shiftLeft(2*L))
-  e = encrypted.shiftRight(2*L)
-  B = [id.shiftRight(L), id.mod(o.shiftLeft(L))]
+  id = encrypted.mod(o.shiftLeft(L+1))
+  e = encrypted.shiftRight(L+1)
+  firstHalfQ = id.and(1)
+  Bx = id.shiftRight(1)
+  By = getY(Bx, firstHalfQ)
+  if By == -1
+    return ""
+  B = [Bx, By]
+  if not onCurve(B)
+    return ""
   sharedKey = elTimes(B, a)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
   pass = binToBase64url(sharedKey.toString(2))
@@ -196,6 +277,8 @@ decrypt = (pass, encrypted) ->
   return mess
 
 makeCode = (text) ->
+  # If provided text, makes the QR code for the text. Else, destroys the
+  # previous QR code.
   document.getElementById('qrcode').innerHTML = ''
   if !text
     document.getElementById('idqr').innerHTML = ''
@@ -225,8 +308,7 @@ runEncryption = ->
   if pass.length != 0
     document.getElementById('mess').value = ""
     if enc.length == 0
-      idp = getKey(pass)
-      id = idp[0].shiftLeft(L).plus(idp[1])
+      id = getID(pass)
       idString = binToBase64url(id.toString(2))
       document.getElementById('id').value = idString
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
@@ -256,10 +338,14 @@ runEncryption = ->
       else
         id = bigInt(base64urlToBin(id), 2)
         encrypted = encrypt(mess, id)
-        eString = binToBase64url(encrypted.toString(2))
-        document.getElementById('enc').value = eString
-        output = "Success! Send over the Encrypted Message to the other party."
-        col = "green"
+        if encrypted == -1
+          output = "Error! ID was probably invalid"
+          col = "red"
+        else
+          eString = binToBase64url(encrypted.toString(2))
+          document.getElementById('enc').value = eString
+          output = "Success! Send over the Encrypted Message to the other party."
+          col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
   out.style.color = col
