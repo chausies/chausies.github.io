@@ -93,13 +93,14 @@ C = {
 getY = (x, firstHalfQ) ->
   # returns the y coordinate corresponding to the x coordinate. If
   # firstHalfQ is true, then returns y < C.P/2, else returns y > C.P/2
+  firstHalfQ = bigInt(firstHalfQ)
   y2 = x.modPow(3, C.P)
     .plus(C.A.times(x.modPow(2, C.P)))
     .plus(x).mod(C.P)
   y = modsqrt(y2, C.P)
   if y == -1 # Some error occurred
     return -1
-  if firstHalfQ and C.P.shiftRight(1).lesser(y)
+  if firstHalfQ.value==1 and C.P.shiftRight(1).lesser(y)
     y = neg(y, C.P)
   else if C.P.shiftRight(1).geq(y)
     y = neg(y, C.P)

@@ -109,12 +109,13 @@ C = {
 
 getY = function(x, firstHalfQ) {
   var y, y2;
+  firstHalfQ = bigInt(firstHalfQ);
   y2 = x.modPow(3, C.P).plus(C.A.times(x.modPow(2, C.P))).plus(x).mod(C.P);
   y = modsqrt(y2, C.P);
   if (y === -1) {
     return -1;
   }
-  if (firstHalfQ && C.P.shiftRight(1).lesser(y)) {
+  if (firstHalfQ.value === 1 && C.P.shiftRight(1).lesser(y)) {
     y = neg(y, C.P);
   } else if (C.P.shiftRight(1).geq(y)) {
     y = neg(y, C.P);
