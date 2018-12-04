@@ -14,14 +14,31 @@ if "id" of GET
   out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
   out.style.color = "green"
 
-# Custom base64 converter
-base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"
-charsToBinary = {}
-for i in [0...base64urlChars.length]
-  st = i.toString(2)
-  st = "000000".substr(st.length) + st # 0-pad to get sextets (64 = 2^6)
-  charsToBinary[base64urlChars[i]] = st
+# Custom base62 encoding that's only alphanumeric
+CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+CHARS2IND = {}
+for i in [0...CHARS.length]
+  CHARS2IND[CHARS[i]] = i
+K = CHARS.length
 
+toBaseKString = (n) ->
+  st = ""
+  qr = n.divmod(K)
+  st = CHARS[qr.remainder.value] + st
+  while not qr.quotient.isZero()
+    qr = qr.quotient.divmod(K)
+    st = CHARS[qr.remainder.value] + st
+  return st
+
+fromBaseKString = (st) ->
+  # returns -1 if erroneous characters are in st
+  n = bigInt(0)
+  for c in st
+    if not (c of CHARS2IND)
+      return -1
+    n = n.times(K)
+    n = n.plus(CHARS2IND[c])
+  return n
 
 sha = (input) ->
   bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256)
@@ -199,24 +216,6 @@ aes_dec = (pass, x) ->
     hexToBase64(x.toString(16))
     , pass).toString(CryptoJS.enc.Utf8)
 
-base64urlToBin = (base64url) ->
-  bin = ''
-  for char in base64url
-    if not (char in base64urlChars)
-      return null
-    bin = bin + charsToBinary[char]
-  return bin
-
-binToBase64url = (bin) ->
-  base64url = ''
-  i = bin.length - 6
-  while i > 0
-    # process in sextets because 64 = 2^6
-    base64url = base64urlChars[parseInt(bin[i...i+6], 2)] + base64url
-    i -= 6
-  base64url = base64urlChars[parseInt(bin[0...i+6], 2)] + base64url
-  return base64url
-
 getID = (pass) ->
   a = hash(pass)
   while a.geq(C.P) or a.leq(1) # outrageously unlikely
@@ -252,7 +251,7 @@ encrypt = (mess, id) ->
   id = B[0].shiftLeft(1).plus(smallerRootQ)
   sharedKey = elTimes(key, b)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
-  pass = binToBase64url(sharedKey.toString(2))
+  pass = toBaseKString(sharedKey)
   e = aes_enc(pass, mess)
   encrypted = e.shiftLeft(L+1).plus(id)
   return encrypted
@@ -275,7 +274,7 @@ decrypt = (pass, encrypted) ->
     return ""
   sharedKey = elTimes(B, a)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
-  pass = binToBase64url(sharedKey.toString(2))
+  pass = toBaseKString(sharedKey)
   mess = aes_dec(pass, e)
   return mess
 
@@ -312,14 +311,17 @@ runEncryption = ->
     document.getElementById('mess').value = ""
     if enc.length == 0
       id = getID(pass)
-      idString = binToBase64url(id.toString(2))
+      idString = toBaseKString(id)
       document.getElementById('id').value = idString
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
       col = "green"
       makeCode('https://www.chausies.xyz/encrypt?id=' + idString)
     else
-      encrypted = bigInt(base64urlToBin(enc), 2)
-      mess = decrypt(pass, encrypted)
+      encrypted = fromBaseKString(enc)
+      if encrypted == -1 # bad characters provided in the base-K string
+        mess = ""
+      else
+        mess = decrypt(pass, encrypted)
       if mess.length == 0
         output = "Error! The Password likely doesn't match the Encrypted Message."
         col = "red"
@@ -339,13 +341,14 @@ runEncryption = ->
         output = "Error! Please enter a Message to encrypt"
         col = "red"
       else
-        id = bigInt(base64urlToBin(id), 2)
-        encrypted = encrypt(mess, id)
-        if encrypted == -1
+        id = fromBaseKString(id)
+        if id != -1 # Bad base K String provided
+          encrypted = encrypt(mess, id)
+        if (id == -1) or (encrypted == -1)
           output = "Error! ID was probably invalid"
           col = "red"
         else
-          eString = binToBase64url(encrypted.toString(2))
+          eString = toBaseKString(encrypted)
           document.getElementById('enc').value = eString
           output = "Success! Send over the Encrypted Message to the other party."
           col = "green"

@@ -1,5 +1,4 @@
-var C, GET, L, aes_dec, aes_enc, base64ToHex, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, decrypt, elAdd, elTimes, encrypt, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, query, ref, ref1, ref2, runEncryption, sha, st, u,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+var C, CHARS, CHARS2IND, GET, K, L, aes_dec, aes_enc, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, query, ref, ref1, ref2, runEncryption, sha, toBaseKString, u;
 
 GET = {};
 
@@ -22,15 +21,41 @@ if ("id" in GET) {
   out.style.color = "green";
 }
 
-base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_";
+CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-charsToBinary = {};
+CHARS2IND = {};
 
-for (i = l = 0, ref1 = base64urlChars.length; 0 <= ref1 ? l < ref1 : l > ref1; i = 0 <= ref1 ? ++l : --l) {
-  st = i.toString(2);
-  st = "000000".substr(st.length) + st;
-  charsToBinary[base64urlChars[i]] = st;
+for (i = l = 0, ref1 = CHARS.length; 0 <= ref1 ? l < ref1 : l > ref1; i = 0 <= ref1 ? ++l : --l) {
+  CHARS2IND[CHARS[i]] = i;
 }
+
+K = CHARS.length;
+
+toBaseKString = function(n) {
+  var qr, st;
+  st = "";
+  qr = n.divmod(K);
+  st = CHARS[qr.remainder.value] + st;
+  while (!qr.quotient.isZero()) {
+    qr = qr.quotient.divmod(K);
+    st = CHARS[qr.remainder.value] + st;
+  }
+  return st;
+};
+
+fromBaseKString = function(st) {
+  var c, len, n, u;
+  n = bigInt(0);
+  for (u = 0, len = st.length; u < len; u++) {
+    c = st[u];
+    if (!(c in CHARS2IND)) {
+      return -1;
+    }
+    n = n.times(K);
+    n = n.plus(CHARS2IND[c]);
+  }
+  return n;
+};
 
 sha = function(input) {
   return bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256);
@@ -210,31 +235,6 @@ aes_dec = function(pass, x) {
   return CryptoJS.AES.decrypt(hexToBase64(x.toString(16)), pass).toString(CryptoJS.enc.Utf8);
 };
 
-base64urlToBin = function(base64url) {
-  var bin, char, len, u;
-  bin = '';
-  for (u = 0, len = base64url.length; u < len; u++) {
-    char = base64url[u];
-    if (!(indexOf.call(base64urlChars, char) >= 0)) {
-      return null;
-    }
-    bin = bin + charsToBinary[char];
-  }
-  return bin;
-};
-
-binToBase64url = function(bin) {
-  var base64url;
-  base64url = '';
-  i = bin.length - 6;
-  while (i > 0) {
-    base64url = base64urlChars[parseInt(bin.slice(i, i + 6), 2)] + base64url;
-    i -= 6;
-  }
-  base64url = base64urlChars[parseInt(bin.slice(0, i + 6), 2)] + base64url;
-  return base64url;
-};
-
 getID = function(pass) {
   var a, id, key, smallerRootQ;
   a = hash(pass);
@@ -279,7 +279,7 @@ encrypt = function(mess, id) {
   id = B[0].shiftLeft(1).plus(smallerRootQ);
   sharedKey = elTimes(key, b);
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1]);
-  pass = binToBase64url(sharedKey.toString(2));
+  pass = toBaseKString(sharedKey);
   e = aes_enc(pass, mess);
   encrypted = e.shiftLeft(L + 1).plus(id);
   return encrypted;
@@ -307,7 +307,7 @@ decrypt = function(pass, encrypted) {
   }
   sharedKey = elTimes(B, a);
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1]);
-  pass = binToBase64url(sharedKey.toString(2));
+  pass = toBaseKString(sharedKey);
   mess = aes_dec(pass, e);
   return mess;
 };
@@ -347,14 +347,18 @@ runEncryption = function() {
     document.getElementById('mess').value = "";
     if (enc.length === 0) {
       id = getID(pass);
-      idString = binToBase64url(id.toString(2));
+      idString = toBaseKString(id);
       document.getElementById('id').value = idString;
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>.";
       col = "green";
       makeCode('https://www.chausies.xyz/encrypt?id=' + idString);
     } else {
-      encrypted = bigInt(base64urlToBin(enc), 2);
-      mess = decrypt(pass, encrypted);
+      encrypted = fromBaseKString(enc);
+      if (encrypted === -1) {
+        mess = "";
+      } else {
+        mess = decrypt(pass, encrypted);
+      }
       if (mess.length === 0) {
         output = "Error! The Password likely doesn't match the Encrypted Message.";
         col = "red";
@@ -377,13 +381,15 @@ runEncryption = function() {
         output = "Error! Please enter a Message to encrypt";
         col = "red";
       } else {
-        id = bigInt(base64urlToBin(id), 2);
-        encrypted = encrypt(mess, id);
-        if (encrypted === -1) {
+        id = fromBaseKString(id);
+        if (id !== -1) {
+          encrypted = encrypt(mess, id);
+        }
+        if ((id === -1) || (encrypted === -1)) {
           output = "Error! ID was probably invalid";
           col = "red";
         } else {
-          eString = binToBase64url(encrypted.toString(2));
+          eString = toBaseKString(encrypted);
           document.getElementById('enc').value = eString;
           output = "Success! Send over the Encrypted Message to the other party.";
           col = "green";
