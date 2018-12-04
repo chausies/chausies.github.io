@@ -427,17 +427,6 @@ for (u = 0, len = ref2.length; u < len; u++) {
   });
 }
 
-tippy('#base64', {
-  content: 'Zero-padding is done in the front. + and / are replaced with ~ and _',
-  trigger: 'click',
-  delay: 100,
-  arrow: true,
-  arrowType: 'round',
-  size: 'large',
-  duration: 500,
-  animation: 'scale'
-});
-
 (function() {
   var areas, clicked, fn, ref3, v;
   areas = document.querySelectorAll('.highlight');

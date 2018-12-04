@@ -378,17 +378,6 @@ for id in ['pass', 'id', 'enc']
       myFunction()
     return
   
-# Tooltip in ending blurb explaining custom base64  
-tippy '#base64',
-  content: 'Zero-padding is done in the front. + and / are replaced with ~ and _'
-  trigger: 'click'
-  delay: 100
-  arrow: true
-  arrowType: 'round'
-  size: 'large'
-  duration: 500
-  animation: 'scale'
-
 # Highlight ID/Signature on first click (for ease of copying/deleting)
 do ->
   areas = document.querySelectorAll('.highlight')
