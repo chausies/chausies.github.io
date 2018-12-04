@@ -1,15 +1,40 @@
-var C, L, base64urlChars, base64urlToBin, binToBase64url, blurAll, charsToBinary, elAdd, elTimes, getRandIntNBits, getY, hash, i, id, input, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, ref, ref1, runVerification, sha, signMessage, st, verifySig,
-  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+var C, CHARS, CHARS2IND, K, L, blurAll, elAdd, elTimes, fromBaseKString, getY, hash, i, id, input, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, ref, ref1, runVerification, sha, signMessage, toBaseKString, verifySig;
 
-base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_";
+CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-charsToBinary = {};
+CHARS2IND = {};
 
-for (i = l = 0, ref = base64urlChars.length; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
-  st = i.toString(2);
-  st = "000000".substr(st.length) + st;
-  charsToBinary[base64urlChars[i]] = st;
+for (i = l = 0, ref = CHARS.length; 0 <= ref ? l < ref : l > ref; i = 0 <= ref ? ++l : --l) {
+  CHARS2IND[CHARS[i]] = i;
 }
+
+K = CHARS.length;
+
+toBaseKString = function(n) {
+  var qr, st;
+  st = "";
+  qr = n.divmod(K);
+  st = CHARS[qr.remainder.value] + st;
+  while (!qr.quotient.isZero()) {
+    qr = qr.quotient.divmod(K);
+    st = CHARS[qr.remainder.value] + st;
+  }
+  return st;
+};
+
+fromBaseKString = function(st) {
+  var c, len, n, o;
+  n = bigInt(0);
+  for (o = 0, len = st.length; o < len; o++) {
+    c = st[o];
+    if (!(c in CHARS2IND)) {
+      return -1;
+    }
+    n = n.times(K);
+    n = n.plus(CHARS2IND[c]);
+  }
+  return n;
+};
 
 sha = function(input) {
   return bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256);
@@ -154,42 +179,6 @@ elTimes = function(p, n) {
   return res;
 };
 
-getRandIntNBits = function() {
-  var byte, bytes, len, n, o;
-  n = bigInt(0);
-  bytes = window.crypto.getRandomValues(new Uint8Array(N / 8));
-  for (o = 0, len = bytes.length; o < len; o++) {
-    byte = bytes[o];
-    n = n.shiftLeft(8).plus(byte);
-  }
-  return n;
-};
-
-base64urlToBin = function(base64url) {
-  var bin, char, len, o;
-  bin = '';
-  for (o = 0, len = base64url.length; o < len; o++) {
-    char = base64url[o];
-    if (!(indexOf.call(base64urlChars, char) >= 0)) {
-      return null;
-    }
-    bin = bin + charsToBinary[char];
-  }
-  return bin;
-};
-
-binToBase64url = function(bin) {
-  var base64url;
-  base64url = '';
-  i = bin.length - 6;
-  while (i > 0) {
-    base64url = base64urlChars[parseInt(bin.slice(i, i + 6), 2)] + base64url;
-    i -= 6;
-  }
-  base64url = base64urlChars[parseInt(bin.slice(0, i + 6), 2)] + base64url;
-  return base64url;
-};
-
 signMessage = function(mess, pass) {
   var d, done, id, k, p, phrase, q, r, s, sig, smallerRootQ, z;
   z = hash(mess);
@@ -227,10 +216,9 @@ signMessage = function(mess, pass) {
 
 verifySig = function(mess, id, sig) {
   var p, q, qx, qy, r, s, smallerRootQ, u1, u2, verified, w, x, z;
-  if ((id === null) || (sig === null)) {
+  if ((id === -1) || (sig === -1)) {
     return false;
   }
-  id = bigInt(id, 2);
   qx = id.shiftRight(1);
   smallerRootQ = id.and(1);
   qy = getY(qx, smallerRootQ);
@@ -245,7 +233,6 @@ verifySig = function(mess, id, sig) {
     return false;
   }
   z = hash(mess);
-  sig = bigInt(sig, 2);
   r = sig.shiftRight(L);
   s = sig.minus(r.shiftLeft(L));
   verified = false;
@@ -301,7 +288,7 @@ runVerification = function() {
   }
   if (pass.length !== 0) {
     ref1 = signMessage(mess, pass), id = ref1[0], sig = ref1[1];
-    idString = binToBase64url(id.toString(2));
+    idString = toBaseKString(id);
     document.getElementById('id').value = idString;
     makeCode(idString);
     if (mess === "") {
@@ -309,11 +296,11 @@ runVerification = function() {
       document.getElementById('sig').value = "";
     } else {
       output = "Success! Send the message, along with the Signature+ID so they can verify the message is indeed from you.";
-      document.getElementById('sig').value = binToBase64url(sig.toString(2));
+      document.getElementById('sig').value = toBaseKString(sig);
     }
     col = "green";
   } else if (id.length > 0 && sig.length > 0) {
-    verified = verifySig(mess, base64urlToBin(id), base64urlToBin(sig));
+    verified = verifySig(mess, fromBaseKString(id), fromBaseKString(sig));
     if (verified) {
       output = "Verification SUCCESS! The signature does indeed match the message from this ID. The other party used the correct password for their ID.";
       col = "green";
@@ -354,17 +341,6 @@ for (o = 0, len = ref1.length; o < len; o++) {
     }
   });
 }
-
-tippy('#base64', {
-  content: 'Zero-padding is done in the front. + and / are replaced with ~ and _',
-  trigger: 'click',
-  delay: 100,
-  arrow: true,
-  arrowType: 'round',
-  size: 'large',
-  duration: 500,
-  animation: 'scale'
-});
 
 (function() {
   var areas, clicked, fn, ref2, u;

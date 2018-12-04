@@ -1,9 +1,28 @@
-base64urlChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789~_"
-charsToBinary = {}
-for i in [0...base64urlChars.length]
-  st = i.toString(2)
-  st = "000000".substr(st.length) + st # 0-pad to get sextets (64 = 2^6)
-  charsToBinary[base64urlChars[i]] = st
+# Custom base62 encoding that's only alphanumeric
+CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+CHARS2IND = {}
+for i in [0...CHARS.length]
+  CHARS2IND[CHARS[i]] = i
+K = CHARS.length
+
+toBaseKString = (n) ->
+  st = ""
+  qr = n.divmod(K)
+  st = CHARS[qr.remainder.value] + st
+  while not qr.quotient.isZero()
+    qr = qr.quotient.divmod(K)
+    st = CHARS[qr.remainder.value] + st
+  return st
+
+fromBaseKString = (st) ->
+  # returns -1 if erroneous characters are in st
+  n = bigInt(0)
+  for c in st
+    if not (c of CHARS2IND)
+      return -1
+    n = n.times(K)
+    n = n.plus(CHARS2IND[c])
+  return n
 
 
 sha = (input) ->
@@ -152,31 +171,6 @@ elTimes = (p, n) ->
     n = n.shiftRight(1)
   return res
 
-getRandIntNBits = ->
-  n = bigInt(0)
-  bytes =  window.crypto.getRandomValues new Uint8Array(N/8)
-  for byte in bytes
-    n = n.shiftLeft(8).plus(byte)
-  return n
-
-base64urlToBin = (base64url) ->
-  bin = ''
-  for char in base64url
-    if not (char in base64urlChars)
-      return null
-    bin = bin + charsToBinary[char]
-  return bin
-
-binToBase64url = (bin) ->
-  base64url = ''
-  i = bin.length - 6
-  while i > 0
-    # process in sextets because 64 = 2^6
-    base64url = base64urlChars[parseInt(bin[i...i+6], 2)] + base64url
-    i -= 6
-  base64url = base64urlChars[parseInt(bin[0...i+6], 2)] + base64url
-  return base64url
-
 signMessage = (mess, pass) ->
   z = hash(mess)
   d = hash(pass)
@@ -207,9 +201,8 @@ signMessage = (mess, pass) ->
   return [id, sig]
 
 verifySig = (mess, id, sig) ->
-  if (id == null) or (sig == null)
+  if (id == -1) or (sig == -1)
     return false
-  id = bigInt(id, 2)
   qx = id.shiftRight(1)
   smallerRootQ = id.and(1)
   qy = getY(qx, smallerRootQ)
@@ -221,7 +214,6 @@ verifySig = (mess, id, sig) ->
   if not (elTimes(q, C.N) == C.Inf)
     return false
   z = hash(mess)
-  sig = bigInt(sig, 2)
   r = sig.shiftRight(L)
   s = sig.minus(r.shiftLeft(L))
   verified = false
@@ -267,7 +259,7 @@ runVerification = ->
     mess = ""
   if pass.length != 0
     [id, sig] = signMessage(mess, pass)
-    idString = binToBase64url(id.toString(2))
+    idString = toBaseKString(id)
     document.getElementById('id').value = idString
     makeCode(idString)
     if mess == ""
@@ -276,10 +268,10 @@ runVerification = ->
     else
       output = "Success! Send the message, along with the Signature+ID so \
       they can verify the message is indeed from you."
-      document.getElementById('sig').value = binToBase64url(sig.toString(2))
+      document.getElementById('sig').value = toBaseKString(sig)
     col = "green"
   else if id.length > 0 and sig.length > 0
-    verified = verifySig(mess, base64urlToBin(id), base64urlToBin(sig))
+    verified = verifySig(mess, fromBaseKString(id), fromBaseKString(sig))
     if verified
       output = "Verification SUCCESS! The signature does indeed match \
       the message from this ID. The other party used the correct password \
@@ -321,17 +313,6 @@ for id in ['pass', 'id', 'sig']
       myFunction()
     return
   
-# Tooltip in ending blurb explaining custom base64  
-tippy '#base64',
-  content: 'Zero-padding is done in the front. + and / are replaced with ~ and _'
-  trigger: 'click'
-  delay: 100
-  arrow: true
-  arrowType: 'round'
-  size: 'large'
-  duration: 500
-  animation: 'scale'
-
 # Highlight ID/Signature on first click (for ease of copying/deleting)
 do ->
   areas = document.querySelectorAll('.highlight')
