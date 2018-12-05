@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, K, L, blurAll, elAdd, elTimes, fromBaseKString, getY, hash, i, id, input, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, ref, ref1, runVerification, sha, signMessage, toBaseKString, verifySig;
+var C, CHARS, CHARS2IND, K, L, blurAll, elAdd, elTimes, fromBaseKString, getY, hash, i, id, input, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, ref, ref1, runVerification, salt, sha, signMessage, toBaseKString, verifySig;
 
 CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -36,8 +36,10 @@ fromBaseKString = function(st) {
   return n;
 };
 
+salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
+
 sha = function(input) {
-  return bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256);
+  return bigInt(CryptoJS.SHA3(input + salt).toString(), 16).shiftRight(256);
 };
 
 hash = sha;

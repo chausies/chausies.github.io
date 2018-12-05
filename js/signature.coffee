@@ -25,8 +25,9 @@ fromBaseKString = (st) ->
   return n
 
 
+salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
 sha = (input) ->
-  bigInt(CryptoJS.SHA3(input).toString(), 16).shiftRight(256)
+  bigInt(CryptoJS.SHA3(input + salt).toString(), 16).shiftRight(256)
 
 hash = sha
 L = 256
