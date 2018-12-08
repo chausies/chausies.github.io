@@ -40,18 +40,25 @@ fromBaseKString = (st) ->
     n = n.plus(CHARS2IND[c])
   return n
 
-salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
+arrayToBigInt = (arr) ->
+  # Because sjcl gives 8 32-bit ints in an array, this convert it to a
+  # 256-bit bigInt
+  b = ''
+  for i in arr
+    m = 1
+    for _ in [0...32]
+      if (i & m) == 0
+        b = b + '0'
+      else
+        b = b + '1'
+      m = m << 1
+  return bigInt(b, 2)
+
+SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
 pbkdf2 = (input) ->
-  return bigInt(
-    CryptoJS.PBKDF2(
-      input,
-      salt,
-      {
-        hasher: CryptoJS.algo.SHA3,
-        keySize: 8,
-        iterations: 1000
-      }
-    ).toString(), 16)
+  return arrayToBigInt(
+    sjcl.misc.pbkdf2(input, SALT, 10000)
+  )
 
 hash = pbkdf2
 L = 256
@@ -215,16 +222,25 @@ hexToBase64 = (hexstring) ->
   ).join('')
 
 aes_enc = (pass, data) ->
-  return bigInt(
-    base64ToHex(
-      CryptoJS.AES.encrypt(data, pass).toString()
-    )
-    , 16)
+  encoded = sjcl.encrypt(pass, data, {mode:'gcm'})
+  eval('e = ' + encoded)
+  ct = bigInt(base64ToHex(e.ct), 16)     # variable length
+  iv = bigInt(base64ToHex(e.iv), 16)     # 128-bit
+  slt = bigInt(base64ToHex(e.salt), 16) # 64-bit
+  x = ct.shiftLeft(128).plus(iv).shiftLeft(64).plus(slt)
+  return x
 
 aes_dec = (pass, x) ->
-  return CryptoJS.AES.decrypt(
-    hexToBase64(x.toString(16))
-    , pass).toString(CryptoJS.enc.Utf8)
+  o = bigInt(1)
+  slt = hexToBase64(x.mod(o.shiftLeft(64)).toString(16))
+  iv = hexToBase64(x.shiftRight(64).mod(o.shiftLeft(128)).toString(16))
+  ct = hexToBase64(x.shiftRight(64+128).toString(16))
+  encoded = "{\"iv\":\"" + iv + "\",\"v\":1,\"iter\":10000,\"ks\":128,\"ts\":64,\"mode\":\"gcm\",\"adata\":\"\",\"cipher\":\"aes\",\"salt\":\"" + slt + "\",\"ct\":\"" + ct + "\"}"
+  try
+    data = sjcl.decrypt(pass, encoded)
+  catch err
+    data = -1
+  return data
 
 getID = (pass) ->
   a = hash(pass)
@@ -278,10 +294,10 @@ decrypt = (pass, encrypted) ->
   Bx = id.shiftRight(1)
   By = getY(Bx, smallerRootQ)
   if By == -1
-    return ""
+    return -1
   B = [Bx, By]
   if not onCurve(B)
-    return ""
+    return -1
   sharedKey = elTimes(B, a)
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1])
   pass = toBaseKString(sharedKey)
@@ -332,8 +348,8 @@ runEncryption = ->
         mess = ""
       else
         mess = decrypt(pass, encrypted)
-      if mess.length == 0
-        output = "Error! The Password likely doesn't match the Encrypted Message."
+      if mess == -1
+        output = "Error! The Password doesn't match the Encrypted Message."
         col = "red"
       else
         document.getElementById('mess').value = mess

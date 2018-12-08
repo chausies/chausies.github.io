@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, GET, K, L, aes_dec, aes_enc, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, salt, toBaseKString, u;
+var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, toBaseKString, uu;
 
 GET = {};
 
@@ -57,14 +57,28 @@ fromBaseKString = function(st) {
   return n;
 };
 
-salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
+arrayToBigInt = function(arr) {
+  var _, b, len, m, u, v;
+  b = '';
+  for (u = 0, len = arr.length; u < len; u++) {
+    i = arr[u];
+    m = 1;
+    for (_ = v = 0; v < 32; _ = ++v) {
+      if ((i & m) === 0) {
+        b = b + '0';
+      } else {
+        b = b + '1';
+      }
+      m = m << 1;
+    }
+  }
+  return bigInt(b, 2);
+};
+
+SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
 
 pbkdf2 = function(input) {
-  return bigInt(CryptoJS.PBKDF2(input, salt, {
-    hasher: CryptoJS.algo.SHA3,
-    keySize: 8,
-    iterations: 1000
-  }).toString(), 16);
+  return arrayToBigInt(sjcl.misc.pbkdf2(input, SALT, 10000));
 };
 
 hash = pbkdf2;
@@ -234,11 +248,32 @@ hexToBase64 = function(hexstring) {
 };
 
 aes_enc = function(pass, data) {
-  return bigInt(base64ToHex(CryptoJS.AES.encrypt(data, pass).toString()), 16);
+  var ct, encoded, iv, slt, x;
+  encoded = sjcl.encrypt(pass, data, {
+    mode: 'gcm'
+  });
+  eval('e = ' + encoded);
+  ct = bigInt(base64ToHex(e.ct), 16);
+  iv = bigInt(base64ToHex(e.iv), 16);
+  slt = bigInt(base64ToHex(e.salt), 16);
+  x = ct.shiftLeft(128).plus(iv).shiftLeft(64).plus(slt);
+  return x;
 };
 
 aes_dec = function(pass, x) {
-  return CryptoJS.AES.decrypt(hexToBase64(x.toString(16)), pass).toString(CryptoJS.enc.Utf8);
+  var ct, data, encoded, err, iv, o, slt;
+  o = bigInt(1);
+  slt = hexToBase64(x.mod(o.shiftLeft(64)).toString(16));
+  iv = hexToBase64(x.shiftRight(64).mod(o.shiftLeft(128)).toString(16));
+  ct = hexToBase64(x.shiftRight(64 + 128).toString(16));
+  encoded = "{\"iv\":\"" + iv + "\",\"v\":1,\"iter\":10000,\"ks\":128,\"ts\":64,\"mode\":\"gcm\",\"adata\":\"\",\"cipher\":\"aes\",\"salt\":\"" + slt + "\",\"ct\":\"" + ct + "\"}";
+  try {
+    data = sjcl.decrypt(pass, encoded);
+  } catch (_error) {
+    err = _error;
+    data = -1;
+  }
+  return data;
 };
 
 getID = function(pass) {
@@ -305,11 +340,11 @@ decrypt = function(pass, encrypted) {
   Bx = id.shiftRight(1);
   By = getY(Bx, smallerRootQ);
   if (By === -1) {
-    return "";
+    return -1;
   }
   B = [Bx, By];
   if (!onCurve(B)) {
-    return "";
+    return -1;
   }
   sharedKey = elTimes(B, a);
   sharedKey = sharedKey[0].shiftLeft(L).plus(sharedKey[1]);
@@ -365,8 +400,8 @@ runEncryption = function() {
       } else {
         mess = decrypt(pass, encrypted);
       }
-      if (mess.length === 0) {
-        output = "Error! The Password likely doesn't match the Encrypted Message.";
+      if (mess === -1) {
+        output = "Error! The Password doesn't match the Encrypted Message.";
         col = "red";
       } else {
         document.getElementById('mess').value = mess;
@@ -421,8 +456,8 @@ blurAll = function() {
 };
 
 ref2 = ['pass', 'id', 'enc'];
-for (u = 0, len = ref2.length; u < len; u++) {
-  id = ref2[u];
+for (uu = 0, len = ref2.length; uu < len; uu++) {
+  id = ref2[uu];
   input = document.getElementById(id);
   input.addEventListener('keydown', function(event) {
     if (event.keyCode === 13) {
