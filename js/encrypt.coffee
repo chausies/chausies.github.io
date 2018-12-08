@@ -41,10 +41,19 @@ fromBaseKString = (st) ->
   return n
 
 salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
-sha = (input) ->
-  bigInt(CryptoJS.SHA3(input + salt).toString(), 16).shiftRight(256)
+pbkdf2 = (input) ->
+  return bigInt(
+    CryptoJS.PBKDF2(
+      input,
+      salt,
+      {
+        hasher: CryptoJS.algo.SHA3,
+        keySize: 8,
+        iterations: 2000
+      }
+    ).toString(), 16)
 
-hash = sha
+hash = pbkdf2
 L = 256
 
 neg = (a, p) ->

@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, GET, K, L, aes_dec, aes_enc, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, query, ref, ref1, ref2, runEncryption, salt, sha, toBaseKString, u;
+var C, CHARS, CHARS2IND, GET, K, L, aes_dec, aes_enc, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, salt, toBaseKString, u;
 
 GET = {};
 
@@ -59,11 +59,15 @@ fromBaseKString = function(st) {
 
 salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
 
-sha = function(input) {
-  return bigInt(CryptoJS.SHA3(input + salt).toString(), 16).shiftRight(256);
+pbkdf2 = function(input) {
+  return bigInt(CryptoJS.PBKDF2(input, salt, {
+    hasher: CryptoJS.algo.SHA3,
+    keySize: 8,
+    iterations: 2000
+  }).toString(), 16);
 };
 
-hash = sha;
+hash = pbkdf2;
 
 L = 256;
 
