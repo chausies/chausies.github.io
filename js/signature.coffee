@@ -183,8 +183,8 @@ elTimes = (p, n) ->
 
 signMessage = (mess, pass) ->
   z = hash(mess)
-  d = hash(pass)
-  while d.geq(C.N) or d.leq(1) # outrageously unlikely
+  d = hash(pass).mod(C.N)
+  while d.leq(1) # outrageously unlikely
     pass = pass + "extra"
     d = hash(pass)
   q = elTimes(C.G, d)
