@@ -39,7 +39,6 @@ fromBaseKString = function(st) {
 salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
 
 pbkdf2 = function(input) {
-  console.log(input)
   return bigInt(CryptoJS.PBKDF2(input, salt, {
     hasher: CryptoJS.algo.SHA3,
     keySize: 8,
