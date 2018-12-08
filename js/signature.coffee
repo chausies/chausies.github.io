@@ -34,7 +34,7 @@ pbkdf2 = (input) ->
       {
         hasher: CryptoJS.algo.SHA3,
         keySize: 8,
-        iterations: 2000
+        iterations: 1000
       }
     ).toString(), 16)
 
