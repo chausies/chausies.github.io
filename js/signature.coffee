@@ -24,21 +24,33 @@ fromBaseKString = (st) ->
     n = n.plus(CHARS2IND[c])
   return n
 
+arrayToBigInt = (arr) ->
+  # Because sjcl gives 8 32-bit ints in an array, this convert it to a
+  # 256-bit bigInt
+  b = ''
+  for i in arr
+    m = 1
+    for _ in [0...32]
+      if (i & m) == 0
+        b = b + '0'
+      else
+        b = b + '1'
+      m = m << 1
+  return bigInt(b, 2)
 
-salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
+SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
 pbkdf2 = (input) ->
-  return bigInt(
-    CryptoJS.PBKDF2(
-      input,
-      salt,
-      {
-        hasher: CryptoJS.algo.SHA3,
-        keySize: 8,
-        iterations: 1000
-      }
-    ).toString(), 16)
+  return arrayToBigInt(
+    sjcl.misc.pbkdf2(input, SALT, 10000)
+  )
 
-hash = pbkdf2
+sha256 = (input) ->
+  return arrayToBigInt(
+    sjcl.hash.sha256.hash(input + SALT)
+  )
+
+hash = sha256
+kdf = pbkdf2
 L = 256
 
 neg = (a, p) ->
@@ -183,10 +195,10 @@ elTimes = (p, n) ->
 
 signMessage = (mess, pass) ->
   z = hash(mess)
-  d = hash(pass).mod(C.N)
+  d = kdf(pass).mod(C.N)
   while d.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    d = hash(pass)
+    d = kdf(pass)
   q = elTimes(C.G, d)
   if q[1].lesser(neg(q[1], C.P))
     smallerRootQ = 1

@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, K, L, blurAll, elAdd, elTimes, fromBaseKString, getY, hash, i, id, input, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, pbkdf2, ref, ref1, runVerification, salt, signMessage, toBaseKString, verifySig;
+var C, CHARS, CHARS2IND, K, L, SALT, arrayToBigInt, blurAll, elAdd, elTimes, fromBaseKString, getY, hash, i, id, input, kdf, l, len, makeCode, modsqrt, myFunction, neg, o, onCurve, pbkdf2, ref, ref1, runVerification, sha256, signMessage, toBaseKString, verifySig;
 
 CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
@@ -36,17 +36,37 @@ fromBaseKString = function(st) {
   return n;
 };
 
-salt = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
-
-pbkdf2 = function(input) {
-  return bigInt(CryptoJS.PBKDF2(input, salt, {
-    hasher: CryptoJS.algo.SHA3,
-    keySize: 8,
-    iterations: 1000
-  }).toString(), 16);
+arrayToBigInt = function(arr) {
+  var _, b, len, m, o, u;
+  b = '';
+  for (o = 0, len = arr.length; o < len; o++) {
+    i = arr[o];
+    m = 1;
+    for (_ = u = 0; u < 32; _ = ++u) {
+      if ((i & m) === 0) {
+        b = b + '0';
+      } else {
+        b = b + '1';
+      }
+      m = m << 1;
+    }
+  }
+  return bigInt(b, 2);
 };
 
-hash = pbkdf2;
+SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa";
+
+pbkdf2 = function(input) {
+  return arrayToBigInt(sjcl.misc.pbkdf2(input, SALT, 10000));
+};
+
+sha256 = function(input) {
+  return arrayToBigInt(sjcl.hash.sha256.hash(input + SALT));
+};
+
+hash = sha256;
+
+kdf = pbkdf2;
 
 L = 256;
 
@@ -188,10 +208,10 @@ elTimes = function(p, n) {
 signMessage = function(mess, pass) {
   var d, done, id, k, p, phrase, q, r, s, sig, smallerRootQ, z;
   z = hash(mess);
-  d = hash(pass).mod(C.N);
+  d = kdf(pass).mod(C.N);
   while (d.leq(1)) {
     pass = pass + "extra";
-    d = hash(pass);
+    d = kdf(pass);
   }
   q = elTimes(C.G, d);
   if (q[1].lesser(neg(q[1], C.P))) {
