@@ -55,12 +55,19 @@ arrayToBigInt = (arr) ->
   return bigInt(b, 2)
 
 SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
+
 pbkdf2 = (input) ->
   return arrayToBigInt(
     sjcl.misc.pbkdf2(input, SALT, 10000)
   )
 
-hash = pbkdf2
+sha256 = (input) ->
+  return arrayToBigInt(
+    sjcl.hash.sha256.hash(input + SALT)
+  )
+
+hash = sha256
+kdf = pbkdf2
 L = 256
 
 neg = (a, p) ->
@@ -243,10 +250,10 @@ aes_dec = (pass, x) ->
   return data
 
 getID = (pass) ->
-  a = hash(pass)
+  a = kdf(pass)
   while a.geq(C.P) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    a = hash(pass)
+    a = kdf(pass)
   key = elTimes(C.G, a)
   if key[1].lesser(neg(key[1], C.P))
     smallerRootQ = 1
@@ -283,10 +290,10 @@ encrypt = (mess, id) ->
   return encrypted
 
 decrypt = (pass, encrypted) ->
-  a = hash(pass)
+  a = kdf(pass)
   while a.geq(C.P) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
-    a = hash(pass)
+    a = kdf(pass)
   o = bigInt(1)
   id = encrypted.mod(o.shiftLeft(L+1))
   e = encrypted.shiftRight(L+1)

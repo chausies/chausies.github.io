@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, toBaseKString, uu;
+var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, kdf, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, sha256, toBaseKString, uu;
 
 GET = {};
 
@@ -81,7 +81,13 @@ pbkdf2 = function(input) {
   return arrayToBigInt(sjcl.misc.pbkdf2(input, SALT, 10000));
 };
 
-hash = pbkdf2;
+sha256 = function(input) {
+  return arrayToBigInt(sjcl.hash.sha256.hash(input + SALT));
+};
+
+hash = sha256;
+
+kdf = pbkdf2;
 
 L = 256;
 
@@ -278,10 +284,10 @@ aes_dec = function(pass, x) {
 
 getID = function(pass) {
   var a, id, key, smallerRootQ;
-  a = hash(pass);
+  a = kdf(pass);
   while (a.geq(C.P) || a.leq(1)) {
     pass = pass + "extra";
-    a = hash(pass);
+    a = kdf(pass);
   }
   key = elTimes(C.G, a);
   if (key[1].lesser(neg(key[1], C.P))) {
@@ -328,10 +334,10 @@ encrypt = function(mess, id) {
 
 decrypt = function(pass, encrypted) {
   var B, Bx, By, a, e, id, mess, o, sharedKey, smallerRootQ;
-  a = hash(pass);
+  a = kdf(pass);
   while (a.geq(C.P) || a.leq(1)) {
     pass = pass + "extra";
-    a = hash(pass);
+    a = kdf(pass);
   }
   o = bigInt(1);
   id = encrypted.mod(o.shiftLeft(L + 1));

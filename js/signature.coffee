@@ -39,6 +39,7 @@ arrayToBigInt = (arr) ->
   return bigInt(b, 2)
 
 SALT = "f704a673366fe76fac7a50c55f62453eade6659661e0c58d4ee5726a7cd128fa"
+
 pbkdf2 = (input) ->
   return arrayToBigInt(
     sjcl.misc.pbkdf2(input, SALT, 10000)
