@@ -326,6 +326,9 @@ makeCode = (text) ->
   qrcode.makeCode text
   return
 
+# Generate 256-bit password by default
+document.getElementById("pass").value = toBaseKString(getRandIntLBits())
+
 myFunction = ->
   out = document.getElementById("out")
   out.innerHTML = "Working..."

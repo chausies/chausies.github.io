@@ -375,6 +375,8 @@ makeCode = function(text) {
   qrcode.makeCode(text);
 };
 
+document.getElementById("pass").value = toBaseKString(getRandIntLBits());
+
 myFunction = function() {
   out = document.getElementById("out");
   out.innerHTML = "Working...";
