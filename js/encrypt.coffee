@@ -208,9 +208,9 @@ elTimes = (p, n) ->
     n = n.shiftRight(1)
   return res
 
-getRandIntLBits = ->
+getRandBytes = (k)->
   n = bigInt(0)
-  bytes =  window.crypto.getRandomValues new Uint8Array(L/8)
+  bytes =  window.crypto.getRandomValues new Uint8Array(k)
   for byte in bytes
     n = n.shiftLeft(8).plus(byte)
   return n
@@ -271,10 +271,10 @@ encrypt = (mess, id) ->
   key = [keyx, keyy]
   if not onCurve(key)
     return -1
-  r = getRandIntLBits()
+  r = getRandBytes(L/8)
   b = hash(mess + r.toString(2)) # Add random bits to obfuscate
   while b.geq(C.P) or b.leq(1) # outrageously unlikely
-    r = getRandIntLBits()
+    r = getRandBytes(L/8)
     b = hash(mess + r.toString(2))
   B = elTimes(C.G, b)
   if B[1].lesser(neg(B[1], C.P))
@@ -327,8 +327,8 @@ makeCode = (text) ->
   return
 
 if not ("id" of GET)
-  # Generate 256-bit password by default
-  document.getElementById("pass").value = toBaseKString(getRandIntLBits())
+  # Generate 128-bit password by default
+  document.getElementById("pass").value = toBaseKString(getRandBytes(16))
 
 myFunction = ->
   out = document.getElementById("out")

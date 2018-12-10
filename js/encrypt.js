@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandIntLBits, getY, hash, hexToBase64, i, id, input, k, kdf, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, sha256, toBaseKString, uu;
+var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandBytes, getY, hash, hexToBase64, i, id, input, k, kdf, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, sha256, toBaseKString, uu;
 
 GET = {};
 
@@ -225,10 +225,10 @@ elTimes = function(p, n) {
   return res;
 };
 
-getRandIntLBits = function() {
+getRandBytes = function(k) {
   var byte, bytes, len, n, u;
   n = bigInt(0);
-  bytes = window.crypto.getRandomValues(new Uint8Array(L / 8));
+  bytes = window.crypto.getRandomValues(new Uint8Array(k));
   for (u = 0, len = bytes.length; u < len; u++) {
     byte = bytes[u];
     n = n.shiftLeft(8).plus(byte);
@@ -311,10 +311,10 @@ encrypt = function(mess, id) {
   if (!onCurve(key)) {
     return -1;
   }
-  r = getRandIntLBits();
+  r = getRandBytes(L/8);
   b = hash(mess + r.toString(2));
   while (b.geq(C.P) || b.leq(1)) {
-    r = getRandIntLBits();
+    r = getRandBytes(L/8);
     b = hash(mess + r.toString(2));
   }
   B = elTimes(C.G, b);
@@ -376,7 +376,7 @@ makeCode = function(text) {
 };
 
 if (!("id" in GET)) {
-  document.getElementById("pass").value = toBaseKString(getRandIntLBits());
+  document.getElementById("pass").value = toBaseKString(getRandBytes(16));
 }
 
 myFunction = function() {
