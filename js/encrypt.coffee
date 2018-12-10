@@ -350,7 +350,7 @@ runEncryption = ->
       id = getID(pass)
       idString = toBaseKString(id)
       document.getElementById('id').value = idString
-      output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "'>this url</a>."
+      output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
       col = "green"
       makeCode('https://www.chausies.xyz/encrypt?id=' + idString)
     else
