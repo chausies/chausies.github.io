@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<style>
+  p {
+    width: 420px;
+    max-width: 100%;
+    word-wrap: break-word;
+  }
+</style>
+
+<h1>
+  <a href="encrypt">Chausies.xyz/encrypt</a> Security Overview
+</h1>
+
+<p>
+  This webapp is for public-key encryption. The example usage is that Alice inputs a password and gets her public ID (her public key). Then Bob can encrypt a Message for Alice's ID, and the Encrypted Message can only be decrypted by Alice via entering her Password. Even if Alice and Bob communicate over an open channel, with Alice sending Bob her ID and Bob sending Alice the Encrypted Message, no one can make out Alice's Password or Bob's Message.
+</p>
+
+<p>
+  This webapp is hosted and served by Github, at chausies.xyz/encrypt (which is just a CNAME for the chausies.github.io/encrypt url). The accompanying javascript and html files are all open source and on Github, and you're guaranteed that those are the files being served by the website. The entire webapp uses only client-side javascript, with nothing leaving your computer and no interaction with any servers. In fact, the webapp can run completely offline. 
+</p>
+
+<p>
+  Now, for the technical security details of the webapp. This webapp implements public-key encryption via <a href="https://en.wikipedia.org/wiki/Elliptic-curve_cryptography">Elliptic Curve Cryptography</a> , using the <a href="https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme">ECIES</a> algorithm, as described in this <a href="https://crypto.stackexchange.com/questions/31602/how-does-encryption-work-in-elliptic-curve-cryptography/31603#31603">Crypto Stackexchange answer</a>. <a href="https://en.wikipedia.org/wiki/Curve25519">Curve25519</a> is used as the Elliptic Curve. The private key <i><b>a</b></i> of the receiver Alice is the <a href="https://en.wikipedia.org/wiki/PBKDF2">PBKDF2</a> digest of her password, using 10000 iterations and a 256-bit salt. The private key <i><b>b</b></i> of Bob is a securely randomly chosen 256-bit number, which is done using the <a href="https://en.wikipedia.org/wiki/Cryptographically_secure_pseudorandom_number_generator">CPRNG</a> window.crypto.getRandomValues. The encryption used for the message is <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a> using the <a href="https://en.wikipedia.org/wiki/Galois/Counter_Mode">GCM mode</a>. The hashing used for Bob's Message is SHA256 with a 256-bit salt.
+</p>
+
+<p>
+  This webapp uses three pure javascript libraries, none of which have any outside dependencies. The first is <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a>, which is used for its implementations of integers larger than 32-bits as well as support for discrete math operations like modular arithmetic, which are needed to implement Elliptic Curve Cryptography (ECC). The second library used is the <a href="https://github.com/bitwiseshiftleft/sjcl">Stanford Javascript Crypto Library</a>, which is a highly vetted a reliable crypto library endorsed by Stanford Cryptography Professor <a href="https://en.wikipedia.org/wiki/Dan_Boneh"> Dan Boneh</a>.  SJCL is used for its implementations of PBKDF2, AES with GCM mode, and SHA256.  The final library is <a href="https://github.com/davidshimjs/qrcodejs">qrcode.js</a>, which is a simple library for making QR codes from text, which is added as a convenience.
+</p>
+
+<p>
+  All of the code for the website can be found at <a href="https://github.com/chausies/chausies.github.io/blob/master/encrypt.html">encrypt.html</a> and <a href="https://github.com/chausies/chausies.github.io/blob/master/js/encrypt.coffee">encrypt.coffee</a> (note that <a href="https://coffeescript.org/">coffeescript</a> is used to make the code look simple and straightforward. The <a href="https://github.com/chausies/chausies.github.io/blob/master/js/encrypt.js">actual javascript</a> is just the compiled version of this coffeescript). The code is easy to follow at a high level and easy to vet.
+</p>
+
+<p>
+  Finally, there are only two main vulnerabilities for this webapp. The first is that the user might use a password that's too simple, such as "password". To circumvent this, a secure random 128-bit password is provided by default. At the very least, a password of 50-60 bits is recommended. The second main vulnerability is a <a href="https://en.wikipedia.org/wiki/Man-in-the-middle_attack">Man-in-the-Middle attack</a>. While this webapp uses <a href="https://en.wikipedia.org/wiki/Authentication">Authenticated Encryption</a> to protect against the tampering of messages (i.e. changing around the letters of the ID or Encrypted Message will result in decryption throwing a "Password does not match!" error), it does not protect against a middleman outright switching your communications for something else. For example, if Alice sends Bob her ID through the middleman Mallory, then Mallory could give Bob her ID instead, which would mean that Bob encrypts his message for Mallory thinking he's encrypting it for Alice. Basically, this webapp only guarantees safety against eavesdroppers. In order to have protection from a man-in-the-middle attack, Alice should give Bob her ID through a secure channel beforehand.
+</p>
+
+<p>
+  This webapp was made by <a href="https://www.chausies.xyz">Ajay Shanker Tripathi</a>, and is released under the <a href="https://opensource.org/licenses/BSD-3-Clause">BSD 3-Clause license</a>. 
+</p>
+
+</body>
+</html>
