@@ -5,11 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<style>
-  p {
-    width: 420px;
-    max-width: 100%;
+<style type="text/css">
+  html{
+    background-color:#fefefe
+  }
+  body{
+    font-family:Open Sans,Arial;
+    color:#454545;
+    font-size:16px;
+    margin:2em auto;
+    max-width:800px;
     word-wrap: break-word;
+    padding:1em;
+    line-height:1.4;
+    text-align:justify;
+  }
+  a{
+    color:#07a;
+  }
+  a:visited{
+    color:#941352;
   }
 </style>
 
@@ -30,7 +45,7 @@
 </p>
 
 <p>
-  This webapp uses three pure javascript libraries, none of which have any outside dependencies. The first is <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a>, which is used for its implementations of integers larger than 32-bits as well as support for discrete math operations like modular arithmetic, which are needed to implement Elliptic Curve Cryptography (ECC). The second library used is the <a href="https://github.com/bitwiseshiftleft/sjcl">Stanford Javascript Crypto Library</a>, which is a highly vetted a reliable crypto library endorsed by Stanford Cryptography Professor <a href="https://en.wikipedia.org/wiki/Dan_Boneh"> Dan Boneh</a>.  SJCL is used for its implementations of PBKDF2, AES with GCM mode, and SHA256.  The final library is <a href="https://github.com/davidshimjs/qrcodejs">qrcode.js</a>, which is a simple library for making QR codes from text, which is added as a convenience.
+  This webapp uses two pure javascript libraries, none of which have any outside dependencies. The first is <a href="https://github.com/peterolson/BigInteger.js/">BigInteger.js</a>, which is used for its implementations of integers larger than 32-bits as well as support for discrete math operations like modular arithmetic, which are needed to implement Elliptic Curve Cryptography (ECC). The second library used is the <a href="https://github.com/bitwiseshiftleft/sjcl">Stanford Javascript Crypto Library</a>, which is a highly vetted a reliable crypto library endorsed by Stanford Cryptography Professor <a href="https://en.wikipedia.org/wiki/Dan_Boneh"> Dan Boneh</a>.  SJCL is used for its implementations of PBKDF2, AES with GCM mode, and SHA256.
 </p>
 
 <p>
