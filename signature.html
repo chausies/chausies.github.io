@@ -11,22 +11,56 @@
 <script src="js/enc_packages/qrcode.min.js"></script>
 <!-- "http://bitwiseshiftleft.github.io/sjcl/sjcl.js" -->
 <script src="js/enc_packages/sjcl.js"></script>
-<style>
-  li {
-    width: 420px;
-    max-width: 100%;
+<style type="text/css">
+  html{
+    background-color:#fefefe
+  }
+  body{
+    font-family:Open Sans,Arial;
+    color:#454545;
+    font-size:16px;
+    margin:2em auto;
+    max-width:800px;
     word-wrap: break-word;
+    padding:1em;
+    line-height:1.4;
+    text-align:justify;
   }
-  textarea {
+  p.input{
+    color: #222;
+    font-weight: bold;
+    line-height:1.0;
+  }
+  textarea{
+    max-width:100%;
+  }
+  input{
     max-width: 100%;
   }
-  input {
-    max-width: 100%;
+  a{
+    color:#07a;
   }
-  p {
-    width: 420px;
-    max-width: 100%;
-    word-wrap: break-word;
+  a:visited{
+    color:#941352;
+  }
+  br {
+    display: block;
+    content: "";
+    margin-top: 0; 
+  }
+  .button {
+    background-color: #4CAF50; /* Green */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 24px;
+    background-color: #e7e7e7;
+    color: #333;
+    border: 2px solid #333;
   }
   #qrcode {
     margin-top:15px;
@@ -54,27 +88,27 @@ Everything uses secure client-side javascript, so no information leaves your dev
 
 <br>
 
-<p>
+<p class="input">
 Message: 
 </p>
 <textarea rows="4" cols="50" id="mess"></textarea>
-<p>
-Password: <input type="password" id="pass", size=40>
+<p class="input">
+Password: <input type="password" id="pass" size=40>
 </p>
-<p>
+<p class="input">
 ID:
 </p>
 <textarea rows="2" cols="50" id="id" class="highlight"></textarea>
-<p id="idqr"></p>
+<p class="input" id="idqr"></p>
 <div id="qrcode"></div>
-<p>
+<p class="input">
 Signature: 
 </p>
 <textarea rows="2" cols="50" id="sig" class="highlight"></textarea>
 
 <br>
 
-<button onclick="myFunction()">Go!</button>
+<button class="button" onclick="myFunction()">Go!</button>
 
 <p id="out"></p>
 <br><br>
