@@ -311,21 +311,6 @@ decrypt = (pass, encrypted) ->
   mess = aes_dec(pass, e)
   return mess
 
-makeCode = (text) ->
-  # If provided text, makes the QR code for the text. Else, destroys the
-  # previous QR code.
-  document.getElementById('qrcode').innerHTML = ''
-  if !text
-    document.getElementById('idqr').innerHTML = ''
-    return
-  document.getElementById('idqr').innerHTML = 'ID (QR code):'
-  qrcode = new QRCode('qrcode',
-    width: 128
-    height: 128
-    correctLevel: QRCode.CorrectLevel.M)
-  qrcode.makeCode text
-  return
-
 if not ("id" of GET)
   # Generate 128-bit password by default
   document.getElementById("pass").value = toBaseKString(getRandBytes(16))
@@ -343,7 +328,6 @@ runEncryption = ->
   id   = document.getElementById('id').value
   enc  = document.getElementById('enc').value
   pass = document.getElementById('pass').value
-  makeCode()
   if pass.length != 0
     document.getElementById('mess').value = ""
     if enc.length == 0
@@ -352,7 +336,6 @@ runEncryption = ->
       document.getElementById('id').value = idString
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
       col = "green"
-      makeCode('https://www.chausies.xyz/encrypt?id=' + idString)
     else
       encrypted = fromBaseKString(enc)
       if encrypted == -1 # bad characters provided in the base-K string

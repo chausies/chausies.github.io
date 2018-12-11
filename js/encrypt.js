@@ -1,4 +1,4 @@
-var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandBytes, getY, hash, hexToBase64, i, id, input, k, kdf, l, len, makeCode, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, sha256, toBaseKString, uu;
+var C, CHARS, CHARS2IND, GET, K, L, SALT, aes_dec, aes_enc, arrayToBigInt, base64ToHex, blurAll, decrypt, elAdd, elTimes, encrypt, fromBaseKString, getID, getRandBytes, getY, hash, hexToBase64, i, id, input, k, kdf, l, len, modsqrt, myFunction, neg, onCurve, out, param, pbkdf2, query, ref, ref1, ref2, runEncryption, sha256, toBaseKString, uu;
 
 GET = {};
 
@@ -359,22 +359,6 @@ decrypt = function(pass, encrypted) {
   return mess;
 };
 
-makeCode = function(text) {
-  var qrcode;
-  document.getElementById('qrcode').innerHTML = '';
-  if (!text) {
-    document.getElementById('idqr').innerHTML = '';
-    return;
-  }
-  document.getElementById('idqr').innerHTML = 'ID (QR code):';
-  qrcode = new QRCode('qrcode', {
-    width: 128,
-    height: 128,
-    correctLevel: QRCode.CorrectLevel.M
-  });
-  qrcode.makeCode(text);
-};
-
 if (!("id" in GET)) {
   document.getElementById("pass").value = toBaseKString(getRandBytes(16));
 }
@@ -393,7 +377,6 @@ runEncryption = function() {
   id = document.getElementById('id').value;
   enc = document.getElementById('enc').value;
   pass = document.getElementById('pass').value;
-  makeCode();
   if (pass.length !== 0) {
     document.getElementById('mess').value = "";
     if (enc.length === 0) {
@@ -402,7 +385,6 @@ runEncryption = function() {
       document.getElementById('id').value = idString;
       output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>.";
       col = "green";
-      makeCode('https://www.chausies.xyz/encrypt?id=' + idString);
     } else {
       encrypted = fromBaseKString(enc);
       if (encrypted === -1) {
