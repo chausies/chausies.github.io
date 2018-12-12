@@ -10,6 +10,7 @@ for i in [0...query.length]
 
 if "id" of GET
   document.getElementById("id").value = GET["id"]
+  document.getElementById("pass_by_default").innerHTML = ""
   out = document.getElementById("out")
   out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
   out.style.color = "green"
