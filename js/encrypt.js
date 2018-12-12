@@ -16,6 +16,7 @@ for (i = k = 0, ref = query.length; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ?
 
 if ("id" in GET) {
   document.getElementById("id").value = GET["id"];
+  document.getElementById("pass_by_default").innerHTML = "";
   out = document.getElementById("out");
   out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!";
   out.style.color = "green";
