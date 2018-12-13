@@ -90,7 +90,7 @@
 No one can decrypt an Encrypted Message except for the person to whom the ID belongs.
 </p>
 <p>
-Everything uses secure client-side javascript, so no information leaves your device.<span id="pass_by_default"> Your browser has already generated a secure random password for you by default, if you want to use it.</span>
+Everything uses secure client-side javascript, so no information leaves your device, making the entire webapp run perfectly offline.<span id="pass_by_default"> Your device has already generated a secure random password for you by default, if you want to use it.</span>
 </p>
 <br>
 <p class="input">
@@ -117,7 +117,7 @@ Encrypted Message:
 <br>
 <p>
   This website uses the <a href="https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme" target="_blank">Elliptic Curve Integrated Encryption Scheme (ECIES)</a> 
-  algorithm with 256-bit security, <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank">Password-Based Key Derivation Function 2</a>, and the <a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank">Advanced Encryption Standard</a>. This has security strength equivalent to 3072-bit RSA. For a full overview of this webapp and its security, <a href="encrypt_security_overview">see here</a>. All the files for the webapp are guaranteed to be served securely by <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> from <a href="https://github.com/chausies/chausies.github.io">this GitHub repo</a>, as can be independently verified <a href="https://toolbox.googleapps.com/apps/dig/#CNAME/www.chausies.xyz">here, by this CNAME lookup</a>.
+  algorithm with 256-bit security, which has security strength equivalent to 3072-bit RSA. For a full overview of this webapp and its security, <a href="encrypt_security_overview">see here</a>. All the files for the webapp are guaranteed to be served securely by <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> from <a href="https://github.com/chausies/chausies.github.io">this GitHub repo</a>, as can be independently verified <a href="https://toolbox.googleapps.com/apps/dig/#CNAME/www.chausies.xyz">here, by this CNAME lookup</a>.
 </p>
 <p>
   <b>CAUTION</b>: Make sure to use a strong password. If you use a bad password like "password", then someone could guess it and decrypt any messages. Also, when you send your ID, do it through something that you trust not to <i><b>replace</b></i> your communications. You are securely protected from eavesdropping, but not communications being outright replaced. See the <a href="encrypt_security_overview">security overview of the webapp</a> for details.
