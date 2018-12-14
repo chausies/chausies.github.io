@@ -47,7 +47,7 @@
   .tab button {
     background-color: inherit;
     font-size: 12.5px; /* fallback */
-    font-size: 2.5vw;
+    font-size: 3.5vw;
     float: left;
     outline: none;
     cursor: pointer;
@@ -116,9 +116,9 @@
   Safe, Secure, and no information leaves your device. The webapp even runs perfectly offline.
 </p>
 <div class="tab">
-  <button class="tablink" onclick="openTab(event, 'getId')">Get your ID</button>
+  <button class="tablink" id="idTab" onclick="openTab(event, 'getId')">Get<br>your ID</button>
   <button class="tablink" id="encryptTab" onclick="openTab(event, 'encryptMessage')">Make Secret Message</button>
-  <button class="tablink" onclick="openTab(event, 'decryptMessage')">Read Secret Message</button>
+  <button class="tablink" id="decryptTab" onclick="openTab(event, 'decryptMessage')">Read Secret Message</button>
 </div>
 
 <div id="getId" class="tabcontent">
