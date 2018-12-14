@@ -446,14 +446,14 @@ encryptMessage = function() {
   id = document.getElementById('id2').value;
   if (id.length === 0) {
     if (mess.length === 0) {
-      output = "Error! Nothing entered. Please enter the Message you want to encrypt, and the ID of the person you're encrypting the Message for.";
+      output = "Error! Nothing entered. Please enter the Message you want to make secret, and the ID of the person you're making the Secret Message for.";
     } else {
-      output = "Error! Please enter the ID of the person for whom the Message is being encryted.";
+      output = "Error! Please enter the ID of the person for whom the Secret Message is for.";
     }
     col = "red";
   } else {
     if (mess.length === 0) {
-      output = "Error! Please enter a Message to encrypt.";
+      output = "Error! Please enter a Message to make secret.";
       col = "red";
     } else {
       id = fromBaseKString(id);
@@ -466,7 +466,7 @@ encryptMessage = function() {
       } else {
         eString = toBaseKString(encrypted);
         document.getElementById('enc2').value = eString;
-        output = "Success! Send over the Encrypted Message to the other party.";
+        output = "Success! Send over the Secret Message to the other party.";
         col = "green";
       }
     }
@@ -484,28 +484,28 @@ decryptMessage = function() {
   enc = document.getElementById('enc3').value;
   if (pass.length === 0) {
     if (enc.length === 0) {
-      output = "Error! Please enter an Encrypted Message and the Password for the ID it was made for.";
+      output = "Error! Please enter a Secret Message and the Password of the ID it was made for.";
     } else {
-      output = "Error! Please enter the Password for the ID the Encrypted Message was made for.";
+      output = "Error! Please enter the Password of the ID the Secret was made for.";
     }
     col = red;
   } else {
     if (enc.length === 0) {
-      output = "Error! Please enter an Encrypted Message made for your ID.";
+      output = "Error! Please enter an Secret Message made for your ID.";
       col = "red";
     } else {
       encrypted = fromBaseKString(enc);
       if (encrypted === -1) {
-        output = "Error! Invalid Encrypted Message entered. It should only be alphanumeric characters.";
+        output = "Error! Invalid Secret Message entered. It should only be alphanumeric characters.";
         col = "red";
       } else {
         mess = decrypt(pass, encrypted);
         if (mess === -1) {
-          output = "Error! The Password doesn't match the Encrypted Message.";
+          output = "Error! The Password doesn't match the Secret Message.";
           col = "red";
         } else {
           document.getElementById('mess3').value = mess;
-          output = "Success! The Encrypted Message has been decrypted!";
+          output = "Success! The Secret Message has been decrypted!";
           col = "green";
         }
       }
@@ -577,7 +577,8 @@ blurAll = function() {
     document.getElementById("id2").value = GET["id"];
     out = document.getElementById("out");
     out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!";
-    return out.style.color = "green";
+    out.style.color = "green";
+    return setTimeout(scrollToOut, 200);
   } else {
     return document.getElementById("idTab").click();
   }
