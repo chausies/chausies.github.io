@@ -1,3 +1,19 @@
+# Close all tabs
+do ->
+  tabcontents = document.getElementsByClassName("tabcontent")
+  for tc in tabcontents
+    tc.style.display = "none"
+  tablinks = document.getElementsByClassName("tablink")
+  for tl in tablinks
+    tl.className = tl.className.replace(" active", "")
+  # Clear all forms
+  for id in [
+    "pass1", "id1",
+    "mess2", "id2", "enc2",
+    "enc3", "pass3", "mess3"
+    ]
+    document.getElementById(id).value = ""
+
 # Check if ID is already provided, and if so, fill it into the ID section
 GET = {}
 query = window.location.search.substring(1).split('&')
@@ -8,18 +24,13 @@ for i in [0...query.length]
   param = query[i].split('=')
   GET[decodeURIComponent(param[0])] = decodeURIComponent(param[1] or '')
 
-if "id" of GET
-  document.getElementById("id").value = GET["id"]
-  document.getElementById("pass_by_default").innerHTML = ""
-  out = document.getElementById("out")
-  out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
-  out.style.color = "green"
-
 # Custom base62 encoding that's only alphanumeric
 CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 CHARS2IND = {}
-for i in [0...CHARS.length]
+i = 0
+while i < CHARS.length
   CHARS2IND[CHARS[i]] = i
+  i = i + 1
 K = CHARS.length
 
 toBaseKString = (n) ->
@@ -250,7 +261,7 @@ aes_dec = (pass, x) ->
     data = -1
   return data
 
-getID = (pass) ->
+idFromPass = (pass) ->
   a = kdf(pass)
   while a.geq(C.P) or a.leq(1) # outrageously unlikely
     pass = pass + "extra"
@@ -312,73 +323,115 @@ decrypt = (pass, encrypted) ->
   mess = aes_dec(pass, e)
   return mess
 
-if not ("id" of GET)
-  # Generate 128-bit password by default
-  document.getElementById("pass").value = toBaseKString(getRandBytes(16))
+do ->
+  s = toBaseKString(getRandBytes(16))
+  document.getElementById("pass1").value = s
+  document.getElementById("pass3").value = s
 
-myFunction = ->
+openTab = (evt, tabId) ->
+  tabcontents = document.getElementsByClassName("tabcontent")
+  for tc in tabcontents
+    tc.style.display = "none"
+  tablinks = document.getElementsByClassName("tablink")
+  for tl in tablinks
+    tl.className = tl.className.replace(" active", "")
+  document.getElementById(tabId).style.display = "block"
+  evt.currentTarget.className += " active"
+  return
+
+doFunc = (func) ->
   out = document.getElementById("out")
   out.innerHTML = "Working..."
   out.style.color = 'blue'
   out.scrollIntoView(false)
-  setTimeout(runEncryption, 40)
+  setTimeout(func, 40)
   return
 
-runEncryption = ->
-  mess = document.getElementById('mess').value
-  id   = document.getElementById('id').value
-  enc  = document.getElementById('enc').value
-  pass = document.getElementById('pass').value
-  if pass.length != 0
-    document.getElementById('mess').value = ""
-    if enc.length == 0
-      id = getID(pass)
-      idString = toBaseKString(id)
-      document.getElementById('id').value = idString
-      output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that only you can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
-      col = "green"
-    else
-      encrypted = fromBaseKString(enc)
-      if encrypted == -1 # bad characters provided in the base-K string
-        mess = ""
-      else
-        mess = decrypt(pass, encrypted)
-      if mess == -1
-        output = "Error! The Password doesn't match the Encrypted Message."
-        col = "red"
-      else
-        document.getElementById('mess').value = mess
-        output = "Success! The Encrypted Message has been decrypted!"
-        col = "green"
+scrollToOut = ->
+  out.scrollIntoView(false)
+  return
+
+getId = ->
+  document.getElementById('id1').value = ""
+  pass = document.getElementById('pass1').value
+  if pass.length == 0
+    output = "Error! Please enter a Password to get your ID."
+    col = "red"
   else
-    if id.length == 0
-      if mess.length == 0
-        output = "Error! Nothing entered. Please either enter a Password to get your ID, an ID+Message to get an Encrypted Message, or an Encrypted Message+Password to get the original Message."
-      else
-        output = "Error! Please enter the ID of the person for whom the Message is being encryted."
+    id = idFromPass(pass)
+    idString = toBaseKString(id)
+    document.getElementById('id1').value = idString
+    output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that <b>only you</b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
+    col = "green"
+  out = document.getElementById("out")
+  out.innerHTML = output
+  out.style.color = col
+  setTimeout(scrollToOut, 200)
+  return
+
+encryptMessage = ->
+  document.getElementById('enc2').value = ""
+  mess = document.getElementById('mess2').value
+  id   = document.getElementById('id2').value
+  if id.length == 0
+    if mess.length == 0
+      output = "Error! Nothing entered. Please enter the Message you want to encrypt, and the ID of the person you're encrypting the Message for."
+    else
+      output = "Error! Please enter the ID of the person for whom the Message is being encryted."
+    col = "red"
+  else
+    if mess.length == 0
+      output = "Error! Please enter a Message to encrypt."
       col = "red"
     else
-      if mess.length == 0
-        output = "Error! Please enter a Message to encrypt"
+      id = fromBaseKString(id)
+      if id != -1 # -1 means bad base K String was provided
+        encrypted = encrypt(mess, id)
+      if (id == -1) or (encrypted == -1)
+        output = "Error! ID entered was probably invalid."
         col = "red"
       else
-        id = fromBaseKString(id)
-        if id != -1 # Bad base K String provided
-          encrypted = encrypt(mess, id)
-        if (id == -1) or (encrypted == -1)
-          output = "Error! ID was probably invalid"
+        eString = toBaseKString(encrypted)
+        document.getElementById('enc2').value = eString
+        output = "Success! Send over the Encrypted Message to the other party."
+        col = "green"
+  out = document.getElementById("out")
+  out.innerHTML = output
+  out.style.color = col
+  setTimeout(scrollToOut, 200)
+  return
+
+decryptMessage = ->
+  document.getElementById('mess3').value = ""
+  pass = document.getElementById('pass3').value
+  enc = document.getElementById('enc3').value
+  if pass.length == 0
+    if enc.length == 0
+      output = "Error! Please enter an Encrypted Message and the Password for the ID it was made for."
+    else
+      output = "Error! Please enter the Password for the ID the Encrypted Message was made for."
+    col = red
+  else
+    if enc.length == 0
+      output = "Error! Please enter an Encrypted Message made for your ID."
+      col = "red"
+    else
+      encrypted = fromBaseKString(enc)
+      if encrypted == -1 # -1 means bad base-K string was provided
+        output = "Error! Invalid Encrypted Message entered. It should only be alphanumeric characters."
+        col = "red"
+      else
+        mess = decrypt(pass, encrypted)
+        if mess == -1
+          output = "Error! The Password doesn't match the Encrypted Message."
           col = "red"
         else
-          eString = toBaseKString(encrypted)
-          document.getElementById('enc').value = eString
-          output = "Success! Send over the Encrypted Message to the other party."
+          document.getElementById('mess3').value = mess
+          output = "Success! The Encrypted Message has been decrypted!"
           col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
   out.style.color = col
-  scrollToOut = ->
-    out.scrollIntoView(false)
-    return
   setTimeout(scrollToOut, 200)
   return
 
@@ -390,16 +443,24 @@ blurAll = ->
   return
 
 # Make enter key work to run things
-for id in ['pass', 'id', 'enc']
-  input = document.getElementById(id)
-  input.addEventListener 'keydown', (event) ->
-    if event.keyCode == 13
-      event.preventDefault()
-      blurAll()
-      myFunction()
-    return
+do ->
+  for [id,func] in [
+    ['pass1', getId],
+    ['id2', encryptMessage],
+    ['enc3', decryptMessage],
+    ['pass3', decryptMessage]
+  ]
+    input = document.getElementById(id)
+    do ->
+      f = func
+      input.addEventListener 'keydown', (event) ->
+        if event.keyCode == 13
+          event.preventDefault()
+          blurAll()
+          doFunc(f)
+        return
   
-# Highlight ID/Signature on first click (for ease of copying/deleting)
+# Highlight ID's/Encrypted Messages on first click (for ease of copying/deleting)
 do ->
   areas = document.querySelectorAll('.highlight')
   clicked = Array(areas.length).fill(false)
@@ -416,3 +477,12 @@ do ->
         clicked[j] = false
         return
   return
+
+do ->
+  if "id" of GET # ID already entered through URL
+    # Set tab to Encrypt a Message tab
+    document.getElementById("encryptTab").click()
+    document.getElementById("id2").value = GET["id"]
+    out = document.getElementById("out")
+    out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
+    out.style.color = "green"
