@@ -278,12 +278,14 @@ idFromPass = (pass) ->
 
 encrypt = (mess, id) ->
   smallerRootQ = id.and(1)
-  keyx = id.shiftRight(1)
-  keyy = getY(keyx, smallerRootQ)
-  if keyy == -1
+  keyX = id.shiftRight(1)
+  keyY = getY(keyX, smallerRootQ)
+  if keyY == -1
     return -1
-  key = [keyx, keyy]
+  key = [keyX, keyY]
   if not onCurve(key)
+    return -1
+  if keyX.isZero and keyY.isZero # There is literally no reason a completely 0 ID would or should ever be used.
     return -1
   r = getRandBytes(L/8)
   b = hash(mess + r.toString(2)) # Add random bits to obfuscate

@@ -321,15 +321,18 @@ idFromPass = function(pass) {
 };
 
 encrypt = function(mess, id) {
-  var B, b, e, encrypted, key, keyx, keyy, pass, r, sharedKey, smallerRootQ;
+  var B, b, e, encrypted, key, keyX, keyY, pass, r, sharedKey, smallerRootQ;
   smallerRootQ = id.and(1);
-  keyx = id.shiftRight(1);
-  keyy = getY(keyx, smallerRootQ);
-  if (keyy === -1) {
+  keyX = id.shiftRight(1);
+  keyY = getY(keyX, smallerRootQ);
+  if (keyY === -1) {
     return -1;
   }
-  key = [keyx, keyy];
+  key = [keyX, keyY];
   if (!onCurve(key)) {
+    return -1;
+  }
+  if (keyX.isZero && keyY.isZero) {
     return -1;
   }
   r = getRandBytes(L / 8);
