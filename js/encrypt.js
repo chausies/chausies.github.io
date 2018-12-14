@@ -332,7 +332,7 @@ encrypt = function(mess, id) {
   if (!onCurve(key)) {
     return -1;
   }
-  if (keyX.isZero && keyY.isZero) {
+  if (keyX.isZero() && keyY.isZero()) {
     return -1;
   }
   r = getRandBytes(L / 8);

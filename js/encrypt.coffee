@@ -285,7 +285,7 @@ encrypt = (mess, id) ->
   key = [keyX, keyY]
   if not onCurve(key)
     return -1
-  if keyX.isZero and keyY.isZero # There is literally no reason a completely 0 ID would or should ever be used.
+  if keyX.isZero() and keyY.isZero() # There is literally no reason a completely 0 ID would or should ever be used.
     return -1
   r = getRandBytes(L/8)
   b = hash(mess + r.toString(2)) # Add random bits to obfuscate
