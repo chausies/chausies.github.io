@@ -266,6 +266,9 @@ base64ToHex = function(base64) {
 };
 
 hexToBase64 = function(hexstring) {
+  if ((hexstring.length & 1) === 1) {
+    hexstring = '0' + hexstring;
+  }
   return btoa(hexstring.match(/\w{2}/g).map(function(a) {
     return String.fromCharCode(parseInt(a, 16));
   }).join(''));
@@ -572,5 +575,7 @@ blurAll = function() {
     out = document.getElementById("out");
     out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!";
     return out.style.color = "green";
+  } else {
+    return document.getElementById("idTab").click();
   }
 })();

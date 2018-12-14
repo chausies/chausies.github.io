@@ -236,6 +236,8 @@ base64ToHex = (base64) ->
   return HEX.toUpperCase()
 
 hexToBase64 = (hexstring) ->
+  if (hexstring.length & 1) == 1 # Odd length hex string
+    hexstring = '0' + hexstring
   btoa hexstring.match(/\w{2}/g).map((a) ->
     String.fromCharCode parseInt(a, 16)
   ).join('')
@@ -486,3 +488,6 @@ do ->
     out = document.getElementById("out")
     out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
     out.style.color = "green"
+  else
+    # Open "Get ID" tab by default
+    document.getElementById("idTab").click()
