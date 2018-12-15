@@ -359,13 +359,13 @@ getId = ->
   document.getElementById('id1').value = ""
   pass = document.getElementById('pass1').value
   if pass.length == 0
-    output = "Error! Please enter a Password to get your ID."
+    output = "ERROR! Please enter a Password to get your ID."
     col = "red"
   else
     id = idFromPass(pass)
     idString = toBaseKString(id)
     document.getElementById('id1').value = idString
-    output = "Success! Here's your ID! Send it to anyone so they can encrypt messages that <b>only you</b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
+    output = "SUCCESS! Here's your ID! Send it to anyone so they can encrypt messages that <b>only you</b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
     col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
@@ -379,25 +379,25 @@ encryptMessage = ->
   id   = document.getElementById('id2').value
   if id.length == 0
     if mess.length == 0
-      output = "Error! Nothing entered. Please enter the Message you want to make secret, and the ID of the person you're making the Secret Message for."
+      output = "ERROR! Nothing entered. Please enter the Message you want to make secret, and the ID of the person you're making the Secret Message for."
     else
-      output = "Error! Please enter the ID of the person for whom the Secret Message is for."
+      output = "ERROR! Please enter the ID of the person for whom the Secret Message is for."
     col = "red"
   else
     if mess.length == 0
-      output = "Error! Please enter a Message to make secret."
+      output = "ERROR! Please enter a Message to make secret."
       col = "red"
     else
       id = fromBaseKString(id)
       if id != -1 # -1 means bad base K String was provided
         encrypted = encrypt(mess, id)
       if (id == -1) or (encrypted == -1)
-        output = "Error! ID entered was probably invalid."
+        output = "ERROR! ID entered was probably invalid."
         col = "red"
       else
         eString = toBaseKString(encrypted)
         document.getElementById('enc2').value = eString
-        output = "Success! Send over the Secret Message to the other party."
+        output = "SUCCESS! Send over the Secret Message to the other party."
         col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
@@ -411,27 +411,27 @@ decryptMessage = ->
   enc = document.getElementById('enc3').value
   if pass.length == 0
     if enc.length == 0
-      output = "Error! Please enter a Secret Message and the Password of the ID it was made for."
+      output = "ERROR! Please enter a Secret Message and the Password of the ID it was made for."
     else
-      output = "Error! Please enter the Password of the ID the Secret was made for."
+      output = "ERROR! Please enter the Password of the ID the Secret was made for."
     col = red
   else
     if enc.length == 0
-      output = "Error! Please enter an Secret Message made for your ID."
+      output = "ERROR! Please enter an Secret Message made for your ID."
       col = "red"
     else
       encrypted = fromBaseKString(enc)
       if encrypted == -1 # -1 means bad base-K string was provided
-        output = "Error! Invalid Secret Message entered. It should only be alphanumeric characters."
+        output = "ERROR! Invalid Secret Message entered. It should only be alphanumeric characters."
         col = "red"
       else
         mess = decrypt(pass, encrypted)
         if mess == -1
-          output = "Error! The Password doesn't match the Secret Message."
+          output = "ERROR! The Password doesn't match the Secret Message. Either you gave the wrong Password for the ID they used to make the Secret Message, or the Secret Message was corrupted/changed and is invalid."
           col = "red"
         else
           document.getElementById('mess3').value = mess
-          output = "Success! The Secret Message has been decrypted!"
+          output = "SUCCESS! The Secret Message has been decrypted!"
           col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
