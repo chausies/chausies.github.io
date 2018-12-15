@@ -430,7 +430,7 @@ getId = function() {
     id = idFromPass(pass);
     idString = toBaseKString(id);
     document.getElementById('id1').value = idString;
-    output = "SUCCESS! Here's your ID! Send it to anyone so they can make Secret Messages that <b><i>only you</i></b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>.";
+    output = "SUCCESS! Here's your ID! Send it to anyone so they can make Secret Messages that <span style='font-weight:900;'>only you</span> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>.";
     col = "green";
   }
   out = document.getElementById("out");
