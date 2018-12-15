@@ -365,7 +365,7 @@ getId = ->
     id = idFromPass(pass)
     idString = toBaseKString(id)
     document.getElementById('id1').value = idString
-    output = "SUCCESS! Here's your ID! Send it to anyone so they can encrypt messages that <b>only you</b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
+    output = "SUCCESS! Here's your ID! Send it to anyone so they can make Secret Messages that <b>only you</b> can decrypt. Or send them <a href='https://www.chausies.xyz/encrypt?id=" + idString + "' target='_blank'>this url</a>."
     col = "green"
   out = document.getElementById("out")
   out.innerHTML = output
@@ -488,7 +488,7 @@ do ->
     document.getElementById("encryptTab").click()
     document.getElementById("id2").value = GET["id"]
     out = document.getElementById("out")
-    out.innerHTML = "The ID has already been entered through the URL. Just enter a message to encrypt!"
+    out.innerHTML = "The ID has already been entered through the URL. Just enter a Message to make secret!"
     out.style.color = "green"
     setTimeout(scrollToOut, 200)
   else
