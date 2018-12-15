@@ -148,7 +148,7 @@
 </h1>
 
 <p>
-  <b>How to use:</b> You make an ID from your Password. They make a Secret Message for your ID. You read the Secret Message for your ID by decrypting it with your Password.
+  <b>How to use:</b> You get an ID from your Password. They make a Secret Message for your ID. You read the Secret Message for your ID by decrypting it with your Password. If someone doesn't know your Password, they can't understand Secret Messages made for your ID!
 </p>
 <p>
   Safe, Secure, and no information leaves your device. The webapp even runs perfectly offline.
@@ -161,7 +161,7 @@
 
 <div id="getId" class="tabcontent">
   <p class="input">
-  Enter a strong Password to generate your ID. <span class="small">(A random secure password is provided by default.)</span>
+  Enter a strong Password to get your ID. <span class="small">(A random secure password is provided by default.)</span>
   </p>
   <input id="pass1" size=40>
   <br>
@@ -208,9 +208,6 @@
 
 <p id="out"></p>
 
-<p>
-  When a Secret Message is made for an ID, it can only be decrypted if you know the Password that generated that ID.
-</p>
 <p>
   This webapp is open source. All the files for the webapp are guaranteed to be served securely by <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> from <a href="https://github.com/chausies/chausies.github.io">this GitHub repo</a>, as can be independently verified <a href="https://toolbox.googleapps.com/apps/dig/#CNAME/www.chausies.xyz">here, by this CNAME lookup</a>. This webapp uses the <a href="https://en.wikipedia.org/wiki/Integrated_Encryption_Scheme" target="_blank">Elliptic Curve Integrated Encryption Scheme (ECIES)</a> algorithm with 256-bit security, which has security strength equivalent to 3072-bit RSA. For a full overview of this webapp and its security, <a href="encrypt_security_overview">see here</a>. 
 </p>
