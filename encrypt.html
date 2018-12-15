@@ -49,13 +49,44 @@
   }
   .tab button {
     background-color: inherit;
-    font-size: 12.5px; /* fallback */
-    font-size: 3.5vw;
+    font-size: 30px;
     float: left;
     outline: none;
     cursor: pointer;
     padding: 14px 0px;
     /* transition: 0.1s; */
+  }
+  /* Change button font-size for different screen widths, to keep the
+     buttons the same size */
+  @media only screen and (max-width: 800px) {
+    .tab button {
+      font-size: 22px;
+    }
+  }
+  @media only screen and (max-width: 600px) {
+    .tab button {
+      font-size: 18px;
+    }
+  }
+  @media only screen and (max-width: 450px) {
+    .tab button {
+      font-size: 16px;
+    }
+  }
+  @media only screen and (max-width: 400px) {
+    .tab button {
+      font-size: 13px;
+    }
+  }
+  @media only screen and (max-width: 350px) {
+    .tab button {
+      font-size: 12px;
+    }
+  }
+  @media only screen and (max-width: 320px) {
+    .tab button {
+      font-size: 11px;
+    }
   }
   .tab button:hover {
     background-color: #ddd;
@@ -78,9 +109,8 @@
     line-height:1.0;
     margin-bottom:2px;
   }
-  font-weight: bold;
   textarea{
-    max-width:97%;
+    max-width:98%;
   }
   input{
     max-width: 97%;
@@ -121,8 +151,8 @@
 </p>
 <div class="tab">
   <button class="tablink" id="idTab" onclick="openTab(event, 'getId')">Get<br>your ID</button>
-  <button class="tablink" id="encryptTab" onclick="openTab(event, 'encryptMessage')">Make Secret Message</button>
-  <button class="tablink" id="decryptTab" onclick="openTab(event, 'decryptMessage')">Read Secret Message</button>
+  <button class="tablink" id="encryptTab" onclick="openTab(event, 'encryptMessage')">Make<br>Secret Message</button>
+  <button class="tablink" id="decryptTab" onclick="openTab(event, 'decryptMessage')">Read<br>Secret Message</button>
 </div>
 
 <div id="getId" class="tabcontent">
