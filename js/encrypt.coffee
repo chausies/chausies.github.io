@@ -446,6 +446,21 @@ blurAll = ->
   document.body.removeChild(tmp)
   return
 
+# Copy text next to the button
+copyText = (id, obj) ->
+  textArea = document.getElementById(id)
+  textArea.select()
+  document.execCommand("copy")
+  do ->
+    button = obj
+    button.innerHTML = "Copied!"
+    button.disabled = true
+    backToNormal = ->
+      button.innerHTML = "Copy!"
+      button.disabled = false
+      return
+    setTimeout(backToNormal, 2000)
+
 # Make enter key work to run things
 do ->
   for [id,func] in [

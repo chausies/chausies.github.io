@@ -113,6 +113,27 @@
   textarea{
     max-width: 98%;
   }
+  textarea.copyable{
+    width: 320px;
+    height: 30px;
+    margin: 0;
+    max-width: 70%;
+  }
+  .cpy{
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 15px;
+    background-color: #e7e7e7;
+    color: #333;
+    border: 2px solid #333;
+    width: 90px;
+    height: 36px;
+    margin: 0;
+    max-width: 26%;
+    vertical-align: text-bottom;
+  }
   input{
     max-width: 97%;
   }
@@ -128,7 +149,6 @@
     margin-top: 0; 
   }
   .button {
-    background-color: #4CAF50; /* Green */
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -140,6 +160,9 @@
     background-color: #e7e7e7;
     color: #333;
     border: 2px solid #333;
+  }
+  button[disabled], button:disabled{
+    opacity:.5;
   }
 </style>
 
@@ -166,7 +189,8 @@
   <p class="input">
   Your ID:
   </p>
-  <textarea rows="2" cols="50" id="id1" class="highlight"></textarea>
+  <textarea id="id1" class="highlight copyable"></textarea>
+  <button class="cpy" onclick='copyText("id1", this)'>Copy!</button>
 </div>
 
 <div id="encryptMessage" class="tabcontent">
@@ -183,14 +207,15 @@
   <p class="input">
   Secret Message: 
   </p>
-  <textarea rows="2" cols="50" id="enc2" class="highlight"></textarea>
+  <textarea id="enc2" class="highlight copyable"></textarea>
+  <button class="cpy" onclick='copyText("enc2", this)'>Copy!</button>
 </div>
 
 <div id="decryptMessage" class="tabcontent">
   <p class="input">
   Enter the Secret Message made for your ID.
   </p>
-  <textarea rows="4" cols="50" id="enc3" class="highlight"></textarea>
+  <textarea rows="3" cols="50" id="enc3" class="highlight"></textarea>
   <p class="input">
   Enter the Password for your ID.
   </p>
