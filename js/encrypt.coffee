@@ -417,7 +417,7 @@ decryptMessage = ->
     col = red
   else
     if enc.length == 0
-      output = "ERROR! Please enter an Secret Message made for your ID."
+      output = "ERROR! Please enter a Secret Message made for your ID."
       col = "red"
     else
       encrypted = fromBaseKString(enc)
