@@ -488,7 +488,7 @@ decryptMessage = function() {
     } else {
       output = "ERROR! Please enter the Password of the ID the Secret was made for.";
     }
-    col = red;
+    col = "red";
   } else {
     if (enc.length === 0) {
       output = "ERROR! Please enter a Secret Message made for your ID.";
