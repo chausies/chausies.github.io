@@ -1,0 +1,59 @@
+<!-- Made entirely with ChatGPT -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Screen</title>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+        font-family: Arial, sans-serif;
+    }
+
+    .instructions {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        color: white;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        opacity: 1;
+        transition: opacity 1s ease-in-out;
+    }
+</style>
+</head>
+<body ondblclick="toggleFullscreen()">
+<div class="instructions" id="instructions">Double-click to toggle fullscreen</div>
+<script>
+    function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(err => {
+                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+            });
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    }
+
+    // Fade out instructions after a delay
+    window.onload = function() {
+        setTimeout(function() {
+            var instructions = document.getElementById('instructions');
+            instructions.style.opacity = '0';
+            setTimeout(function() {
+                instructions.style.display = 'none';
+            }, 1000); // Fade out duration
+        }, 3000); // Delay before fading out
+    };
+</script>
+</body>
+</html>
