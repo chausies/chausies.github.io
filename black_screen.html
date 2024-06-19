@@ -12,6 +12,7 @@
         height: 100%;
         overflow: hidden;
         font-family: Arial, sans-serif;
+        background-color: black;
     }
 
     .instructions {
@@ -26,12 +27,28 @@
         border-radius: 10px;
         opacity: 1;
         transition: opacity 1s ease-in-out;
+        text-align: center;
+    }
+
+    .clock {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        font-size: 24px;
+        color: #a9a9a9;
+        background-color: rgba(0, 0, 0, 0.8);
+        padding: 10px;
+        border-radius: 5px;
+        font-family: 'Courier New', Courier, monospace;
     }
 </style>
 </head>
-<body ondblclick="toggleFullscreen()">
-<div class="instructions" id="instructions">Double-click to toggle fullscreen</div>
+<body>
+<div class="instructions" id="instructions">Double-click to toggle fullscreen.<br>Single-click to toggle clock.</div>
+<div class="clock" id="clock"></div>
 <script>
+    let clickTimeout;
+
     function toggleFullscreen() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch(err => {
@@ -44,16 +61,43 @@
         }
     }
 
-    // Fade out instructions after a delay
+    function toggleClockVisibility() {
+        const clockElement = document.getElementById('clock');
+        clockElement.style.display = clockElement.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function updateClock() {
+        const clockElement = document.getElementById('clock');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+
     window.onload = function() {
         setTimeout(function() {
             var instructions = document.getElementById('instructions');
             instructions.style.opacity = '0';
             setTimeout(function() {
                 instructions.style.display = 'none';
-            }, 1000); // Fade out duration
-        }, 3000); // Delay before fading out
+            }, 1000);
+        }, 3000);
     };
+
+    document.body.addEventListener('click', function() {
+        clickTimeout = setTimeout(function() {
+            toggleClockVisibility();
+        }, 250);
+    });
+
+    document.body.addEventListener('dblclick', function() {
+        clearTimeout(clickTimeout);
+        toggleFullscreen();
+    });
 </script>
 </body>
 </html>
