@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Tracker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 
+        Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #4a9eff;
+      text-align: center;
+      font-size: 32px;
+    }
+
+    .section {
+      background-color: #2a2a2a;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      border: 1px solid #3a3a3a;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #b0b0b0;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      background-color: #1a1a1a;
+      border: 1px solid #3a3a3a;
+      border-radius: 4px;
+      color: #e0e0e0;
+      font-size: 14px;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #4a9eff;
+    }
+
+    textarea {
+      resize: vertical;
+      font-family: monospace;
+      min-height: 120px;
+    }
+
+    .workout-row {
+      margin-bottom: 15px;
+      padding: 15px;
+      background-color: #1a1a1a;
+      border-radius: 4px;
+      border: 1px solid #3a3a3a;
+    }
+
+    .workout-name {
+      font-weight: 600;
+      color: #4a9eff;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .workout-inputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .input-group {
+      flex: 0 1 auto;
+      min-width: 100px;
+    }
+
+    .input-group.comment-group {
+      flex: 1 1 200px;
+    }
+
+    .input-group label {
+      font-size: 12px;
+      margin-bottom: 4px;
+      color: #909090;
+    }
+
+    .input-group input {
+      margin-bottom: 0;
+      width: 100%;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #4a9eff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #3a8eef;
+    }
+
+    button:active {
+      background-color: #2a7edf;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .date-input {
+      max-width: 200px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .section {
+        padding: 15px;
+      }
+
+      .workout-inputs {
+        flex-direction: column;
+      }
+
+      .input-group {
+        width: 100%;
+        min-width: auto;
+      }
+
+      button {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💪 Workout Tracker</h1>
+
+    <div class="section">
+      <label for="dateInput">Date (MM/DD/YY):</label>
+      <input 
+        type="text" 
+        id="dateInput" 
+        class="date-input" 
+        placeholder="MM/DD/YY"
+      >
+    </div>
+
+    <div class="section" id="workoutInputsSection">
+      <!-- Dynamic workout inputs will be generated here -->
+    </div>
+
+    <div class="section">
+      <button id="submitBtn">Submit Workout</button>
+    </div>
+
+    <div class="section">
+      <label for="workoutListInput">List of Workouts:</label>
+      <textarea 
+        id="workoutListInput" 
+        placeholder="Workout Name, Metric 1, Metric 2, ..."
+      ></textarea>
+      <button id="updateListBtn">Update Workout List</button>
+    </div>
+
+    <div class="section">
+      <label for="loadDateSelect">Load workout from Date:</label>
+      <select id="loadDateSelect">
+        <option value="">-- Select a date --</option>
+      </select>
+    </div>
+
+    <div class="section">
+      <div class="button-group">
+        <button id="saveFileBtn">Save Workout File</button>
+        <button id="loadFileBtn">Load Workout File</button>
+      </div>
+      <input 
+        type="file" 
+        id="fileInput" 
+        accept=".json" 
+        style="display: none;"
+      >
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let workoutDict = {};
+    let currentWorkoutList = [];
+
+    // Default example workouts
+    const DEFAULT_WORKOUTS = [
+      'Lat Pulldown, Weight (lb), Set 1 Reps, Set 2 Reps, Set 3 Reps',
+      'Chest Press, Weight (lb), Set 1 Reps, Set 2 Reps, Set 3 Reps',
+      'Elliptical, Time (min), Distance (mi), Resistance',
+      'Squats, Reps'
+    ].join('\n');
+
+    // Initialize app
+    function init() {
+      loadFromLocalStorage();
+      setDefaultDate();
+      loadMostRecentWorkoutList();
+      populateLoadDateDropdown();
+      attachEventListeners();
+    }
+
+    // Load workoutDict from localStorage
+    function loadFromLocalStorage() {
+      const stored = localStorage.getItem('workoutDict');
+      if (stored) {
+        try {
+          workoutDict = JSON.parse(stored);
+        } catch (e) {
+          console.error('Error parsing localStorage:', e);
+          workoutDict = {};
+        }
+      }
+    }
+
+    // Save workoutDict to localStorage
+    function saveToLocalStorage() {
+      localStorage.setItem('workoutDict', JSON.stringify(workoutDict));
+    }
+
+    // Format date as MM/DD/YY
+    function formatDate(date) {
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const year = String(date.getFullYear()).slice(-2);
+      return `${month}/${day}/${year}`;
+    }
+
+    // Parse date string MM/DD/YY to Date object
+    function parseDate(dateStr) {
+      const parts = dateStr.split('/');
+      if (parts.length !== 3) return null;
+      const month = parseInt(parts[0]) - 1;
+      const day = parseInt(parts[1]);
+      const year = 2000 + parseInt(parts[2]);
+      return new Date(year, month, day);
+    }
+
+    // Set default date to today
+    function setDefaultDate() {
+      const today = formatDate(new Date());
+      document.getElementById('dateInput').value = today;
+    }
+
+    // Get most recent date before today from workoutDict
+    function getMostRecentDate() {
+      const today = new Date();
+      const dates = Object.keys(workoutDict)
+        .map(d => ({ str: d, date: parseDate(d) }))
+        .filter(d => d.date && d.date < today)
+        .sort((a, b) => b.date - a.date);
+      
+      return dates.length > 0 ? dates[0].str : null;
+    }
+
+    // Load most recent workout list and populate inputs
+    function loadMostRecentWorkoutList() {
+      const mostRecentDate = getMostRecentDate();
+      
+      if (mostRecentDate && workoutDict[mostRecentDate]) {
+        // Build workout list from most recent date
+        const workouts = workoutDict[mostRecentDate];
+        const lines = [];
+        
+        for (const workoutName in workouts) {
+          const metrics = workouts[workoutName];
+          const metricNames = Object.keys(metrics)
+            .filter(m => m !== 'Comment');
+          lines.push([workoutName, ...metricNames].join(', '));
+        }
+        
+        document.getElementById('workoutListInput').value = 
+          lines.join('\n');
+      } else {
+        // Use default workouts if no data exists
+        document.getElementById('workoutListInput').value = 
+          DEFAULT_WORKOUTS;
+      }
+      
+      parseAndRenderWorkouts();
+      
+      // Fill in values from most recent date
+      if (mostRecentDate) {
+        fillWorkoutValues(mostRecentDate);
+      }
+    }
+
+    // Parse workout list and render input fields
+    function parseAndRenderWorkouts() {
+      const workoutListText = 
+        document.getElementById('workoutListInput').value;
+      const lines = workoutListText
+        .split('\n')
+        .filter(line => line.trim());
+      
+      currentWorkoutList = lines.map(line => {
+        const parts = line.split(',').map(p => p.trim());
+        return {
+          name: parts[0],
+          metrics: parts.slice(1)
+        };
+      });
+      
+      renderWorkoutInputs();
+    }
+
+    // Render workout input fields
+    function renderWorkoutInputs() {
+      const container = document.getElementById('workoutInputsSection');
+      container.innerHTML = '';
+      
+      currentWorkoutList.forEach((workout, idx) => {
+        const row = document.createElement('div');
+        row.className = 'workout-row';
+        
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'workout-name';
+        nameDiv.textContent = workout.name;
+        row.appendChild(nameDiv);
+        
+        const inputsDiv = document.createElement('div');
+        inputsDiv.className = 'workout-inputs';
+        
+        // Add metric inputs
+        workout.metrics.forEach(metric => {
+          const group = document.createElement('div');
+          group.className = 'input-group';
+          
+          const label = document.createElement('label');
+          label.textContent = metric;
+          group.appendChild(label);
+          
+          const input = document.createElement('input');
+          input.type = 'number';
+          input.step = 'any';
+          input.dataset.workoutIdx = idx;
+          input.dataset.metric = metric;
+          group.appendChild(input);
+          
+          inputsDiv.appendChild(group);
+        });
+        
+        // Add comment input
+        const commentGroup = document.createElement('div');
+        commentGroup.className = 'input-group comment-group';
+        
+        const commentLabel = document.createElement('label');
+        commentLabel.textContent = 'Comment:';
+        commentGroup.appendChild(commentLabel);
+        
+        const commentInput = document.createElement('input');
+        commentInput.type = 'text';
+        commentInput.dataset.workoutIdx = idx;
+        commentInput.dataset.metric = 'Comment';
+        commentGroup.appendChild(commentInput);
+        
+        inputsDiv.appendChild(commentGroup);
+        row.appendChild(inputsDiv);
+        container.appendChild(row);
+      });
+    }
+
+    // Fill workout values from a specific date
+    function fillWorkoutValues(dateStr) {
+      if (!workoutDict[dateStr]) return;
+      
+      const dateData = workoutDict[dateStr];
+      
+      currentWorkoutList.forEach((workout, idx) => {
+        const workoutData = dateData[workout.name] || {};
+        
+        // Fill metric values
+        workout.metrics.forEach(metric => {
+          const input = document.querySelector(
+            `input[data-workout-idx="${idx}"]` +
+            `[data-metric="${metric}"]`
+          );
+          if (input) {
+            input.value = workoutData[metric] || '';
+          }
+        });
+        
+        // Fill comment
+        const commentInput = document.querySelector(
+          `input[data-workout-idx="${idx}"]` +
+          `[data-metric="Comment"]`
+        );
+        if (commentInput) {
+          commentInput.value = workoutData['Comment'] || '';
+        }
+      });
+    }
+
+    // Get most recent value for a workout/metric combination
+    function getMostRecentValue(workoutName, metric) {
+      const today = new Date();
+      const dates = Object.keys(workoutDict)
+        .map(d => ({ str: d, date: parseDate(d) }))
+        .filter(d => d.date && d.date < today)
+        .sort((a, b) => b.date - a.date);
+      
+      for (const dateObj of dates) {
+        const dateData = workoutDict[dateObj.str];
+        if (dateData[workoutName] && 
+            dateData[workoutName][metric] !== undefined) {
+          return dateData[workoutName][metric];
+        }
+      }
+      
+      return '';
+    }
+
+    // Update workout list and populate with most recent values
+    function updateWorkoutList() {
+      parseAndRenderWorkouts();
+      
+      // Fill each workout with most recent data
+      currentWorkoutList.forEach((workout, idx) => {
+        workout.metrics.forEach(metric => {
+          const input = document.querySelector(
+            `input[data-workout-idx="${idx}"]` +
+            `[data-metric="${metric}"]`
+          );
+          if (input) {
+            input.value = getMostRecentValue(workout.name, metric);
+          }
+        });
+        
+        const commentInput = document.querySelector(
+          `input[data-workout-idx="${idx}"]` +
+          `[data-metric="Comment"]`
+        );
+        if (commentInput) {
+          commentInput.value = 
+            getMostRecentValue(workout.name, 'Comment');
+        }
+      });
+    }
+
+    // Submit workout
+    function submitWorkout() {
+      const dateStr = document.getElementById('dateInput').value.trim();
+      
+      if (!dateStr) {
+        alert('Please enter a date');
+        return;
+      }
+      
+      if (!workoutDict[dateStr]) {
+        workoutDict[dateStr] = {};
+      }
+      
+      currentWorkoutList.forEach((workout, idx) => {
+        if (!workoutDict[dateStr][workout.name]) {
+          workoutDict[dateStr][workout.name] = {};
+        }
+        
+        // Save metric values
+        workout.metrics.forEach(metric => {
+          const input = document.querySelector(
+            `input[data-workout-idx="${idx}"]` +
+            `[data-metric="${metric}"]`
+          );
+          if (input) {
+            workoutDict[dateStr][workout.name][metric] = 
+              input.value || '';
+          }
+        });
+        
+        // Save comment
+        const commentInput = document.querySelector(
+          `input[data-workout-idx="${idx}"]` +
+          `[data-metric="Comment"]`
+        );
+        if (commentInput) {
+          workoutDict[dateStr][workout.name]['Comment'] = 
+            commentInput.value || '';
+        }
+      });
+      
+      saveToLocalStorage();
+      populateLoadDateDropdown();
+      alert('Workout saved!');
+    }
+
+    // Populate load date dropdown
+    function populateLoadDateDropdown() {
+      const select = document.getElementById('loadDateSelect');
+      select.innerHTML = 
+        '<option value="">-- Select a date --</option>';
+      
+      const dates = Object.keys(workoutDict)
+        .map(d => ({ str: d, date: parseDate(d) }))
+        .filter(d => d.date)
+        .sort((a, b) => b.date - a.date);
+      
+      dates.forEach(dateObj => {
+        const option = document.createElement('option');
+        option.value = dateObj.str;
+        option.textContent = dateObj.str;
+        select.appendChild(option);
+      });
+    }
+
+    // Load workout from selected date
+    function loadFromDate() {
+      const dateStr = document.getElementById('loadDateSelect').value;
+      
+      if (!dateStr) return;
+      
+      document.getElementById('dateInput').value = dateStr;
+      
+      // Load workout list from that date
+      if (workoutDict[dateStr]) {
+        const workouts = workoutDict[dateStr];
+        const lines = [];
+        
+        for (const workoutName in workouts) {
+          const metrics = workouts[workoutName];
+          const metricNames = Object.keys(metrics)
+            .filter(m => m !== 'Comment');
+          lines.push([workoutName, ...metricNames].join(', '));
+        }
+        
+        document.getElementById('workoutListInput').value = 
+          lines.join('\n');
+        parseAndRenderWorkouts();
+        fillWorkoutValues(dateStr);
+      }
+    }
+
+    // Save to file
+    function saveToFile() {
+      const dataStr = JSON.stringify(workoutDict, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'workout_data.json';
+      a.click();
+      
+      URL.revokeObjectURL(url);
+    }
+
+    // Load from file
+    function loadFromFile() {
+      document.getElementById('fileInput').click();
+    }
+
+    function handleFileLoad(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          workoutDict = data;
+          saveToLocalStorage();
+          loadMostRecentWorkoutList();
+          populateLoadDateDropdown();
+          alert('Workout data loaded successfully!');
+        } catch (err) {
+          alert('Error loading file: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      
+      // Reset file input
+      event.target.value = '';
+    }
+
+    // Attach event listeners
+    function attachEventListeners() {
+      document.getElementById('submitBtn')
+        .addEventListener('click', submitWorkout);
+      
+      document.getElementById('updateListBtn')
+        .addEventListener('click', updateWorkoutList);
+      
+      document.getElementById('loadDateSelect')
+        .addEventListener('change', loadFromDate);
+      
+      document.getElementById('saveFileBtn')
+        .addEventListener('click', saveToFile);
+      
+      document.getElementById('loadFileBtn')
+        .addEventListener('click', loadFromFile);
+      
+      document.getElementById('fileInput')
+        .addEventListener('change', handleFileLoad);
+    }
+
+    // Start the app
+    init();
+  </script>
+</body>
+</html>
