@@ -100,11 +100,13 @@
 
     .input-group {
       flex: 0 1 auto;
-      min-width: 100px;
+      min-width: 80px;
+      max-width: 120px;
     }
 
     .input-group.comment-group {
       flex: 1 1 200px;
+      max-width: none;
     }
 
     .input-group label {
@@ -140,6 +142,14 @@
       background-color: #2a7edf;
     }
 
+    button#wipeDataBtn:hover {
+      background-color: #b71c1c;
+    }
+
+    button#wipeDataBtn:active {
+      background-color: #a01010;
+    }
+
     .button-group {
       display: flex;
       flex-wrap: wrap;
@@ -165,13 +175,12 @@
         padding: 15px;
       }
 
-      .workout-inputs {
-        flex-direction: column;
+      .input-group {
+        min-width: 80px;
       }
 
-      .input-group {
+      .input-group.comment-group {
         width: 100%;
-        min-width: auto;
       }
 
       button {
@@ -184,6 +193,11 @@
 <body>
   <div class="container">
     <h1>💪 Workout Tracker</h1>
+
+    <p style="text-align: center; color: #b0b0b0; margin-bottom: 25px; font-size: 14px;">
+      <a href="source_code_file.com" target="_blank" style="color: #4a9eff; text-decoration: none;">Open source</a> 
+      workout tracker that runs offline, stores data locally in browser, and auto-fills workouts based on your most recent routine.
+    </p>
 
     <div class="section">
       <label for="dateInput">Date (MM/DD/YY):</label>
@@ -223,6 +237,9 @@
       <div class="button-group">
         <button id="saveFileBtn">Save Workout File</button>
         <button id="loadFileBtn">Load Workout File</button>
+        <button id="wipeDataBtn" style="background-color: #d32f2f;">
+          Wipe Workout Data from Browser
+        </button>
       </div>
       <input 
         type="file" 
@@ -364,6 +381,8 @@
       const container = document.getElementById('workoutInputsSection');
       container.innerHTML = '';
       
+      const allInputs = [];
+      
       currentWorkoutList.forEach((workout, idx) => {
         const row = document.createElement('div');
         row.className = 'workout-row';
@@ -392,6 +411,7 @@
           input.dataset.metric = metric;
           group.appendChild(input);
           
+          allInputs.push(input);
           inputsDiv.appendChild(group);
         });
         
@@ -409,9 +429,23 @@
         commentInput.dataset.metric = 'Comment';
         commentGroup.appendChild(commentInput);
         
+        allInputs.push(commentInput);
         inputsDiv.appendChild(commentGroup);
         row.appendChild(inputsDiv);
         container.appendChild(row);
+      });
+      
+      // Add enter key navigation
+      allInputs.forEach((input, index) => {
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const nextIndex = index + 1;
+            if (nextIndex < allInputs.length) {
+              allInputs[nextIndex].focus();
+            }
+          }
+        });
       });
     }
 
@@ -626,6 +660,32 @@
       event.target.value = '';
     }
 
+    // Wipe all data from browser
+    function wipeData() {
+      const confirmed = confirm(
+        'Are you sure you want to delete ALL workout data from your browser?\n\n' +
+        'This cannot be undone!\n\n' +
+        'We recommend saving your workout file first using the "Save Workout File" button.'
+      );
+      
+      if (confirmed) {
+        const doubleCheck = confirm(
+          'Really delete everything? This is your last chance to back out!'
+        );
+        
+        if (doubleCheck) {
+          workoutDict = {};
+          localStorage.removeItem('workoutDict');
+          document.getElementById('workoutListInput').value = 
+            DEFAULT_WORKOUTS;
+          parseAndRenderWorkouts();
+          populateLoadDateDropdown();
+          setDefaultDate();
+          alert('All workout data has been wiped from your browser.');
+        }
+      }
+    }
+
     // Attach event listeners
     function attachEventListeners() {
       document.getElementById('submitBtn')
@@ -645,6 +705,9 @@
       
       document.getElementById('fileInput')
         .addEventListener('change', handleFileLoad);
+      
+      document.getElementById('wipeDataBtn')
+        .addEventListener('click', wipeData);
     }
 
     // Start the app
