@@ -7,131 +7,93 @@
   <style>
     /* --- DESIGN PARAMETERS --- */
     :root {
-      --bg-color: #0a0a0a;
+      --bg-color: #000;
       --text-color: #e0e0e0;
       --accent-yellow: #f1c40f;
       --accent-blue: #3498db;
-      --grid-color: #222;
-      --left-width: 22%;
-      --middle-width: 48%;
+      --grid-color: #1a1a1a;
+      --label-color: #555;
+      --left-width: 20%;
+      --middle-width: 50%;
       --right-width: 30%;
     }
 
     * { box-sizing: border-box; }
     body, html {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
+      margin: 0; padding: 0; width: 100%; height: 100%;
       background-color: var(--bg-color);
       color: var(--text-color);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overflow: hidden; /* Designed for a fixed monitor segment */
+      overflow: hidden;
     }
 
-    /* --- LAYOUT --- */
-    #app {
-      display: flex;
-      width: 100%;
-      height: 100%;
-      padding: 20px;
-      gap: 20px;
+    /* Minimal Top Buffer */
+    #app { 
+      display: flex; 
+      width: 100%; 
+      height: 100%; 
+      padding: 10px 15px 15px 15px; 
+      gap: 15px; 
     }
 
-    #setup-screen {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-    }
+    #setup-screen { display: flex; justify-content: center; align-items: center; height: 100%; }
+    section { height: 100%; min-width: 0; }
 
-    section { height: 100%; }
-
-    /* Left Panel: Current State */
-    #left-panel {
-      flex: 0 0 var(--left-width);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .time-large { font-size: 3rem; font-weight: 200; }
-    .date-sub { font-size: 1.2rem; opacity: 0.7; margin-bottom: 20px; }
-    .temp-current { font-size: 4rem; font-weight: 600; color: var(--accent-yellow); }
-    .weather-icon-main { font-size: 4rem; cursor: help; margin: 10px 0; display: inline-block; }
-    .sun-times { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
-
-    /* Middle Panel: Graph */
-    #middle-panel {
-      flex: 0 0 var(--middle-width);
-      display: flex;
+    /* --- LEFT PANEL (3 SECTIONS) --- */
+    #left-panel { 
+      flex: 0 0 var(--left-width); 
+      display: flex; 
       flex-direction: column;
     }
-    .graph-container {
-      flex-grow: 1;
-      position: relative;
-      border-left: 1px solid var(--grid-color);
-      border-bottom: 1px solid var(--grid-color);
-    }
-    svg { width: 100%; height: 100%; }
+    .lp-top { flex: 0 0 25%; display: flex; flex-direction: column; justify-content: flex-start; }
+    .lp-mid { flex: 0 0 40%; display: flex; flex-direction: column; justify-content: center; }
+    .lp-bot { flex: 0 0 35%; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; font-size: 0.85rem; opacity: 0.8; }
 
-    /* Right Panel: 6-Day Forecast */
+    .time-large { font-size: 2.8rem; font-weight: 200; line-height: 1.1; }
+    .date-sub { font-size: 1.1rem; opacity: 0.6; }
+    .temp-current { font-size: 4.2rem; font-weight: 700; color: var(--accent-yellow); line-height: 1; }
+    .weather-icon-main { font-size: 3.8rem; cursor: help; line-height: 1; margin-bottom: 5px; }
+    .wind-arrow { display: inline-block; font-size: 1.1rem; font-style: normal; }
+
+    /* --- MIDDLE PANEL (GRAPH) --- */
+    #middle-panel { flex: 0 0 var(--middle-width); position: relative; }
+    .graph-container { 
+      position: absolute; 
+      top: 15px; bottom: 35px; left: 35px; right: 35px; 
+    }
+    svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    
+    .axis-label { position: absolute; font-size: 0.7rem; color: var(--label-color); white-space: nowrap; }
+    .label-y-temp { left: -32px; text-align: right; width: 28px; }
+    .label-y-rain { right: -38px; text-align: left; width: 35px; color: var(--accent-blue); }
+    .label-x-time { bottom: -22px; transform: translateX(-50%); }
+
+    /* --- RIGHT PANEL (6-DAY) --- */
     #right-panel {
       flex: 0 0 var(--right-width);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
     .day-cell {
-      background: #151515;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px;
-      text-align: center;
+      background: #0d0d0d; border-radius: 4px; border: 1px solid #1a1a1a;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 5px;
     }
-    .day-name { font-weight: bold; margin-bottom: 5px; }
-    .day-icon { font-size: 1.5rem; margin: 5px 0; }
-    .day-temp { font-size: 0.9rem; }
-    .day-rain { font-size: 0.8rem; color: var(--accent-blue); margin-top: 4px; }
+    .day-name { font-weight: bold; font-size: 0.75rem; text-transform: uppercase; color: #888; }
+    .day-icon { font-size: 1.5rem; margin: 3px 0; }
+    .day-temp { font-size: 0.85rem; font-weight: 500; }
+    .day-rain { font-size: 0.7rem; color: var(--accent-blue); margin-top: 2px; }
 
-    /* UI Components */
-    input {
-      background: #222;
-      border: 1px solid #444;
-      color: white;
-      padding: 10px 15px;
-      font-size: 1.2rem;
-      border-radius: 4px;
-      width: 300px;
-    }
+    input { background: #111; border: 1px solid #333; color: white; padding: 12px; font-size: 1rem; border-radius: 4px; text-align: center; }
     .hidden { display: none !important; }
     
-    .tooltip {
-      position: relative;
-      display: inline-block;
-    }
+    /* Tooltip */
+    .tooltip { position: relative; display: inline-block; }
     .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 140px;
-      background-color: #333;
-      color: #fff;
-      text-align: center;
-      padding: 5px;
-      border-radius: 6px;
-      position: absolute;
-      z-index: 1;
-      bottom: 110%;
-      left: 50%;
-      margin-left: -70px;
-      font-size: 0.8rem;
-      opacity: 0;
-      transition: opacity 0.3s;
+      visibility: hidden; width: 110px; background: #222; border: 1px solid #444; color: #fff;
+      text-align: center; padding: 4px; border-radius: 4px; position: absolute; z-index: 10;
+      bottom: 110%; left: 50%; transform: translateX(-50%); font-size: 0.7rem; opacity: 0; transition: opacity 0.2s;
     }
     .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
   </style>
@@ -139,252 +101,217 @@
 <body>
 
   <div id="setup-screen" class="hidden">
-    <h1>Weather Dashboard</h1>
-    <p>Enter city name (e.g. San Francisco)</p>
-    <input type="text" id="city-input" placeholder="City Name..." autofocus>
+    <input type="text" id="city-input" placeholder="Enter City Name..." autofocus>
   </div>
 
   <div id="app" class="hidden">
     <section id="left-panel">
-      <div>
+      <div class="lp-top">
         <div id="display-time" class="time-large">--:--</div>
-        <div id="display-date" class="date-sub">--- --- --</div>
+        <div id="display-date" class="date-sub">--- --</div>
+      </div>
+      <div class="lp-mid">
         <div class="tooltip">
           <span id="display-icon" class="weather-icon-main">--</span>
           <span id="display-desc" class="tooltiptext">Loading...</span>
         </div>
-        <div id="display-temp" class="temp-current">--°F</div>
+        <div id="display-temp" class="temp-current">--°</div>
       </div>
-      <div class="sun-times">
-        ☀️ Sunrise: <span id="display-sunrise">--:--</span><br>
-        🌙 Sunset: <span id="display-sunset">--:--</span>
+      <div class="lp-bot">
+        <div>💨 <span id="display-wind">--</span> mph <b id="wind-dir" class="wind-arrow">↑</b></div>
+        <div>☀️ <span id="display-sunrise">--:--</span></div>
+        <div>🌙 <span id="display-sunset">--:--</span></div>
       </div>
     </section>
 
     <section id="middle-panel">
-      <div class="graph-container" id="graph-box">
-        </div>
+      <div class="graph-container" id="graph-box"></div>
     </section>
 
-    <section id="right-panel">
-      </section>
+    <section id="right-panel"></section>
   </div>
 
 <script>
-  /** --- CONFIGURATION --- **/
-  const UPDATE_WEATHER_MINUTES = 30;
-  const UPDATE_CLOCK_SECONDS = 5;
+  /** --- PARAMETERS --- **/
+  const WEATHER_FETCH_INTERVAL = 30; // Minutes
+  const CLOCK_TICK_INTERVAL = 5;    // Seconds
 
-  // WMO Weather Code Mapping
-  const WEATHER_MAP = {
-    0: { icon: "☀️", desc: "Clear Sky" },
-    1: { icon: "🌤️", desc: "Mainly Clear" },
-    2: { icon: "⛅", desc: "Partly Cloudy" },
-    3: { icon: "☁️", desc: "Overcast" },
-    45: { icon: "🌫️", desc: "Fog" },
-    48: { icon: "🌫️", desc: "Depositing Rime Fog" },
-    51: { icon: "🌦️", desc: "Light Drizzle" },
-    53: { icon: "🌦️", desc: "Moderate Drizzle" },
-    55: { icon: "🌦️", desc: "Dense Drizzle" },
-    61: { icon: "🌧️", desc: "Slight Rain" },
-    63: { icon: "🌧️", desc: "Moderate Rain" },
-    65: { icon: "🌧️", desc: "Heavy Rain" },
-    71: { icon: "🌨️", desc: "Slight Snow" },
-    73: { icon: "🌨️", desc: "Moderate Snow" },
-    75: { icon: "🌨️", desc: "Heavy Snow" },
-    80: { icon: "🌦️", desc: "Slight Rain Showers" },
-    81: { icon: "🌧️", desc: "Moderate Rain Showers" },
-    82: { icon: "🌧️", desc: "Violent Rain Showers" },
-    95: { icon: "🌩️", desc: "Thunderstorm" },
-    96: { icon: "⛈️", desc: "Thunderstorm + Hail" },
-    99: { icon: "⛈️", desc: "Heavy Thunderstorm + Hail" },
+  const WMO_CODES = {
+    0: { icon: "☀️", desc: "Clear" }, 1: { icon: "🌤️", desc: "Mostly Clear" }, 2: { icon: "⛅", desc: "Partly Cloudy" },
+    3: { icon: "☁️", desc: "Overcast" }, 45: { icon: "🌫️", desc: "Fog" }, 51: { icon: "🌦️", desc: "Drizzle" },
+    61: { icon: "🌧️", desc: "Light Rain" }, 63: { icon: "🌧️", desc: "Rain" }, 65: { icon: "🌧️", desc: "Heavy Rain" },
+    80: { icon: "🌦️", desc: "Showers" }, 95: { icon: "🌩️", desc: "Thunderstorm" }
   };
-
-  /** --- CORE LOGIC --- **/
 
   async function init() {
     const hash = window.location.hash;
-    if (hash && hash.startsWith("#loc=")) {
-      const coords = hash.replace("#loc=", "").split(",");
-      showApp();
-      startUpdates(coords[0], coords[1]);
+    if (hash.startsWith("#loc=")) {
+      const [lat, lon] = hash.replace("#loc=", "").split(",");
+      document.getElementById("app").classList.remove("hidden");
+      startLifecycle(lat, lon);
     } else {
-      showSetup();
+      document.getElementById("setup-screen").classList.remove("hidden");
+      setupLocationSearch();
     }
   }
 
-  function showSetup() {
-    const screen = document.getElementById("setup-screen");
+  function setupLocationSearch() {
     const input = document.getElementById("city-input");
-    screen.classList.remove("hidden");
-    
     input.addEventListener("keypress", async (e) => {
       if (e.key === "Enter") {
-        const city = input.value;
-        const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
-        const data = await geo.json();
-        if (data.results && data.results[0]) {
-          const res = data.results[0];
-          window.location.hash = `#loc=${res.latitude},${res.longitude}`;
+        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(input.value)}&count=1`).then(r => r.json());
+        if (res.results?.[0]) {
+          const loc = res.results[0];
+          window.location.hash = `#loc=${loc.latitude},${loc.longitude}`;
           location.reload();
-        } else {
-          alert("City not found.");
         }
       }
     });
   }
 
-  function showApp() {
-    document.getElementById("app").classList.remove("hidden");
-    document.getElementById("setup-screen").classList.add("hidden");
+  function startLifecycle(lat, lon) {
+    const updateTime = () => {
+      const now = new Date();
+      document.getElementById("display-time").textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toLowerCase();
+      document.getElementById("display-date").textContent = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+    };
+    updateTime();
+    setInterval(updateTime, CLOCK_TICK_INTERVAL * 1000);
+
+    const updateWeather = () => fetchWeatherData(lat, lon);
+    updateWeather();
+    setInterval(updateWeather, WEATHER_FETCH_INTERVAL * 60 * 1000);
+
+    window.addEventListener('resize', () => { if(window.cachedData) renderUI(window.cachedData); });
   }
 
-  function startUpdates(lat, lon) {
-    updateClock();
-    setInterval(updateClock, UPDATE_CLOCK_SECONDS * 1000);
-
-    fetchWeather(lat, lon);
-    setInterval(() => fetchWeather(lat, lon), UPDATE_WEATHER_MINUTES * 60 * 1000);
-    
-    // Resize listener for graph scaling
-    window.onresize = () => renderGraph(window.lastWeatherData);
-  }
-
-  function updateClock() {
-    const now = new Date();
-    const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toLowerCase();
-    const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
-    
-    document.getElementById("display-time").textContent = timeStr;
-    document.getElementById("display-date").textContent = dateStr;
-  }
-
-  async function fetchWeather(lat, lon) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto`;
-    
+  async function fetchWeatherData(lat, lon) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto`;
     try {
-      const response = await fetch(url);
-      const data = await response.json();
-      window.lastWeatherData = data;
-      renderAll(data);
-    } catch (e) {
-      console.error("Fetch failed", e);
-    }
+      const data = await fetch(url).then(r => r.json());
+      window.cachedData = data;
+      renderUI(data);
+    } catch (e) { console.error("Weather fetch failed", e); }
   }
 
-  function renderAll(data) {
-    const current = data.current_weather;
-    const weather = WEATHER_MAP[current.weathercode] || { icon: "❓", desc: "Unknown" };
+  function renderUI(data) {
+    // Current Weather
+    const cur = data.current_weather;
+    const weather = WMO_CODES[cur.weathercode] || { icon: "🌡️", desc: "Clear" };
     
-    // Left Panel
-    document.getElementById("display-temp").textContent = `${Math.round(current.temperature)}°F`;
+    document.getElementById("display-temp").textContent = `${Math.round(cur.temperature)}°`;
     document.getElementById("display-icon").textContent = weather.icon;
     document.getElementById("display-desc").textContent = weather.desc;
+    document.getElementById("display-wind").textContent = Math.round(cur.windspeed);
+    document.getElementById("wind-dir").style.transform = `rotate(${cur.winddirection}deg)`;
     
-    const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    document.getElementById("display-sunrise").textContent = sunrise;
-    document.getElementById("display-sunset").textContent = sunset;
+    document.getElementById("display-sunrise").textContent = new Date(data.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    document.getElementById("display-sunset").textContent = new Date(data.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
 
-    // Middle Panel (Graph)
     renderGraph(data);
 
-    // Right Panel (6-Day Forecast)
-    const rightPanel = document.getElementById("right-panel");
-    rightPanel.innerHTML = "";
+    // 6-Day Forecast
+    const right = document.getElementById("right-panel");
+    right.innerHTML = "";
     for (let i = 1; i <= 6; i++) {
-      const dayCode = data.daily.weathercode[i];
-      const dayMeta = WEATHER_MAP[dayCode] || { icon: "❓", desc: "Unknown" };
-      const dateObj = new Date(data.daily.time[i] + "T00:00");
-      const dayName = dateObj.toLocaleDateString([], { weekday: 'short' });
-      
-      const cell = document.createElement("div");
-      cell.className = "day-cell";
-      cell.title = dayMeta.desc;
-      cell.innerHTML = `
-        <div class="day-name">${dayName}</div>
-        <div class="day-icon">${dayMeta.icon}</div>
-        <div class="day-temp">${Math.round(data.daily.temperature_2m_min[i])}° / ${Math.round(data.daily.temperature_2m_max[i])}°</div>
-        <div class="day-rain">${data.daily.precipitation_probability_max[i]}%</div>
-      `;
-      rightPanel.appendChild(cell);
+      const meta = WMO_CODES[data.daily.weathercode[i]] || { icon: "☁️" };
+      const dayStr = new Date(data.daily.time[i] + "T00:00").toLocaleDateString([], { weekday: 'short' });
+      right.innerHTML += `
+        <div class="day-cell" title="${meta.desc}">
+          <div class="day-name">${dayStr}</div>
+          <div class="day-icon">${meta.icon}</div>
+          <div class="day-temp">${Math.round(data.daily.temperature_2m_min[i])}° / ${Math.round(data.daily.temperature_2m_max[i])}°</div>
+          <div class="day-rain">${data.daily.precipitation_probability_max[i]}%</div>
+        </div>`;
     }
   }
-
-  /** --- GRAPH RENDERING (SVG SPLINES) --- **/
 
   function renderGraph(data) {
-    if (!data) return;
     const container = document.getElementById("graph-box");
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-    
-    // Data for next 24 hours
-    const temps = data.hourly.temperature_2m.slice(0, 24);
-    const rain = data.hourly.precipitation_probability.slice(0, 24);
-    
-    const minTemp = Math.floor(Math.min(...temps) / 5) * 5 - 5;
-    const maxTemp = Math.ceil(Math.max(...temps) / 5) * 5 + 5;
-    const tempRange = maxTemp - minTemp;
+    container.innerHTML = "";
+    const w = container.clientWidth;
+    const h = container.clientHeight;
 
-    // Helper: Map data to SVG coords
-    const getX = (i) => (i / 23) * width;
-    const getYTemp = (v) => height - ((v - minTemp) / tempRange) * height;
-    const getYRain = (v) => height - (v / 100) * height;
+    // GRAPH LOGIC: "Next 24 Hours" from the exact current point
+    // We combine the 'current_weather' (now) with the subsequent 23 hourly slots
+    const nowTemp = data.current_weather.temperature;
+    const nowRain = data.hourly.precipitation_probability[0];
+    const nowTime = new Date();
 
-    // Build Grid Lines
-    let gridLines = "";
-    // Vertical: Every 3 hours
-    for (let i = 0; i <= 24; i += 3) {
-      const x = getX(i);
-      gridLines += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="${varToHex('--grid-color')}" stroke-width="1" />`;
-    }
-    // Horizontal: Every 5 degrees
-    for (let t = minTemp; t <= maxTemp; t += 5) {
-      const y = getYTemp(t);
-      gridLines += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="${varToHex('--grid-color')}" stroke-width="1" />`;
+    const temps = [nowTemp, ...data.hourly.temperature_2m.slice(1, 24)];
+    const rains = [nowRain, ...data.hourly.precipitation_probability.slice(1, 24)];
+    
+    // Map of specific timestamps for x-axis labeling
+    const times = [nowTime];
+    for(let i=1; i<24; i++) {
+      times.push(new Date(data.hourly.time[i]));
     }
 
-    // Generate Spline Paths
-    const tempPoints = temps.map((v, i) => [getX(i), getYTemp(v)]);
-    const rainPoints = rain.map((v, i) => [getX(i), getYRain(v)]);
-    
-    const tempPath = solveSpline(tempPoints);
-    const rainPath = solveSpline(rainPoints);
+    const minT = Math.floor(Math.min(...temps) / 5) * 5 - 5;
+    const maxT = Math.ceil(Math.max(...temps) / 5) * 5 + 5;
+    const maxR = Math.max(5, Math.ceil(Math.max(...rains) / 10) * 10);
 
-    container.innerHTML = `
-      <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
-        ${gridLines}
-        <path d="${rainPath}" fill="none" stroke="var(--accent-blue)" stroke-width="2" opacity="0.6" />
-        <path d="${tempPath}" fill="none" stroke="var(--accent-yellow)" stroke-width="3" />
-      </svg>
-    `;
+    const getX = (i) => (i / 23) * w;
+    const getYT = (v) => h - ((v - minT) / (maxT - minT)) * h;
+    const getYR = (v) => h - (v / maxR) * h;
+
+    let svgMarkup = "";
+
+    // Grid: Vertical Time (Every 3 hours)
+    times.forEach((t, i) => {
+      if (t.getHours() % 3 === 0) {
+        const x = getX(i);
+        svgMarkup += `<line x1="${x}" y1="0" x2="${x}" y2="${h}" stroke="var(--grid-color)" />`;
+        const label = document.createElement("div");
+        label.className = "axis-label label-x-time";
+        label.style.left = `${x}px`;
+        const hNum = t.getHours();
+        label.textContent = hNum === 12 ? "12n" : (hNum === 0 ? "12a" : (hNum > 12 ? hNum-12+'p' : hNum+'a'));
+        container.appendChild(label);
+      }
+    });
+
+    // Grid: Horizontal Temp (Every 5 deg)
+    for (let t = minT; t <= maxT; t += 5) {
+      const y = getYT(t);
+      svgMarkup += `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="var(--grid-color)" />`;
+      const label = document.createElement("div");
+      label.className = "axis-label label-y-temp";
+      label.style.top = `${y - 6}px`;
+      label.textContent = `${t}°`;
+      container.appendChild(label);
+    }
+
+    // Precipitation Label (Right axis)
+    const rLabel = document.createElement("div");
+    rLabel.className = "axis-label label-y-rain";
+    rLabel.style.top = "-12px";
+    rLabel.textContent = `${maxR}% 🌧️`;
+    container.appendChild(rLabel);
+
+    // Plotting Curves
+    const tPts = temps.map((v, i) => [getX(i), getYT(v)]);
+    const rPts = rains.map((v, i) => [getX(i), getYR(v)]);
+
+    svgMarkup += `<path d="${createSpline(rPts)}" fill="none" stroke="var(--accent-blue)" stroke-width="2" opacity="0.4" />`;
+    svgMarkup += `<path d="${createSpline(tPts)}" fill="none" stroke="var(--accent-yellow)" stroke-width="3" />`;
+
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    svg.innerHTML = svgMarkup;
+    container.appendChild(svg);
   }
 
-  // Basic Monotone Cubic Spline (Catmull-Rom style simplified)
-  function solveSpline(points) {
-    if (points.length < 2) return "";
-    let d = `M ${points[0][0]},${points[0][1]}`;
-    
-    for (let i = 0; i < points.length - 1; i++) {
-      const p0 = points[i === 0 ? i : i - 1];
-      const p1 = points[i];
-      const p2 = points[i + 1];
-      const p3 = points[i + 2 === points.length ? i + 1 : i + 2];
-      
-      // Control points
-      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
-      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
-      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
-      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
-      
+  function createSpline(pts) {
+    if (pts.length < 2) return "";
+    let d = `M ${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[Math.max(0, i-1)], p1 = pts[i], p2 = pts[i+1], p3 = pts[Math.min(pts.length-1, i+2)];
+      const cp1x = p1[0] + (p2[0]-p0[0])/6, cp1y = p1[1] + (p2[1]-p0[1])/6;
+      const cp2x = p2[0] - (p3[0]-p1[0])/6, cp2y = p2[1] - (p3[1]-p1[1])/6;
       d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1]}`;
     }
     return d;
-  }
-
-  function varToHex(v) {
-    return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
   }
 
   init();
