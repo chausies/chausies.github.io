@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minimal Weather Dashboard</title>
+  <style>
+    /* --- DESIGN PARAMETERS --- */
+    :root {
+      --bg-color: #0a0a0a;
+      --text-color: #e0e0e0;
+      --accent-yellow: #f1c40f;
+      --accent-blue: #3498db;
+      --grid-color: #222;
+      --left-width: 22%;
+      --middle-width: 48%;
+      --right-width: 30%;
+    }
+
+    * { box-sizing: border-box; }
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden; /* Designed for a fixed monitor segment */
+    }
+
+    /* --- LAYOUT --- */
+    #app {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    #setup-screen {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    section { height: 100%; }
+
+    /* Left Panel: Current State */
+    #left-panel {
+      flex: 0 0 var(--left-width);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .time-large { font-size: 3rem; font-weight: 200; }
+    .date-sub { font-size: 1.2rem; opacity: 0.7; margin-bottom: 20px; }
+    .temp-current { font-size: 4rem; font-weight: 600; color: var(--accent-yellow); }
+    .weather-icon-main { font-size: 4rem; cursor: help; margin: 10px 0; display: inline-block; }
+    .sun-times { font-size: 0.9rem; opacity: 0.6; line-height: 1.6; }
+
+    /* Middle Panel: Graph */
+    #middle-panel {
+      flex: 0 0 var(--middle-width);
+      display: flex;
+      flex-direction: column;
+    }
+    .graph-container {
+      flex-grow: 1;
+      position: relative;
+      border-left: 1px solid var(--grid-color);
+      border-bottom: 1px solid var(--grid-color);
+    }
+    svg { width: 100%; height: 100%; }
+
+    /* Right Panel: 6-Day Forecast */
+    #right-panel {
+      flex: 0 0 var(--right-width);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .day-cell {
+      background: #151515;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      text-align: center;
+    }
+    .day-name { font-weight: bold; margin-bottom: 5px; }
+    .day-icon { font-size: 1.5rem; margin: 5px 0; }
+    .day-temp { font-size: 0.9rem; }
+    .day-rain { font-size: 0.8rem; color: var(--accent-blue); margin-top: 4px; }
+
+    /* UI Components */
+    input {
+      background: #222;
+      border: 1px solid #444;
+      color: white;
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      border-radius: 4px;
+      width: 300px;
+    }
+    .hidden { display: none !important; }
+    
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 140px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 5px;
+      border-radius: 6px;
+      position: absolute;
+      z-index: 1;
+      bottom: 110%;
+      left: 50%;
+      margin-left: -70px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext { visibility: visible; opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <div id="setup-screen" class="hidden">
+    <h1>Weather Dashboard</h1>
+    <p>Enter city name (e.g. San Francisco)</p>
+    <input type="text" id="city-input" placeholder="City Name..." autofocus>
+  </div>
+
+  <div id="app" class="hidden">
+    <section id="left-panel">
+      <div>
+        <div id="display-time" class="time-large">--:--</div>
+        <div id="display-date" class="date-sub">--- --- --</div>
+        <div class="tooltip">
+          <span id="display-icon" class="weather-icon-main">--</span>
+          <span id="display-desc" class="tooltiptext">Loading...</span>
+        </div>
+        <div id="display-temp" class="temp-current">--°F</div>
+      </div>
+      <div class="sun-times">
+        ☀️ Sunrise: <span id="display-sunrise">--:--</span><br>
+        🌙 Sunset: <span id="display-sunset">--:--</span>
+      </div>
+    </section>
+
+    <section id="middle-panel">
+      <div class="graph-container" id="graph-box">
+        </div>
+    </section>
+
+    <section id="right-panel">
+      </section>
+  </div>
+
+<script>
+  /** --- CONFIGURATION --- **/
+  const UPDATE_WEATHER_MINUTES = 30;
+  const UPDATE_CLOCK_SECONDS = 5;
+
+  // WMO Weather Code Mapping
+  const WEATHER_MAP = {
+    0: { icon: "☀️", desc: "Clear Sky" },
+    1: { icon: "🌤️", desc: "Mainly Clear" },
+    2: { icon: "⛅", desc: "Partly Cloudy" },
+    3: { icon: "☁️", desc: "Overcast" },
+    45: { icon: "🌫️", desc: "Fog" },
+    48: { icon: "🌫️", desc: "Depositing Rime Fog" },
+    51: { icon: "🌦️", desc: "Light Drizzle" },
+    53: { icon: "🌦️", desc: "Moderate Drizzle" },
+    55: { icon: "🌦️", desc: "Dense Drizzle" },
+    61: { icon: "🌧️", desc: "Slight Rain" },
+    63: { icon: "🌧️", desc: "Moderate Rain" },
+    65: { icon: "🌧️", desc: "Heavy Rain" },
+    71: { icon: "🌨️", desc: "Slight Snow" },
+    73: { icon: "🌨️", desc: "Moderate Snow" },
+    75: { icon: "🌨️", desc: "Heavy Snow" },
+    80: { icon: "🌦️", desc: "Slight Rain Showers" },
+    81: { icon: "🌧️", desc: "Moderate Rain Showers" },
+    82: { icon: "🌧️", desc: "Violent Rain Showers" },
+    95: { icon: "🌩️", desc: "Thunderstorm" },
+    96: { icon: "⛈️", desc: "Thunderstorm + Hail" },
+    99: { icon: "⛈️", desc: "Heavy Thunderstorm + Hail" },
+  };
+
+  /** --- CORE LOGIC --- **/
+
+  async function init() {
+    const hash = window.location.hash;
+    if (hash && hash.startsWith("#loc=")) {
+      const coords = hash.replace("#loc=", "").split(",");
+      showApp();
+      startUpdates(coords[0], coords[1]);
+    } else {
+      showSetup();
+    }
+  }
+
+  function showSetup() {
+    const screen = document.getElementById("setup-screen");
+    const input = document.getElementById("city-input");
+    screen.classList.remove("hidden");
+    
+    input.addEventListener("keypress", async (e) => {
+      if (e.key === "Enter") {
+        const city = input.value;
+        const geo = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1`);
+        const data = await geo.json();
+        if (data.results && data.results[0]) {
+          const res = data.results[0];
+          window.location.hash = `#loc=${res.latitude},${res.longitude}`;
+          location.reload();
+        } else {
+          alert("City not found.");
+        }
+      }
+    });
+  }
+
+  function showApp() {
+    document.getElementById("app").classList.remove("hidden");
+    document.getElementById("setup-screen").classList.add("hidden");
+  }
+
+  function startUpdates(lat, lon) {
+    updateClock();
+    setInterval(updateClock, UPDATE_CLOCK_SECONDS * 1000);
+
+    fetchWeather(lat, lon);
+    setInterval(() => fetchWeather(lat, lon), UPDATE_WEATHER_MINUTES * 60 * 1000);
+    
+    // Resize listener for graph scaling
+    window.onresize = () => renderGraph(window.lastWeatherData);
+  }
+
+  function updateClock() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toLowerCase();
+    const dateStr = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+    
+    document.getElementById("display-time").textContent = timeStr;
+    document.getElementById("display-date").textContent = dateStr;
+  }
+
+  async function fetchWeather(lat, lon) {
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto`;
+    
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      window.lastWeatherData = data;
+      renderAll(data);
+    } catch (e) {
+      console.error("Fetch failed", e);
+    }
+  }
+
+  function renderAll(data) {
+    const current = data.current_weather;
+    const weather = WEATHER_MAP[current.weathercode] || { icon: "❓", desc: "Unknown" };
+    
+    // Left Panel
+    document.getElementById("display-temp").textContent = `${Math.round(current.temperature)}°F`;
+    document.getElementById("display-icon").textContent = weather.icon;
+    document.getElementById("display-desc").textContent = weather.desc;
+    
+    const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    document.getElementById("display-sunrise").textContent = sunrise;
+    document.getElementById("display-sunset").textContent = sunset;
+
+    // Middle Panel (Graph)
+    renderGraph(data);
+
+    // Right Panel (6-Day Forecast)
+    const rightPanel = document.getElementById("right-panel");
+    rightPanel.innerHTML = "";
+    for (let i = 1; i <= 6; i++) {
+      const dayCode = data.daily.weathercode[i];
+      const dayMeta = WEATHER_MAP[dayCode] || { icon: "❓", desc: "Unknown" };
+      const dateObj = new Date(data.daily.time[i] + "T00:00");
+      const dayName = dateObj.toLocaleDateString([], { weekday: 'short' });
+      
+      const cell = document.createElement("div");
+      cell.className = "day-cell";
+      cell.title = dayMeta.desc;
+      cell.innerHTML = `
+        <div class="day-name">${dayName}</div>
+        <div class="day-icon">${dayMeta.icon}</div>
+        <div class="day-temp">${Math.round(data.daily.temperature_2m_min[i])}° / ${Math.round(data.daily.temperature_2m_max[i])}°</div>
+        <div class="day-rain">${data.daily.precipitation_probability_max[i]}%</div>
+      `;
+      rightPanel.appendChild(cell);
+    }
+  }
+
+  /** --- GRAPH RENDERING (SVG SPLINES) --- **/
+
+  function renderGraph(data) {
+    if (!data) return;
+    const container = document.getElementById("graph-box");
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    
+    // Data for next 24 hours
+    const temps = data.hourly.temperature_2m.slice(0, 24);
+    const rain = data.hourly.precipitation_probability.slice(0, 24);
+    
+    const minTemp = Math.floor(Math.min(...temps) / 5) * 5 - 5;
+    const maxTemp = Math.ceil(Math.max(...temps) / 5) * 5 + 5;
+    const tempRange = maxTemp - minTemp;
+
+    // Helper: Map data to SVG coords
+    const getX = (i) => (i / 23) * width;
+    const getYTemp = (v) => height - ((v - minTemp) / tempRange) * height;
+    const getYRain = (v) => height - (v / 100) * height;
+
+    // Build Grid Lines
+    let gridLines = "";
+    // Vertical: Every 3 hours
+    for (let i = 0; i <= 24; i += 3) {
+      const x = getX(i);
+      gridLines += `<line x1="${x}" y1="0" x2="${x}" y2="${height}" stroke="${varToHex('--grid-color')}" stroke-width="1" />`;
+    }
+    // Horizontal: Every 5 degrees
+    for (let t = minTemp; t <= maxTemp; t += 5) {
+      const y = getYTemp(t);
+      gridLines += `<line x1="0" y1="${y}" x2="${width}" y2="${y}" stroke="${varToHex('--grid-color')}" stroke-width="1" />`;
+    }
+
+    // Generate Spline Paths
+    const tempPoints = temps.map((v, i) => [getX(i), getYTemp(v)]);
+    const rainPoints = rain.map((v, i) => [getX(i), getYRain(v)]);
+    
+    const tempPath = solveSpline(tempPoints);
+    const rainPath = solveSpline(rainPoints);
+
+    container.innerHTML = `
+      <svg viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+        ${gridLines}
+        <path d="${rainPath}" fill="none" stroke="var(--accent-blue)" stroke-width="2" opacity="0.6" />
+        <path d="${tempPath}" fill="none" stroke="var(--accent-yellow)" stroke-width="3" />
+      </svg>
+    `;
+  }
+
+  // Basic Monotone Cubic Spline (Catmull-Rom style simplified)
+  function solveSpline(points) {
+    if (points.length < 2) return "";
+    let d = `M ${points[0][0]},${points[0][1]}`;
+    
+    for (let i = 0; i < points.length - 1; i++) {
+      const p0 = points[i === 0 ? i : i - 1];
+      const p1 = points[i];
+      const p2 = points[i + 1];
+      const p3 = points[i + 2 === points.length ? i + 1 : i + 2];
+      
+      // Control points
+      const cp1x = p1[0] + (p2[0] - p0[0]) / 6;
+      const cp1y = p1[1] + (p2[1] - p0[1]) / 6;
+      const cp2x = p2[0] - (p3[0] - p1[0]) / 6;
+      const cp2y = p2[1] - (p3[1] - p1[1]) / 6;
+      
+      d += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2[0]},${p2[1]}`;
+    }
+    return d;
+  }
+
+  function varToHex(v) {
+    return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  }
+
+  init();
+</script>
+</body>
+</html>
