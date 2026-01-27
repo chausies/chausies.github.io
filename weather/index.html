@@ -123,8 +123,8 @@
 
     .tooltip { position: relative; display: inline-block; }
     .tooltip .tooltiptext {
-      visibility: hidden; width: 140px; background: #222; color: #fff; font-size: 1rem;
-      text-align: center; padding: 8px; position: absolute; z-index: 10; bottom: 110%; left: 50%; transform: translateX(-50%);
+      visibility: hidden; width: fit-content; background: #222; color: #fff; font-size: 2rem;
+      text-align: center; padding: 8px; position: absolute; z-index: 10; bottom: 0; left: 0; transform: translateX(-25%);
       border: 1px solid #444; border-radius: 4px;
     }
     .tooltip:hover .tooltiptext { visibility: visible; }
@@ -303,9 +303,10 @@
         const d = new Date(year, month - 1, day).toLocaleDateString([], { weekday: 'short' });
 
         right.innerHTML += `
-          <div class="day-cell" title="${meta.desc}">
+          <div class="day-cell tooltip">
             <div class="day-name">${d}</div>
             <div class="day-icon">${meta.icon}</div>
+            <div class="tooltiptext">${meta.desc}</div>
             <div class="day-temp">${Math.round(minT)}°/${Math.round(maxT)}°</div>
             <div class="day-rain">${rain}%</div>
           </div>`;
