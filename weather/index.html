@@ -226,13 +226,15 @@
     window.addEventListener('resize', () => { if(window.rawWeather) render(window.rawWeather); });
   }
 
-  function updateMoonPhase() {
+function updateMoonPhase() {
     const now = new Date();
-    // Julian date for J2000 epoch
-    const lp = 2551442.8; // Lunar period in seconds
+    // More precise lunar period (29.53059 days)
+    const lp = 2551442.976; 
     const newMoonRef = new Date('2000-01-06T18:14:00Z');
     const diff = (now.getTime() - newMoonRef.getTime()) / 1000;
-    const phase = (diff % lp) / lp; // 0 to 1
+    
+    // phase: 0.0 is New Moon, 0.5 is Full Moon
+    const phase = (diff % lp) / lp; 
 
     let icon = "🌑";
     if (phase < 0.06 || phase > 0.94) icon = "🌑";
@@ -249,19 +251,18 @@
     
     let moonText = "";
     if (currentDay <= daysInCycle / 2) {
-      // Days until Full Moon
-      const toFM = Math.ceil((daysInCycle / 2) - currentDay);
-      moonText = `${toFM}d to FM`;
+      // Time until Full Moon (Middle of cycle)
+      const toFM = (daysInCycle / 2) - currentDay;
+      moonText = `${toFM.toFixed(1)}d to FM`;
     } else {
-      // Days until New Moon
-      const toNM = Math.ceil(daysInCycle - currentDay);
-      moonText = `${toNM}d to NM`;
+      // Time until New Moon (End of cycle)
+      const toNM = daysInCycle - currentDay;
+      moonText = `${toNM.toFixed(1)}d to NM`;
     }
 
     document.getElementById("display-moon-icon").textContent = icon;
     document.getElementById("display-moon-text").textContent = moonText;
   }
-
   async function fetchWeather(lat, lon) {
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto&forecast_days=7`;
     try {
