@@ -325,7 +325,7 @@
     const tPts = temps.map((v, i) => [getX(i), getYT(v)]);
     const rPts = rains.map((v, i) => [getX(i), getYR(v)]);
 
-    svg += `<path d="${makeSpline(rPts)}" fill="none" stroke="var(--accent-blue)" stroke-width="2" opacity="0.4" />`;
+    svg += `<path d="${makeSpline(rPts)}" fill="none" stroke="var(--accent-blue)" stroke-width="4" />`;
     svg += `<path d="${makeSpline(tPts)}" fill="none" stroke="var(--accent-yellow)" stroke-width="4" />`;
 
     const s = document.createElementNS("http://www.w3.org/2000/svg", "svg");
