@@ -52,7 +52,6 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      /* overflow: hidden; */
     }
     
     .lp-top { font-size: 10vh; align-items: center; line-height: 1.1; }
@@ -63,7 +62,24 @@
     .weather-icon-main { font-size: 1em; line-height: 1; }
     .temp-current { font-size: 1em; font-weight: 700; color: var(--accent-yellow); line-height: 1; }
 
-    .lp-bot { font-size: 6vh; align-items: center; gap: 8px; }
+    /* Bottom section changed to 2x2 grid */
+    .lp-bot { 
+      display: grid !important;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      font-size: 6vh; 
+      align-items: center; 
+      gap: 5px;
+      text-align: center;
+    }
+    .lp-bot > div {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .lp-bot-val { font-weight: 600; }
+    .lp-bot-sub { font-size: 0.5em; color: var(--label-color); text-transform: uppercase; margin-top: 2px; }
     .wind-arrow { display: inline-block; font-style: normal; }
 
     /* --- MIDDLE PANEL  --- */
@@ -86,7 +102,6 @@
       grid-template-columns: repeat(3, 1fr);
       grid-template-rows: repeat(2, 1fr);
       gap: 15px;
-      /* padding: 15px 30px 25px 30px; */
       padding-bottom: 1%;
       padding-right: 4%;
       padding-left: 1%;
@@ -96,7 +111,7 @@
       background: #0d0d0d; border-radius: 8px; border: 1px solid #222;
       display: flex; flex-direction: column; align-items: center; justify-content: space-evenly;
       padding: 1px;
-      font-size: 8vh; /* Significantly larger */
+      font-size: 8vh; 
     }
     .day-name { font-weight: bold; font-size: 0.8em; color: #aaa; text-transform: uppercase; }
     .day-icon { font-size: 1.6em; }
@@ -135,9 +150,22 @@
         <div id="display-temp" class="temp-current">--°</div>
       </div>
       <div class="lp-section lp-bot">
-        <div>💨 <span id="display-wind">--</span> mph <b id="wind-dir" class="wind-arrow">↑</b></div>
-        <div>☀️ <span id="display-sunrise">--:--</span></div>
-        <div>🌙 <span id="display-sunset">--:--</span></div>
+        <div>
+          <span class="lp-bot-val">💨 <span id="display-wind">--</span> <b id="wind-dir" class="wind-arrow">↑</b></span>
+          <span class="lp-bot-sub">Wind mph</span>
+        </div>
+        <div>
+          <span class="lp-bot-val"><span id="display-moon-icon">🌑</span> <span id="display-moon-text">-- d to NM</span></span>
+          <span class="lp-bot-sub">Moon Phase</span>
+        </div>
+        <div>
+          <span class="lp-bot-val">☀️ <span id="display-sunrise">--:--</span></span>
+          <span class="lp-bot-sub">Sunrise</span>
+        </div>
+        <div>
+          <span class="lp-bot-val">🌙 <span id="display-sunset">--:--</span></span>
+          <span class="lp-bot-sub">Sunset</span>
+        </div>
       </div>
     </section>
 
@@ -186,6 +214,7 @@
       const now = new Date();
       document.getElementById("display-time").textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' }).toLowerCase();
       document.getElementById("display-date").textContent = now.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+      updateMoonPhase();
     };
     tick();
     setInterval(tick, CLOCK_TICK_SECS * 1000);
@@ -197,8 +226,43 @@
     window.addEventListener('resize', () => { if(window.rawWeather) render(window.rawWeather); });
   }
 
+  function updateMoonPhase() {
+    const now = new Date();
+    // Julian date for J2000 epoch
+    const lp = 2551442.8; // Lunar period in seconds
+    const newMoonRef = new Date('2000-01-06T18:14:00Z');
+    const diff = (now.getTime() - newMoonRef.getTime()) / 1000;
+    const phase = (diff % lp) / lp; // 0 to 1
+
+    let icon = "🌑";
+    if (phase < 0.06 || phase > 0.94) icon = "🌑";
+    else if (phase < 0.19) icon = "🌒";
+    else if (phase < 0.31) icon = "🌓";
+    else if (phase < 0.44) icon = "🌔";
+    else if (phase < 0.56) icon = "🌕";
+    else if (phase < 0.69) icon = "🌖";
+    else if (phase < 0.81) icon = "🌗";
+    else icon = "🌘";
+
+    const daysInCycle = lp / 86400;
+    const currentDay = phase * daysInCycle;
+    
+    let moonText = "";
+    if (currentDay <= daysInCycle / 2) {
+      // Days until Full Moon
+      const toFM = Math.ceil((daysInCycle / 2) - currentDay);
+      moonText = `${toFM}d to FM`;
+    } else {
+      // Days until New Moon
+      const toNM = Math.ceil(daysInCycle - currentDay);
+      moonText = `${toNM}d to NM`;
+    }
+
+    document.getElementById("display-moon-icon").textContent = icon;
+    document.getElementById("display-moon-text").textContent = moonText;
+  }
+
   async function fetchWeather(lat, lon) {
-    // Requesting 7 days to populate the right panel correctly
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto&forecast_days=7`;
     try {
       const data = await fetch(url).then(r => r.json());
@@ -217,7 +281,6 @@
     document.getElementById("display-wind").textContent = Math.round(cur.windspeed);
     document.getElementById("wind-dir").style.transform = `rotate(${cur.winddirection}deg)`;
     
-    // Sunrise/Sunset formatting
     const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}).toLowerCase();
     const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}).toLowerCase();
     document.getElementById("display-sunrise").textContent = sunrise;
@@ -225,11 +288,9 @@
 
     renderGraph(data);
 
-    // RIGHT PANEL FIX
     const right = document.getElementById("right-panel");
     right.innerHTML = "";
     
-    // Check if daily data exists and has enough entries
     if (data.daily && data.daily.time) {
       for (let i = 1; i <= 6; i++) {
         const dateStr = data.daily.time[i];
@@ -237,10 +298,7 @@
         const minT = data.daily.temperature_2m_min[i];
         const maxT = data.daily.temperature_2m_max[i];
         const rain = data.daily.precipitation_probability_max[i];
-        
         const meta = WMO_MAP[code] || { icon: "☁️", desc: "Cloudy" };
-        
-        // Manual date parsing to avoid "Invalid Date" on some browsers
         const [year, month, day] = dateStr.split('-');
         const d = new Date(year, month - 1, day).toLocaleDateString([], { weekday: 'short' });
 
@@ -255,14 +313,12 @@
     }
   }
 
-  /* --- GRAPH LOGIC --- */
   function renderGraph(data) {
     const container = document.getElementById("graph-box");
     container.innerHTML = "";
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // FIX: Get local time parts instead of UTC ISO string
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -270,17 +326,13 @@
     const hour = String(now.getHours()).padStart(2, '0');
     const localHourStr = `${year}-${month}-${day}T${hour}:00`;
 
-    // Find the index using the local hour string
     let startIndex = data.hourly.time.findIndex(t => t.startsWith(localHourStr));
-    
-    // Fallback: if we can't find the exact hour, start at the beginning
     if (startIndex === -1) startIndex = 0;
 
     const temps = data.hourly.temperature_2m.slice(startIndex, startIndex + 24);
     const rains = data.hourly.precipitation_probability.slice(startIndex, startIndex + 24);
     const times = data.hourly.time.slice(startIndex, startIndex + 24).map(t => new Date(t));
 
-    // ... (rest of your rendering logic remains the same)
     const minT = Math.floor(Math.min(...temps) / 10) * 10 - 10;
     const maxT = Math.ceil(Math.max(...temps) / 10) * 10 + 10;
     const maxR = Math.max(5, Math.ceil(Math.max(...rains) / 10) * 10);
