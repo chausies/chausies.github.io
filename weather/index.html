@@ -263,7 +263,7 @@
   }
 
   async function fetchWeather(lat, lon) {
-    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&timezone=auto&forecast_days=7`;
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=temperature_2m,precipitation_probability&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto&forecast_days=7`;
     try {
       const data = await fetch(url).then(r => r.json());
       window.rawWeather = data;
@@ -279,7 +279,7 @@
     document.getElementById("display-icon").textContent = w.icon;
     document.getElementById("display-desc").textContent = w.desc;
     document.getElementById("display-wind").textContent = Math.round(cur.windspeed);
-    document.getElementById("wind-dir").style.transform = `rotate(${cur.winddirection}deg)`;
+    document.getElementById("wind-dir").style.transform = `rotate(${cur.winddirection+180}deg)`;
     
     const sunrise = new Date(data.daily.sunrise[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}).toLowerCase();
     const sunset = new Date(data.daily.sunset[0]).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}).toLowerCase();
