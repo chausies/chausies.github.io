@@ -10,11 +10,9 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      width: 100%;
       overflow: hidden;
       font-family: Arial, sans-serif;
       background-color: black;
-      cursor: pointer;
     }
 
     .instructions {
@@ -31,7 +29,6 @@
       transition: opacity 1s ease-in-out;
       text-align: center;
       pointer-events: none;
-      z-index: 100;
     }
 
     .clock {
@@ -45,28 +42,47 @@
       border-radius: 5px;
       font-family: 'Courier New', Courier, monospace;
       user-select: none;
-      pointer-events: none;
+    }
+
+    /* Message box for errors since alert() is prohibited */
+    #error-message {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff4444;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      display: none;
+      z-index: 1000;
     }
   </style>
 </head>
 <body>
-
+  <div id="error-message"></div>
   <div class="instructions" id="instructions">
-    Double-click to toggle fullscreen.<br>
-    Long-press to toggle clock.
+    Long-click (hold) to toggle fullscreen.<br>
+    Quick click to toggle clock.
   </div>
-  
   <div class="clock" id="clock"></div>
 
   <script>
-    let longPressTimer;
-    const LONG_PRESS_DURATION = 600; // ms
+    let pressTimer;
     let isLongPress = false;
+    const LONG_PRESS_DURATION = 500; // ms
+
+    function showError(msg) {
+      const err = document.getElementById('error-message');
+      err.textContent = msg;
+      err.style.display = 'block';
+      setTimeout(() => { err.style.display = 'none'; }, 3000);
+    }
 
     function toggleFullscreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
-          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+          showError(`Fullscreen failed: ${err.message}`);
         });
       } else {
         if (document.exitFullscreen) {
@@ -77,8 +93,7 @@
 
     function toggleClockVisibility() {
       const clockElement = document.getElementById('clock');
-      const isHidden = window.getComputedStyle(clockElement).display === 'none';
-      clockElement.style.display = isHidden ? 'block' : 'none';
+      clockElement.style.display = clockElement.style.display === 'none' ? 'block' : 'none';
     }
 
     function updateClock() {
@@ -90,58 +105,60 @@
       clockElement.textContent = `${hours}:${minutes}:${seconds}`;
     }
 
-    // Initialize clock
+    // Set up long press logic
+    function handleStart(e) {
+      isLongPress = false;
+      pressTimer = setTimeout(() => {
+        isLongPress = true;
+        toggleFullscreen();
+      }, LONG_PRESS_DURATION);
+    }
+
+    function handleEnd(e) {
+      clearTimeout(pressTimer);
+      // If the press was released before the timer, it's a quick click
+      if (!isLongPress && e.type !== 'contextmenu') {
+        toggleClockVisibility();
+      }
+      isLongPress = false;
+    }
+
+    // Event Listeners
+    document.body.addEventListener('mousedown', handleStart);
+    document.body.addEventListener('mouseup', handleEnd);
+    
+    // Support touch devices
+    document.body.addEventListener('touchstart', (e) => {
+      // e.preventDefault(); // Uncomment if touch scrolling/zoom is an issue
+      handleStart(e);
+    }, { passive: true });
+    
+    document.body.addEventListener('touchend', (e) => {
+      handleEnd(e);
+    }, { passive: true });
+
+    // Prevent context menu from popping up on long press
+    window.oncontextmenu = function(event) {
+      if (isLongPress) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    };
+
+    // Initializations
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Fade out instructions
     window.onload = function() {
       setTimeout(function() {
-        const inst = document.getElementById('instructions');
-        inst.style.opacity = '0';
-        setTimeout(() => inst.style.display = 'none', 1000);
+        const instructions = document.getElementById('instructions');
+        instructions.style.opacity = '0';
+        setTimeout(function() {
+          instructions.style.display = 'none';
+        }, 1000);
       }, 4000);
     };
-
-    // Long-press logic
-    const startPress = (e) => {
-      isLongPress = false;
-      longPressTimer = setTimeout(() => {
-        isLongPress = true;
-        toggleClockVisibility();
-      }, LONG_PRESS_DURATION);
-    };
-
-    const cancelPress = () => {
-      clearTimeout(longPressTimer);
-    };
-
-    // Double click logic
-    document.body.addEventListener('dblclick', (e) => {
-      cancelPress(); // Prevent long press logic from interfering if still active
-      toggleFullscreen();
-    });
-
-    // Handle mouse and touch for long-press
-    document.body.addEventListener('mousedown', startPress);
-    document.body.addEventListener('touchstart', (e) => {
-      // Prevent scrolling/zooming on mobile long-press
-      startPress(e);
-    }, { passive: true });
-
-    document.body.addEventListener('mouseup', cancelPress);
-    document.body.addEventListener('mouseleave', cancelPress);
-    document.body.addEventListener('touchend', cancelPress);
-    document.body.addEventListener('touchcancel', cancelPress);
-
-    // Disable standard click to ensure single click does nothing
-    document.body.addEventListener('click', (e) => {
-      if (isLongPress) {
-        e.preventDefault();
-        isLongPress = false;
-      }
-    });
-
   </script>
 </body>
 </html>
