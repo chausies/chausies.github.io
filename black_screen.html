@@ -1,103 +1,147 @@
-<!-- Made entirely with ChatGPT -->
+<!-- Made with Gemini -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Black Screen</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Black Screen</title>
+  <style>
     html, body {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        background-color: black;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background-color: black;
+      cursor: pointer;
     }
 
     .instructions {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 24px;
-        color: white;
-        background-color: rgba(0, 0, 0, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        opacity: 1;
-        transition: opacity 1s ease-in-out;
-        text-align: center;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+      text-align: center;
+      pointer-events: none;
+      z-index: 100;
     }
 
     .clock {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        font-size: 24px;
-        color: #a9a9a9;
-        background-color: rgba(0, 0, 0, 0.8);
-        padding: 10px;
-        border-radius: 5px;
-        font-family: 'Courier New', Courier, monospace;
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 24px;
+      color: #a9a9a9;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      font-family: 'Courier New', Courier, monospace;
+      user-select: none;
+      pointer-events: none;
     }
-</style>
+  </style>
 </head>
 <body>
-<div class="instructions" id="instructions">Double-click to toggle fullscreen.<br>Single-click to toggle clock.</div>
-<div class="clock" id="clock" style="user-select: none;"></div>
-<script>
-    let clickTimeout;
+
+  <div class="instructions" id="instructions">
+    Double-click to toggle fullscreen.<br>
+    Long-press to toggle clock.
+  </div>
+  
+  <div class="clock" id="clock"></div>
+
+  <script>
+    let longPressTimer;
+    const LONG_PRESS_DURATION = 600; // ms
+    let isLongPress = false;
 
     function toggleFullscreen() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().catch(err => {
-                alert(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
-            });
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
         }
+      }
     }
 
     function toggleClockVisibility() {
-        const clockElement = document.getElementById('clock');
-        clockElement.style.display = clockElement.style.display === 'none' ? 'block' : 'none';
+      const clockElement = document.getElementById('clock');
+      const isHidden = window.getComputedStyle(clockElement).display === 'none';
+      clockElement.style.display = isHidden ? 'block' : 'none';
     }
 
     function updateClock() {
-        const clockElement = document.getElementById('clock');
-        const now = new Date();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+      const clockElement = document.getElementById('clock');
+      const now = new Date();
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      clockElement.textContent = `${hours}:${minutes}:${seconds}`;
     }
 
+    // Initialize clock
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Fade out instructions
     window.onload = function() {
-        setTimeout(function() {
-            var instructions = document.getElementById('instructions');
-            instructions.style.opacity = '0';
-            setTimeout(function() {
-                instructions.style.display = 'none';
-            }, 1000);
-        }, 3000);
+      setTimeout(function() {
+        const inst = document.getElementById('instructions');
+        inst.style.opacity = '0';
+        setTimeout(() => inst.style.display = 'none', 1000);
+      }, 4000);
     };
 
-    document.body.addEventListener('click', function() {
-        clickTimeout = setTimeout(function() {
-            toggleClockVisibility();
-        }, 250);
+    // Long-press logic
+    const startPress = (e) => {
+      isLongPress = false;
+      longPressTimer = setTimeout(() => {
+        isLongPress = true;
+        toggleClockVisibility();
+      }, LONG_PRESS_DURATION);
+    };
+
+    const cancelPress = () => {
+      clearTimeout(longPressTimer);
+    };
+
+    // Double click logic
+    document.body.addEventListener('dblclick', (e) => {
+      cancelPress(); // Prevent long press logic from interfering if still active
+      toggleFullscreen();
     });
 
-    document.body.addEventListener('dblclick', function() {
-        clearTimeout(clickTimeout);
-        toggleFullscreen();
+    // Handle mouse and touch for long-press
+    document.body.addEventListener('mousedown', startPress);
+    document.body.addEventListener('touchstart', (e) => {
+      // Prevent scrolling/zooming on mobile long-press
+      startPress(e);
+    }, { passive: true });
+
+    document.body.addEventListener('mouseup', cancelPress);
+    document.body.addEventListener('mouseleave', cancelPress);
+    document.body.addEventListener('touchend', cancelPress);
+    document.body.addEventListener('touchcancel', cancelPress);
+
+    // Disable standard click to ensure single click does nothing
+    document.body.addEventListener('click', (e) => {
+      if (isLongPress) {
+        e.preventDefault();
+        isLongPress = false;
+      }
     });
-</script>
+
+  </script>
 </body>
 </html>
