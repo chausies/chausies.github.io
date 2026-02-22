@@ -1,15 +1,17 @@
 # **Note Reader Practice**
 
-An open-source, interactive web application designed to help musicians
-practice sight-reading sheet music.
+Sight-reading trainer webapp that supports keyboard input **and** listening
+to a piano being played through a mic. Completely open source and runs
+locally in your browser.
 
 ## **Overview**
 
 Note Reader Practice generates an infinite stream of random notes or chords
 on a virtual staff. Users read the notes and input the correct pitch,
-accidental, and octave to advance. The app tracks your accuracy, correct
-notes, and calculates your penalized "Net Speed" in Notes Per Minute (NPM)
-to measure your real sight-reading fluency.
+accidental, and octave (or note on their actual piano) to advance. The app
+tracks your accuracy, correct notes, and calculates your penalized "Net
+Speed" in Notes Per Minute (NPM) to measure your real sight-reading
+fluency.
 
 ## **Features**
 
@@ -19,10 +21,8 @@ to measure your real sight-reading fluency.
 * **Treble & Bass Clefs:** Toggle between standard clefs based on your 
     instrument.  
 * **Octave Shifts:** Supports standard, 8va, and 8vb transpositions.  
-* **Intelligent Error Feedback:** Instead of just flashing red, the app 
-    overlays your incorrect input onto the staff so you can instantly see
-    *why* you were wrong (e.g. missing an accidental vs misjudging the
-    line/space).
+* **Microphone (piano) mode** Listens on your mic for a piano being played. 
+    Great for use with a smart phone/tablet!
 
 ## **Controls**
 
