@@ -1,2 +1,5 @@
 - Test on mobile
 - Allow for using a mic and a real keyboard to input notes
+- Test mic functionality
+- Add grand staff option
+- Add multiple-notes-at-once option
