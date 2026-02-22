@@ -170,7 +170,7 @@
   <div id="app-container">
     <div id="settings-btn" title="Settings">⚙️</div>
 
-    <div class="ui-layer instructions">
+    <div class="ui-layer instructions" id="instruction-text">
       Type the note name on your keyboard (e.g. "a4", "c#5"/"cs5", "bb3").
     </div>
 
@@ -252,7 +252,7 @@
           <label>Input Method</label>
           <select id="setting-input">
             <option value="keyboard" selected>Keyboard Typing</option>
-            <option value="mic" disabled>Microphone (Under Construction)</option>
+            <option value="mic">Microphone (Piano)</option>
           </select>
         </div>
 
@@ -268,7 +268,7 @@
         <button class="btn" id="settings-save">Save & Return</button>
         
         <div style="text-align: center; margin-top: 1.5rem;">
-          <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
+          <a href="https://github.com/repo" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
         </div>
       </div>
     </div>
@@ -322,7 +322,6 @@
       'Gb': [{p:'b', a:'b'}, {p:'e', a:'b'}, {p:'a', a:'b'}, {p:'d', a:'b'}, {p:'g', a:'b'}, {p:'c', a:'b'}]
     };
 
-    // Standard line/space octaves for key signatures
     const keySigOctaves = {
       'treble': {
         '#': { f:5, c:5, g:5, d:5, a:4, e:5, b:4 },
@@ -350,9 +349,9 @@
       const keyAcc = activeKeySigs.find(k => k.p === pitch);
       const defaultAcc = keyAcc ? keyAcc.a : '';
 
-      if (trueAcc === defaultAcc) return '';  // Fits key
-      if (trueAcc === '') return 'n';         // Needs natural to override key
-      return trueAcc;                         // Needs explicit # or b
+      if (trueAcc === defaultAcc) return '';
+      if (trueAcc === '') return 'n';
+      return trueAcc;
     }
 
     function parseInput(str) {
@@ -367,6 +366,13 @@
       return { pitch, acc, oct };
     }
 
+    function midiToNoteString(midi) {
+      const pitches = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
+      const oct = Math.floor(midi / 12) - 1;
+      const pitch = pitches[midi % 12];
+      return pitch + oct; // Returns sharp-biased visual string for the error renderer
+    }
+
     function createSVGElement(tag, attrs) {
       const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
       for (let k in attrs) el.setAttribute(k, attrs[k]);
@@ -375,7 +381,6 @@
 
     // Drawing Helpers
     function drawDecorations() {
-      // 1. Draw Key Signature
       const group = document.getElementById('key-signature-layer');
       group.innerHTML = '';
       const accs = keySigs[appSettings.key];
@@ -393,11 +398,8 @@
           xOffset += 16;
         });
       }
-      
-      // Expand starting X to make room for key signature
       X_START = Math.max(220, xOffset + 40);
 
-      // 2. Draw 8va/8vb indicator
       const octGroup = document.getElementById('octave-indicator');
       octGroup.innerHTML = '';
       if (appSettings.octave !== 0) {
@@ -408,7 +410,6 @@
         text.textContent = appSettings.octave === 1 ? '8va' : '8vb';
         octGroup.appendChild(text);
 
-        // Dashed line
         const line = createSVGElement('line', {
           x1: 140, x2: 960, y1: yPos - 6, y2: yPos - 6,
           stroke: '#333', 'stroke-width': 1, 'stroke-dasharray': '5,5'
@@ -418,7 +419,6 @@
     }
 
     function appendNoteVisuals(g, y, visualAcc, headColor, accColor) {
-      // Ledger lines
       if (y >= 260) {
         for (let ly = 260; ly <= y; ly += 20) {
           g.appendChild(createSVGElement('line', { x1: -22, x2: 22, y1: ly, y2: ly, stroke: headColor, 'stroke-width': 2 }));
@@ -430,19 +430,16 @@
         }
       }
 
-      // Note head
       g.appendChild(createSVGElement('ellipse', {
         cx: 0, cy: y, rx: 14, ry: 10, transform: `rotate(-20 0 ${y})`, fill: headColor
       }));
 
-      // Stem
       const isStemUp = y > 200;
       g.appendChild(createSVGElement('line', {
         x1: isStemUp ? 12 : -12, x2: isStemUp ? 12 : -12,
         y1: y, y2: isStemUp ? y - 35 : y + 35, stroke: headColor, 'stroke-width': 2
       }));
 
-      // Accidental
       if (visualAcc) {
         const accText = createSVGElement('text', {
           x: -32, y: y + 6, 'font-size': 26, fill: accColor, 'font-family': 'sans-serif'
@@ -471,7 +468,6 @@
               for (let acc of accidentals) {
                 if (forbidden.includes(p + acc)) continue;
                 const actualOct = visualOct + appSettings.octave;
-                // Calculate absolute MIDI value for correct chord interval calculations
                 const midi = (actualOct + 1) * 12 + semitones[p] + (acc === '#' ? 1 : acc === 'b' ? -1 : 0);
                 
                 pool.push({
@@ -486,13 +482,10 @@
         }
       };
 
-      // F3 to E6 relative to C4 (idx 0)
       addNotes(treblePool, -4, 16, 4, 'treble'); 
-      // A1 to G4 relative to C4
       addNotes(bassPool, -16, 4, 4, 'bass');     
     }
 
-    // Find the musically best spelled note for a given midi value based on key sig
     function getBestNoteForMidi(midi, pool, currentKey) {
       const candidates = pool.filter(n => n.midi === midi);
       if (candidates.length === 1) return candidates[0];
@@ -501,8 +494,8 @@
       
       for (let cand of candidates) {
         const keyAcc = keyAccs.find(k => k.p === cand.pitch);
-        if (keyAcc && keyAcc.a === cand.trueAcc) return cand; // Natively fits the key
-        if (!keyAcc && cand.trueAcc === '') return cand; // Naturally fits standard C Maj slots
+        if (keyAcc && keyAcc.a === cand.trueAcc) return cand; 
+        if (!keyAcc && cand.trueAcc === '') return cand; 
       }
       
       const hasFlats = keyAccs.some(k => k.a === 'b');
@@ -514,26 +507,18 @@
 
     const NoteGenerator = {
       chordQueue: [],
-      
       uniform: function() {
         const pool = appSettings.clef === 'treble' ? treblePool : bassPool;
         return pool[Math.floor(Math.random() * pool.length)];
       },
-      
       chords: function() {
-        if (this.chordQueue.length > 0) {
-          return this.chordQueue.shift();
-        }
+        if (this.chordQueue.length > 0) return this.chordQueue.shift();
 
         const pool = appSettings.clef === 'treble' ? treblePool : bassPool;
         const maxMidi = Math.max(...pool.map(p => p.midi));
         
-        // Allowed Intervals: Maj7, Min7, Maj6, Min6
-        const intervalSets = [
-          [0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]
-        ];
+        const intervalSets = [[0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]];
         
-        // Find a safe root note that won't go out of bounds when we build inversions (+24 max extension)
         const validRoots = pool.filter(n => n.midi + 24 <= maxMidi);
         const rootNote = validRoots[Math.floor(Math.random() * validRoots.length)];
         const rootMidi = rootNote.midi;
@@ -541,33 +526,19 @@
         const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
         let chordMidis = intervals.map(i => rootMidi + i);
         
-        // Random Inversion (0 to 3)
         const inv = Math.floor(Math.random() * 4);
         for (let i = 0; i < inv; i++) {
           let minMidi = Math.min(...chordMidis);
           chordMidis[chordMidis.indexOf(minMidi)] += 12;
         }
-        
         chordMidis.sort((a, b) => a - b);
+        if (Math.random() > 0.5) chordMidis.reverse();
         
-        // Ascending or Descending Sequence
-        if (Math.random() > 0.5) {
-          chordMidis.reverse();
-        }
-        
-        // Map to exact spelling notes and queue them
         this.chordQueue = chordMidis.map(m => getBestNoteForMidi(m, pool, appSettings.key));
-        
         return this.chordQueue.shift();
       },
-      
-      next: function() {
-        return this[appSettings.mode]();
-      },
-      
-      clearQueue: function() {
-        this.chordQueue = [];
-      }
+      next: function() { return this[appSettings.mode](); },
+      clearQueue: function() { this.chordQueue = []; }
     };
 
     // App Rendering Loop
@@ -605,11 +576,9 @@
               const errorVisualAcc = getVisualAccidental(errorData.pitch, errorData.acc);
 
               if (errorY !== n.data.y) {
-                // Wrong pitch line
                 appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_PENDING, COLOR_PENDING);
                 appendNoteVisuals(el, errorY, errorVisualAcc, COLOR_ERROR, COLOR_ERROR);
               } else {
-                // Same line, accidental mistake
                 if (errorVisualAcc === '') {
                   appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_ERROR, COLOR_PENDING);
                 } else {
@@ -622,7 +591,6 @@
         }
       });
 
-      // Cleanup stale DOM elements
       Array.from(layer.children).forEach(child => {
         if (!activeNotes.find(n => n.id === child.id)) {
           child.style.opacity = '0';
@@ -653,64 +621,211 @@
       renderNotes();
     }
 
-    // Input Handling
-    function updateBufferDisplay() {
-      document.getElementById('buffer-display').textContent = inputBuffer;
+    // ---------------------------------------------------------
+    // Audio Input Engine (Microphone)
+    // ---------------------------------------------------------
+    const AudioEngine = {
+      context: null,
+      analyser: null,
+      stream: null,
+      loopId: null,
+      buf: new Float32Array(2048),
+      pitchHistory: [],
+      lastEvaluatedMidi: -1,
+      cooldown: false,
+      CONSECUTIVE_FRAMES_NEEDED: 5, // ~80ms of stable pitch
+
+      init: async function() {
+        if (this.context) return;
+        try {
+          this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          this.context = new (window.AudioContext || window.webkitAudioContext)();
+          this.analyser = this.context.createAnalyser();
+          this.analyser.fftSize = 2048; 
+          const source = this.context.createMediaStreamSource(this.stream);
+          source.connect(this.analyser);
+          this.start();
+        } catch (e) {
+          console.error('Microphone error:', e);
+          alert('Could not access microphone. Falling back to keyboard.');
+          appSettings.input = 'keyboard';
+          document.getElementById('setting-input').value = 'keyboard';
+          updateInstructions();
+        }
+      },
+
+      stop: function() {
+        if (this.loopId) cancelAnimationFrame(this.loopId);
+        if (this.stream) this.stream.getTracks().forEach(t => t.stop());
+        if (this.context) this.context.close();
+        this.context = null;
+        this.analyser = null;
+      },
+
+      start: function() {
+        this.pitchHistory = [];
+        this.lastEvaluatedMidi = -1;
+        this.tick();
+      },
+
+      // Robust time-domain autocorrelation algorithm
+      autoCorrelate: function(buf, sampleRate) {
+        let SIZE = buf.length;
+        let rms = 0;
+        for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
+        rms = Math.sqrt(rms / SIZE);
+        if (rms < 0.01) return -1; // Silence / Background noise
+
+        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+        for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buf[i]) < thres) { r1 = i; break; }
+        for (let i = 1; i < SIZE / 2; i++) if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+        
+        buf = buf.slice(r1, r2);
+        SIZE = buf.length;
+
+        let c = new Array(SIZE).fill(0);
+        for (let i = 0; i < SIZE; i++)
+          for (let j = 0; j < SIZE - i; j++)
+            c[i] = c[i] + buf[j] * buf[j + i];
+
+        let d = 0; while (c[d] > c[d + 1]) d++;
+        let maxval = -1, maxpos = -1;
+        for (let i = d; i < SIZE; i++) {
+          if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
+        }
+        
+        let T0 = maxpos;
+        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+        let a = (x1 + x3 - 2 * x2) / 2;
+        let b = (x3 - x1) / 2;
+        if (a) T0 = T0 - b / (2 * a);
+
+        return sampleRate / T0;
+      },
+
+      tick: function() {
+        if (!this.analyser) return;
+        this.analyser.getFloatTimeDomainData(this.buf);
+        const pitch = this.autoCorrelate(this.buf, this.context.sampleRate);
+
+        if (pitch !== -1 && !isShifting && !this.cooldown) {
+          const midi = Math.round(12 * (Math.log2(pitch / 440)) + 69);
+          this.pitchHistory.push(midi);
+          if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
+
+          // If sustained note detected
+          if (this.pitchHistory.length === this.CONSECUTIVE_FRAMES_NEEDED && this.pitchHistory.every(v => v === midi)) {
+            if (midi !== this.lastEvaluatedMidi) {
+              this.lastEvaluatedMidi = midi;
+              InputManager.handleMicInput(midi);
+            }
+          }
+        } else {
+          // Track Silence to reset evaluation state
+          this.pitchHistory.push(-1);
+          if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
+          if (this.pitchHistory.every(v => v === -1)) {
+            this.lastEvaluatedMidi = -1; 
+          }
+        }
+        
+        this.loopId = requestAnimationFrame(this.tick.bind(this));
+      }
+    };
+
+    // ---------------------------------------------------------
+    // Unified Input Manager
+    // ---------------------------------------------------------
+    function updateBufferDisplay(text) {
+      document.getElementById('buffer-display').textContent = text !== undefined ? text : inputBuffer;
     }
 
-    window.addEventListener('keydown', (e) => {
-      // Ignore inputs if shifting or if settings menu is open
-      if (isShifting || document.getElementById('settings-overlay').style.display === 'flex') return;
-      if (appSettings.input === 'mic') return; // Ignore keyboard if mic is selected
-      
-      const key = e.key.toLowerCase();
-      
-      if (key >= '0' && key <= '9') {
-        if (inputBuffer.length > 0) {
-          inputBuffer += key;
+    const InputManager = {
+      handleKeyboardInput: function(key) {
+        if (key >= '0' && key <= '9') {
+          if (inputBuffer.length > 0) {
+            inputBuffer += key;
+            updateBufferDisplay();
+            this.evaluateString(inputBuffer);
+          }
+        } else if (key >= 'a' && key <= 'g') {
+          if (inputBuffer.length === 1 && key === 'b') inputBuffer += key;
+          else inputBuffer = key;
           updateBufferDisplay();
-          checkInput();
+        } else if (key === '#' || key === 's') {
+          if (inputBuffer.length === 1) {
+            inputBuffer += '#';
+            updateBufferDisplay();
+          }
         }
-      } else if (key >= 'a' && key <= 'g') {
-        if (inputBuffer.length === 1 && key === 'b') inputBuffer += key; // Flat
-        else inputBuffer = key; // New pitch
-        updateBufferDisplay();
-      } else if (key === '#' || key === 's') {
-        if (inputBuffer.length === 1) {
-          inputBuffer += '#';
-          updateBufferDisplay();
-        }
-      }
-    });
+      },
 
-    function checkInput() {
-      const current = activeNotes[currentIndex];
-      
-      if (inputBuffer === current.data.displayStr) {
+      handleMicInput: function(detectedMidi) {
+        const current = activeNotes[currentIndex];
+        const displayStr = midiToNoteString(detectedMidi);
+        
+        // Show what the mic heard briefly
+        updateBufferDisplay(displayStr.toUpperCase());
+        setTimeout(() => { if (inputBuffer === '') updateBufferDisplay(''); }, 600);
+
+        if (current.data.midi === detectedMidi) {
+          this.triggerSuccess();
+          AudioEngine.cooldown = true;
+          setTimeout(() => AudioEngine.cooldown = false, 300);
+        } else {
+          this.triggerError(displayStr);
+        }
+      },
+
+      evaluateString: function(str) {
+        const current = activeNotes[currentIndex];
+        if (str === current.data.displayStr) {
+          this.triggerSuccess();
+          inputBuffer = '';
+          setTimeout(() => updateBufferDisplay(), 150);
+        } else {
+          this.triggerError(str);
+          inputBuffer = '';
+          setTimeout(() => updateBufferDisplay(), 150);
+        }
+      },
+
+      triggerSuccess: function() {
+        const current = activeNotes[currentIndex];
         current.state = 'correct';
         current.errorInput = null;
         stats.correct++;
         currentIndex++;
         renderNotes();
-        
-        inputBuffer = '';
-        setTimeout(updateBufferDisplay, 150);
 
         if (currentIndex === 4) {
           isShifting = true;
           setTimeout(() => { shiftNotes(); isShifting = false; }, 350);
         }
-      } else {
+      },
+
+      triggerError: function(errStr) {
+        const current = activeNotes[currentIndex];
         current.state = 'error';
-        current.errorInput = inputBuffer;
+        current.errorInput = errStr;
         stats.mistakes++;
         renderNotes();
-        inputBuffer = '';
-        setTimeout(updateBufferDisplay, 150);
       }
-    }
+    };
+
+    window.addEventListener('keydown', (e) => {
+      if (isShifting || document.getElementById('settings-overlay').style.display === 'flex') return;
+      if (appSettings.input === 'mic') return; 
+      InputManager.handleKeyboardInput(e.key.toLowerCase());
+    });
 
     // Stats & Settings UI
+    function updateInstructions() {
+      const el = document.getElementById('instruction-text');
+      if (appSettings.input === 'mic') el.innerHTML = "Microphone Active. Play the note on your instrument.";
+      else el.innerHTML = "Type the note name on your keyboard (e.g. \"a4\", \"c#5\"/\"cs5\", \"bb3\").";
+    }
+
     function updateStatsUI() {
       const elapsedSecs = Math.floor((Date.now() - stats.startTime) / 1000);
       const minsDisplay = Math.floor(elapsedSecs / 60).toString().padStart(2, '0');
@@ -745,23 +860,25 @@
     });
 
     document.getElementById('settings-save').addEventListener('click', () => {
-      const previousMode = appSettings.mode;
-
       appSettings.clef = document.getElementById('setting-clef').value;
       appSettings.key = document.getElementById('setting-key').value;
       appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
       appSettings.mode = document.getElementById('setting-mode').value;
+      
+      const prevInput = appSettings.input;
       appSettings.input = document.getElementById('setting-input').value;
+      updateInstructions();
+
+      if (appSettings.input === 'mic' && prevInput !== 'mic') AudioEngine.init();
+      else if (appSettings.input === 'keyboard' && prevInput === 'mic') AudioEngine.stop();
       
       document.getElementById('settings-overlay').style.display = 'none';
       
-      // Apply UI changes
       document.getElementById('treble-clef').style.display = appSettings.clef === 'treble' ? 'block' : 'none';
       document.getElementById('bass-clef').style.display = appSettings.clef === 'bass' ? 'block' : 'none';
       
-      // Rebuild and reboot
       inputBuffer = '';
-      updateBufferDisplay();
+      updateBufferDisplay('');
       buildPools();
       drawDecorations();
       initNotes();
