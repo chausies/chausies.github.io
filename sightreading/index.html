@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Note Reader Practice</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #fdfdfd;
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #app-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* The viewBox 0 80 1000 240 ensures the staff is as huge as possible 
+       while safely keeping ledger lines for F3 and E6 in view. */
+    svg {
+      width: 100%;
+      height: 100%;
+      max-height: 100vh;
+      display: block;
+    }
+
+    .clef-group {
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .clef-group:hover {
+      opacity: 0.7;
+    }
+
+    .note-group {
+      transition: transform 0.4s ease-in-out, opacity 0.4s;
+    }
+
+    /* Optional transitions for color changes */
+    .note-group ellipse, .note-group line, .note-group text {
+      transition: fill 0.15s, stroke 0.15s;
+    }
+
+    .ui-layer {
+      position: absolute;
+      width: 100%;
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .instructions {
+      top: 5vh;
+      color: #666;
+      font-size: 1.2rem;
+      padding: 0 1rem;
+    }
+
+    .buffer-display {
+      bottom: 8vh;
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: #444;
+      min-height: 3rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 768px) {
+      .instructions { font-size: 0.95rem; }
+      .buffer-display { font-size: 1.8rem; bottom: 5vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="app-container">
+    <div class="ui-layer instructions">
+      Click the clef to toggle Treble/Bass.<br>
+      Type the note name on your keyboard (e.g. "a4", "c#5", "bb3").
+    </div>
+
+    <svg id="staff-svg" viewBox="0 80 1000 240" preserveAspectRatio="xMidYMid meet">
+      <!-- Staff Lines -->
+      <g id="staff-lines" stroke="#333" stroke-width="2">
+        <line x1="40" x2="960" y1="160" y2="160"/>
+        <line x1="40" x2="960" y1="180" y2="180"/>
+        <line x1="40" x2="960" y1="200" y2="200"/>
+        <line x1="40" x2="960" y1="220" y2="220"/>
+        <line x1="40" x2="960" y1="240" y2="240"/>
+      </g>
+
+      <!-- Clefs -->
+      <g id="clef-container" class="clef-group" fill="#333">
+        <!-- Using highly compatible unicode music symbols with fallback system fonts -->
+        <text id="treble-clef" x="110" y="218" font-size="130" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle">&#119070;</text>
+        <text id="bass-clef" x="110" y="195" font-size="110" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle" style="display: none;">&#119074;</text>
+      </g>
+
+      <!-- Dynamic Notes Layer -->
+      <g id="notes-layer"></g>
+    </svg>
+
+    <div class="ui-layer buffer-display" id="buffer-display"></div>
+  </div>
+
+  <script>
+    // Configuration
+    const X_START = 220;
+    const X_STEP = 90;
+    const COLOR_PENDING = '#333';
+    const COLOR_CORRECT = '#3b82f6'; // Blue
+    const COLOR_ERROR = '#ef4444';   // Red
+
+    // App State
+    let currentClef = 'treble';
+    let activeNotes = [];
+    let currentIndex = 0;
+    let globalNoteId = 0;
+    let inputBuffer = '';
+    let isShifting = false;
+
+    // Precompute Note Pools
+    const treblePool = [];
+    const bassPool = [];
+    
+    function buildPools() {
+      const pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
+      const pitchVals = { 'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6 };
+      const accidentals = ['', '#', 'b'];
+      const forbidden = ['cb', 'fb', 'b#', 'e#']; // Omit confusing theoretical accidentals
+
+      // Treble: F3 (index -4) to E6 (index 16)
+      for (let oct = 3; oct <= 6; oct++) {
+        for (let p of pitches) {
+          let idx = pitchVals[p] + (oct - 4) * 7;
+          if (idx >= -4 && idx <= 16) {
+            for (let acc of accidentals) {
+              if (forbidden.includes(p + acc)) continue;
+              treblePool.push({
+                pitch: p, acc: acc, oct: oct,
+                displayStr: p + acc + oct,
+                y: 260 - idx * 10
+              });
+            }
+          }
+        }
+      }
+
+      // Bass: A1 (index -16) to G4 (index 4)
+      for (let oct = 1; oct <= 4; oct++) {
+        for (let p of pitches) {
+          let idx = pitchVals[p] + (oct - 4) * 7;
+          if (idx >= -16 && idx <= 4) {
+            for (let acc of accidentals) {
+              if (forbidden.includes(p + acc)) continue;
+              bassPool.push({
+                pitch: p, acc: acc, oct: oct,
+                displayStr: p + acc + oct,
+                y: 140 - idx * 10
+              });
+            }
+          }
+        }
+      }
+    }
+
+    function getRandomNote() {
+      const pool = currentClef === 'treble' ? treblePool : bassPool;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    // Helper to calculate Y position dynamically
+    function calculateY(pitch, oct, clef) {
+      const pitchVals = { 'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6 };
+      let idx = pitchVals[pitch] + (oct - 4) * 7;
+      if (clef === 'treble') return 260 - idx * 10;
+      else return 140 - idx * 10;
+    }
+
+    // Helper to parse a raw string input back into components
+    function parseInput(str) {
+      if (!str) return null;
+      const pitch = str[0];
+      const octMatch = str.match(/\d+/);
+      if (!octMatch) return null;
+      const oct = parseInt(octMatch[0], 10);
+      let acc = '';
+      if (str.includes('#')) acc = '#';
+      else if (str.includes('b')) acc = 'b';
+      return { pitch, acc, oct };
+    }
+
+    // SVG Utility
+    function createSVGElement(tag, attrs) {
+      const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+      for (let k in attrs) el.setAttribute(k, attrs[k]);
+      return el;
+    }
+
+    // Helper to draw note components
+    function appendNoteVisuals(g, y, acc, headColor, accColor) {
+      // Ledger lines below staff
+      if (y >= 260) {
+        for (let ly = 260; ly <= y; ly += 20) {
+          g.appendChild(createSVGElement('line', {
+            x1: -22, x2: 22, y1: ly, y2: ly,
+            stroke: headColor, 'stroke-width': 2
+          }));
+        }
+      }
+      // Ledger lines above staff
+      if (y <= 140) {
+        for (let ly = 140; ly >= y; ly -= 20) {
+          g.appendChild(createSVGElement('line', {
+            x1: -22, x2: 22, y1: ly, y2: ly,
+            stroke: headColor, 'stroke-width': 2
+          }));
+        }
+      }
+
+      // Note head
+      g.appendChild(createSVGElement('ellipse', {
+        cx: 0, cy: y, rx: 14, ry: 10,
+        transform: `rotate(-20 0 ${y})`,
+        fill: headColor
+      }));
+
+      // Stem
+      const isStemUp = y > 200;
+      g.appendChild(createSVGElement('line', {
+        x1: isStemUp ? 12 : -12, x2: isStemUp ? 12 : -12,
+        y1: y, y2: isStemUp ? y - 35 : y + 35,
+        stroke: headColor, 'stroke-width': 2
+      }));
+
+      // Accidental
+      if (acc) {
+        const accText = createSVGElement('text', {
+          x: -32, y: y + 6, 'font-size': 26,
+          fill: accColor, 'font-family': 'sans-serif'
+        });
+        accText.textContent = acc === '#' ? '♯' : '♭';
+        g.appendChild(accText);
+      }
+    }
+
+    function renderNotes() {
+      const layer = document.getElementById('notes-layer');
+
+      activeNotes.forEach((n, idx) => {
+        let el = document.getElementById(n.id);
+        const targetX = X_START + idx * X_STEP;
+        
+        if (!el) {
+          el = createSVGElement('g', { 'class': 'note-group', 'id': n.id });
+          layer.appendChild(el);
+        }
+        
+        // Update horizontal position
+        el.style.transform = `translateX(${targetX}px)`;
+
+        // To avoid destroying CSS transitions, we only rebuild inner contents when state changes
+        const stateKey = n.state + '-' + (n.errorInput || '');
+        if (el.getAttribute('data-rendered-state') !== stateKey) {
+          el.innerHTML = ''; // clear contents
+          
+          if (n.state === 'pending') {
+            appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
+          } else if (n.state === 'correct') {
+            appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_CORRECT, COLOR_CORRECT);
+          } else if (n.state === 'error') {
+            const errorData = parseInput(n.errorInput);
+            if (!errorData) {
+              appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
+            } else {
+              const errorY = calculateY(errorData.pitch, errorData.oct, currentClef);
+
+              if (errorY !== n.data.y) {
+                // Wrong pitch/octave: Draw target black, error red.
+                appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
+                appendNoteVisuals(el, errorY, errorData.acc, COLOR_ERROR, COLOR_ERROR);
+              } else {
+                // Pitch/octave match, accidental is wrong
+                if (errorData.acc === '') {
+                  // User omitted accidental: Draw head red, target accidental black
+                  appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_ERROR, COLOR_PENDING);
+                } else {
+                  // User added wrong accidental: Draw head black, error accidental red
+                  appendNoteVisuals(el, n.data.y, errorData.acc, COLOR_PENDING, COLOR_ERROR);
+                }
+              }
+            }
+          }
+          el.setAttribute('data-rendered-state', stateKey);
+        }
+      });
+
+      // Cleanup stale DOM elements with fade out
+      Array.from(layer.children).forEach(child => {
+        if (!activeNotes.find(n => n.id === child.id)) {
+          child.style.opacity = '0';
+          setTimeout(() => child.remove(), 400); // Wait for CSS transition
+        }
+      });
+    }
+
+    function initNotes() {
+      activeNotes = [];
+      currentIndex = 0;
+      globalNoteId = 0;
+      document.getElementById('notes-layer').innerHTML = '';
+      
+      for (let i = 0; i < 8; i++) {
+        activeNotes.push({
+          data: getRandomNote(),
+          id: 'note-' + globalNoteId++,
+          state: 'pending',
+          errorInput: null
+        });
+      }
+      renderNotes();
+    }
+
+    function shiftNotes() {
+      // Remove first 4 and slide remaining ones
+      activeNotes = activeNotes.slice(4);
+      
+      // Append 4 new random notes
+      for (let i = 0; i < 4; i++) {
+        activeNotes.push({
+          data: getRandomNote(),
+          id: 'note-' + globalNoteId++,
+          state: 'pending',
+          errorInput: null
+        });
+      }
+      currentIndex = 0;
+      renderNotes();
+    }
+
+    // Input Handling
+    function updateBufferDisplay() {
+      document.getElementById('buffer-display').textContent = inputBuffer;
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (isShifting) return;
+      
+      const key = e.key.toLowerCase();
+      
+      // Number triggers evaluation
+      if (key >= '0' && key <= '9') {
+        if (inputBuffer.length > 0) {
+          inputBuffer += key;
+          updateBufferDisplay();
+          checkInput();
+        }
+      } 
+      // Letter logic
+      else if (key >= 'a' && key <= 'g') {
+        // If buffer already has a pitch and 'b' is typed, it's a flat
+        if (inputBuffer.length === 1 && key === 'b') {
+          inputBuffer += key;
+        } else {
+          // Otherwise, start a brand new note
+          inputBuffer = key;
+        }
+        updateBufferDisplay();
+      } 
+      // Sharp logic
+      else if (key === '#') {
+        if (inputBuffer.length === 1) {
+          inputBuffer += key;
+          updateBufferDisplay();
+        }
+      }
+    });
+
+    function checkInput() {
+      const current = activeNotes[currentIndex];
+      
+      if (inputBuffer === current.data.displayStr) {
+        // Success
+        current.state = 'correct';
+        current.errorInput = null;
+        currentIndex++;
+        renderNotes();
+        
+        inputBuffer = '';
+        setTimeout(updateBufferDisplay, 150);
+
+        if (currentIndex === 4) {
+          isShifting = true;
+          setTimeout(() => {
+            shiftNotes();
+            isShifting = false;
+          }, 350);
+        }
+      } else {
+        // Failure
+        current.state = 'error';
+        current.errorInput = inputBuffer;
+        renderNotes();
+        inputBuffer = '';
+        setTimeout(updateBufferDisplay, 150);
+      }
+    }
+
+    // Toggle Clef
+    document.getElementById('clef-container').addEventListener('click', () => {
+      currentClef = currentClef === 'treble' ? 'bass' : 'treble';
+      document.getElementById('treble-clef').style.display = currentClef === 'treble' ? 'block' : 'none';
+      document.getElementById('bass-clef').style.display = currentClef === 'bass' ? 'block' : 'none';
+      
+      // Reset input state
+      inputBuffer = '';
+      updateBufferDisplay();
+      initNotes();
+    });
+
+    // Boot App
+    buildPools();
+    initNotes();
+
+  </script>
+</body>
+</html>
