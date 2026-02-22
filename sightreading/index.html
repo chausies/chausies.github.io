@@ -29,8 +29,97 @@
       position: relative;
     }
 
-    /* The viewBox 0 80 1000 240 ensures the staff is as huge as possible 
-       while safely keeping ledger lines for F3 and E6 in view. */
+    /* Settings Button */
+    #settings-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: transform 0.2s;
+      user-select: none;
+    }
+    #settings-btn:hover { transform: rotate(45deg); }
+
+    /* Settings Menu Overlay */
+    #settings-overlay {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: #fdfdfd;
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .settings-panel {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 450px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .settings-panel h2 { margin-top: 0; text-align: center; }
+    
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .setting-row select {
+      padding: 0.4rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      max-width: 55%;
+    }
+
+    .stats-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .stats-box p { margin: 0.4rem 0; font-size: 1.1rem; display: flex; justify-content: space-between; }
+    .stat-blue { color: #3b82f6; font-weight: bold; }
+    .stat-red { color: #ef4444; font-weight: bold; }
+    .stat-green { color: #10b981; font-weight: bold; }
+    
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 0.8rem;
+      margin-top: 1rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: white;
+      background: #333;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .btn:hover { background: #555; }
+    .btn-outline {
+      background: transparent;
+      color: #333;
+      border: 2px solid #333;
+      margin-top: 0.5rem;
+    }
+    .btn-outline:hover { background: #eee; }
+
+    /* SVG Canvas */
     svg {
       width: 100%;
       height: 100%;
@@ -38,20 +127,10 @@
       display: block;
     }
 
-    .clef-group {
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .clef-group:hover {
-      opacity: 0.7;
-    }
-
     .note-group {
       transition: transform 0.4s ease-in-out, opacity 0.4s;
     }
 
-    /* Optional transitions for color changes */
     .note-group ellipse, .note-group line, .note-group text {
       transition: fill 0.15s, stroke 0.15s;
     }
@@ -89,9 +168,10 @@
 <body>
 
   <div id="app-container">
+    <div id="settings-btn" title="Settings">⚙️</div>
+
     <div class="ui-layer instructions">
-      Click the clef to toggle Treble/Bass.<br>
-      Type the note name on your keyboard (e.g. "a4", "c#5", "bb3").
+      Type the note name on your keyboard (e.g. "a4", "c#5"/"cs5", "bb3").
     </div>
 
     <svg id="staff-svg" viewBox="0 80 1000 240" preserveAspectRatio="xMidYMid meet">
@@ -105,86 +185,159 @@
       </g>
 
       <!-- Clefs -->
-      <g id="clef-container" class="clef-group" fill="#333">
-        <!-- Using highly compatible unicode music symbols with fallback system fonts -->
-        <text id="treble-clef" x="110" y="218" font-size="130" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle">&#119070;</text>
-        <text id="bass-clef" x="110" y="195" font-size="110" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle" style="display: none;">&#119074;</text>
+      <g id="clef-container" fill="#333">
+        <text id="treble-clef" x="110" y="238" font-size="130" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle">&#119070;</text>
+        <text id="bass-clef" x="110" y="225" font-size="110" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle" style="display: none;">&#119074;</text>
       </g>
+
+      <!-- Key Signature & Indicators -->
+      <g id="key-signature-layer"></g>
+      <g id="octave-indicator"></g>
 
       <!-- Dynamic Notes Layer -->
       <g id="notes-layer"></g>
     </svg>
 
     <div class="ui-layer buffer-display" id="buffer-display"></div>
+    
+    <!-- Settings Overlay -->
+    <div id="settings-overlay">
+      <div class="settings-panel">
+        <h2>Settings</h2>
+        
+        <div class="setting-row">
+          <label>Clef</label>
+          <select id="setting-clef">
+            <option value="treble" selected>Treble</option>
+            <option value="bass">Bass</option>
+          </select>
+        </div>
+        
+        <div class="setting-row">
+          <label>Key Signature</label>
+          <select id="setting-key">
+            <option value="C">C Major / A minor</option>
+            <option value="G">G Major / E minor</option>
+            <option value="D">D Major / B minor</option>
+            <option value="A">A Major / F# minor</option>
+            <option value="E">E Major / C# minor</option>
+            <option value="B">B Major / G# minor</option>
+            <option value="F">F Major / D minor</option>
+            <option value="Bb">Bb Major / G minor</option>
+            <option value="Eb">Eb Major / C minor</option>
+            <option value="Ab">Ab Major / F minor</option>
+            <option value="Db">Db Major / Bb minor</option>
+            <option value="Gb">Gb Major / Eb minor</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label>Octave</label>
+          <select id="setting-octave">
+            <option value="0" selected>Standard</option>
+            <option value="1">8va (Play higher)</option>
+            <option value="-1">8vb (Play lower)</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label>Generation Mode</label>
+          <select id="setting-mode">
+            <option value="uniform" selected>Uniform (Random)</option>
+            <option value="chords">Chords Sequences</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label>Input Method</label>
+          <select id="setting-input">
+            <option value="keyboard" selected>Keyboard Typing</option>
+            <option value="mic" disabled>Microphone (Under Construction)</option>
+          </select>
+        </div>
+
+        <div class="stats-box">
+          <p>Time Elapsed: <span id="stat-time">00:00</span></p>
+          <p>Correct: <span id="stat-correct" class="stat-blue">0</span></p>
+          <p>Mistakes: <span id="stat-mistakes" class="stat-red">0</span></p>
+          <p>Accuracy: <span id="stat-ratio">0%</span></p>
+          <p title="Penalized correct note rate: (Correct - Mistakes) / Minutes">Net Speed: <span id="stat-npm" class="stat-green">0</span> <span style="font-size: 0.8rem; font-weight: normal;">NPM</span></p>
+          <button class="btn btn-outline" id="stat-reset">Reset Stats</button>
+        </div>
+
+        <button class="btn" id="settings-save">Save & Return</button>
+        
+        <div style="text-align: center; margin-top: 1.5rem;">
+          <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    // Configuration
-    const X_START = 220;
+    // Constants
+    let X_START = 220; // Dynamically adjusted based on key signature width
     const X_STEP = 90;
     const COLOR_PENDING = '#333';
-    const COLOR_CORRECT = '#3b82f6'; // Blue
-    const COLOR_ERROR = '#ef4444';   // Red
+    const COLOR_CORRECT = '#3b82f6';
+    const COLOR_ERROR = '#ef4444';
+
+    // Settings State
+    const appSettings = {
+      clef: 'treble',
+      key: 'C',
+      octave: 0,
+      mode: 'uniform',
+      input: 'keyboard'
+    };
 
     // App State
-    let currentClef = 'treble';
     let activeNotes = [];
     let currentIndex = 0;
     let globalNoteId = 0;
     let inputBuffer = '';
     let isShifting = false;
 
-    // Precompute Note Pools
+    // Stats State
+    const stats = {
+      startTime: Date.now(),
+      correct: 0,
+      mistakes: 0
+    };
+
+    // Music Definitions
+    const keySigs = {
+      'C': [],
+      'G':  [{p:'f', a:'#'}],
+      'D':  [{p:'f', a:'#'}, {p:'c', a:'#'}],
+      'A':  [{p:'f', a:'#'}, {p:'c', a:'#'}, {p:'g', a:'#'}],
+      'E':  [{p:'f', a:'#'}, {p:'c', a:'#'}, {p:'g', a:'#'}, {p:'d', a:'#'}],
+      'B':  [{p:'f', a:'#'}, {p:'c', a:'#'}, {p:'g', a:'#'}, {p:'d', a:'#'}, {p:'a', a:'#'}],
+      'F':  [{p:'b', a:'b'}],
+      'Bb': [{p:'b', a:'b'}, {p:'e', a:'b'}],
+      'Eb': [{p:'b', a:'b'}, {p:'e', a:'b'}, {p:'a', a:'b'}],
+      'Ab': [{p:'b', a:'b'}, {p:'e', a:'b'}, {p:'a', a:'b'}, {p:'d', a:'b'}],
+      'Db': [{p:'b', a:'b'}, {p:'e', a:'b'}, {p:'a', a:'b'}, {p:'d', a:'b'}, {p:'g', a:'b'}],
+      'Gb': [{p:'b', a:'b'}, {p:'e', a:'b'}, {p:'a', a:'b'}, {p:'d', a:'b'}, {p:'g', a:'b'}, {p:'c', a:'b'}]
+    };
+
+    // Standard line/space octaves for key signatures
+    const keySigOctaves = {
+      'treble': {
+        '#': { f:5, c:5, g:5, d:5, a:4, e:5, b:4 },
+        'b': { b:4, e:5, a:4, d:5, g:4, c:5, f:4 }
+      },
+      'bass': {
+        '#': { f:3, c:3, g:3, d:3, a:2, e:3, b:2 },
+        'b': { b:2, e:3, a:2, d:3, g:2, c:3, f:2 }
+      }
+    };
+
     const treblePool = [];
     const bassPool = [];
-    
-    function buildPools() {
-      const pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
-      const pitchVals = { 'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6 };
-      const accidentals = ['', '#', 'b'];
-      const forbidden = ['cb', 'fb', 'b#', 'e#']; // Omit confusing theoretical accidentals
 
-      // Treble: F3 (index -4) to E6 (index 16)
-      for (let oct = 3; oct <= 6; oct++) {
-        for (let p of pitches) {
-          let idx = pitchVals[p] + (oct - 4) * 7;
-          if (idx >= -4 && idx <= 16) {
-            for (let acc of accidentals) {
-              if (forbidden.includes(p + acc)) continue;
-              treblePool.push({
-                pitch: p, acc: acc, oct: oct,
-                displayStr: p + acc + oct,
-                y: 260 - idx * 10
-              });
-            }
-          }
-        }
-      }
-
-      // Bass: A1 (index -16) to G4 (index 4)
-      for (let oct = 1; oct <= 4; oct++) {
-        for (let p of pitches) {
-          let idx = pitchVals[p] + (oct - 4) * 7;
-          if (idx >= -16 && idx <= 4) {
-            for (let acc of accidentals) {
-              if (forbidden.includes(p + acc)) continue;
-              bassPool.push({
-                pitch: p, acc: acc, oct: oct,
-                displayStr: p + acc + oct,
-                y: 140 - idx * 10
-              });
-            }
-          }
-        }
-      }
-    }
-
-    function getRandomNote() {
-      const pool = currentClef === 'treble' ? treblePool : bassPool;
-      return pool[Math.floor(Math.random() * pool.length)];
-    }
-
-    // Helper to calculate Y position dynamically
+    // Core Helpers
     function calculateY(pitch, oct, clef) {
       const pitchVals = { 'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6 };
       let idx = pitchVals[pitch] + (oct - 4) * 7;
@@ -192,7 +345,16 @@
       else return 140 - idx * 10;
     }
 
-    // Helper to parse a raw string input back into components
+    function getVisualAccidental(pitch, trueAcc) {
+      const activeKeySigs = keySigs[appSettings.key] || [];
+      const keyAcc = activeKeySigs.find(k => k.p === pitch);
+      const defaultAcc = keyAcc ? keyAcc.a : '';
+
+      if (trueAcc === defaultAcc) return '';  // Fits key
+      if (trueAcc === '') return 'n';         // Needs natural to override key
+      return trueAcc;                         // Needs explicit # or b
+    }
+
     function parseInput(str) {
       if (!str) return null;
       const pitch = str[0];
@@ -205,60 +367,210 @@
       return { pitch, acc, oct };
     }
 
-    // SVG Utility
     function createSVGElement(tag, attrs) {
       const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
       for (let k in attrs) el.setAttribute(k, attrs[k]);
       return el;
     }
 
-    // Helper to draw note components
-    function appendNoteVisuals(g, y, acc, headColor, accColor) {
-      // Ledger lines below staff
+    // Drawing Helpers
+    function drawDecorations() {
+      // 1. Draw Key Signature
+      const group = document.getElementById('key-signature-layer');
+      group.innerHTML = '';
+      const accs = keySigs[appSettings.key];
+      
+      let xOffset = 170;
+      if (accs && accs.length > 0) {
+        const isSharp = accs[0].a === '#';
+        accs.forEach(acc => {
+          const y = calculateY(acc.p, keySigOctaves[appSettings.clef][isSharp ? '#' : 'b'][acc.p], appSettings.clef);
+          const text = createSVGElement('text', {
+            x: xOffset, y: y + 6, 'font-size': 26, fill: '#333', 'font-family': 'sans-serif'
+          });
+          text.textContent = isSharp ? '♯' : '♭';
+          group.appendChild(text);
+          xOffset += 16;
+        });
+      }
+      
+      // Expand starting X to make room for key signature
+      X_START = Math.max(220, xOffset + 40);
+
+      // 2. Draw 8va/8vb indicator
+      const octGroup = document.getElementById('octave-indicator');
+      octGroup.innerHTML = '';
+      if (appSettings.octave !== 0) {
+        const yPos = appSettings.octave === 1 ? 110 : 280;
+        const text = createSVGElement('text', {
+          x: 100, y: yPos, 'font-size': 20, fill: '#333', 'font-style': 'italic', 'font-weight': 'bold'
+        });
+        text.textContent = appSettings.octave === 1 ? '8va' : '8vb';
+        octGroup.appendChild(text);
+
+        // Dashed line
+        const line = createSVGElement('line', {
+          x1: 140, x2: 960, y1: yPos - 6, y2: yPos - 6,
+          stroke: '#333', 'stroke-width': 1, 'stroke-dasharray': '5,5'
+        });
+        octGroup.appendChild(line);
+      }
+    }
+
+    function appendNoteVisuals(g, y, visualAcc, headColor, accColor) {
+      // Ledger lines
       if (y >= 260) {
         for (let ly = 260; ly <= y; ly += 20) {
-          g.appendChild(createSVGElement('line', {
-            x1: -22, x2: 22, y1: ly, y2: ly,
-            stroke: headColor, 'stroke-width': 2
-          }));
+          g.appendChild(createSVGElement('line', { x1: -22, x2: 22, y1: ly, y2: ly, stroke: headColor, 'stroke-width': 2 }));
         }
       }
-      // Ledger lines above staff
       if (y <= 140) {
         for (let ly = 140; ly >= y; ly -= 20) {
-          g.appendChild(createSVGElement('line', {
-            x1: -22, x2: 22, y1: ly, y2: ly,
-            stroke: headColor, 'stroke-width': 2
-          }));
+          g.appendChild(createSVGElement('line', { x1: -22, x2: 22, y1: ly, y2: ly, stroke: headColor, 'stroke-width': 2 }));
         }
       }
 
       // Note head
       g.appendChild(createSVGElement('ellipse', {
-        cx: 0, cy: y, rx: 14, ry: 10,
-        transform: `rotate(-20 0 ${y})`,
-        fill: headColor
+        cx: 0, cy: y, rx: 14, ry: 10, transform: `rotate(-20 0 ${y})`, fill: headColor
       }));
 
       // Stem
       const isStemUp = y > 200;
       g.appendChild(createSVGElement('line', {
         x1: isStemUp ? 12 : -12, x2: isStemUp ? 12 : -12,
-        y1: y, y2: isStemUp ? y - 35 : y + 35,
-        stroke: headColor, 'stroke-width': 2
+        y1: y, y2: isStemUp ? y - 35 : y + 35, stroke: headColor, 'stroke-width': 2
       }));
 
       // Accidental
-      if (acc) {
+      if (visualAcc) {
         const accText = createSVGElement('text', {
-          x: -32, y: y + 6, 'font-size': 26,
-          fill: accColor, 'font-family': 'sans-serif'
+          x: -32, y: y + 6, 'font-size': 26, fill: accColor, 'font-family': 'sans-serif'
         });
-        accText.textContent = acc === '#' ? '♯' : '♭';
+        if (visualAcc === '#') accText.textContent = '♯';
+        else if (visualAcc === 'b') accText.textContent = '♭';
+        else if (visualAcc === 'n') accText.textContent = '♮';
         g.appendChild(accText);
       }
     }
 
+    // Modular Note Generation
+    function buildPools() {
+      treblePool.length = 0; bassPool.length = 0;
+      const pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
+      const pitchVals = { 'c': 0, 'd': 1, 'e': 2, 'f': 3, 'g': 4, 'a': 5, 'b': 6 };
+      const semitones = { 'c': 0, 'd': 2, 'e': 4, 'f': 5, 'g': 7, 'a': 9, 'b': 11 };
+      const accidentals = ['', '#', 'b'];
+      const forbidden = ['cb', 'fb', 'b#', 'e#'];
+
+      const addNotes = (pool, minIdx, maxIdx, baseOct, clefType) => {
+        for (let visualOct = baseOct - 2; visualOct <= baseOct + 3; visualOct++) {
+          for (let p of pitches) {
+            let idx = pitchVals[p] + (visualOct - baseOct) * 7;
+            if (idx >= minIdx && idx <= maxIdx) {
+              for (let acc of accidentals) {
+                if (forbidden.includes(p + acc)) continue;
+                const actualOct = visualOct + appSettings.octave;
+                // Calculate absolute MIDI value for correct chord interval calculations
+                const midi = (actualOct + 1) * 12 + semitones[p] + (acc === '#' ? 1 : acc === 'b' ? -1 : 0);
+                
+                pool.push({
+                  pitch: p, trueAcc: acc, actualOct: actualOct, visualOct: visualOct,
+                  displayStr: p + acc + actualOct,
+                  midi: midi,
+                  y: calculateY(p, visualOct, clefType)
+                });
+              }
+            }
+          }
+        }
+      };
+
+      // F3 to E6 relative to C4 (idx 0)
+      addNotes(treblePool, -4, 16, 4, 'treble'); 
+      // A1 to G4 relative to C4
+      addNotes(bassPool, -16, 4, 4, 'bass');     
+    }
+
+    // Find the musically best spelled note for a given midi value based on key sig
+    function getBestNoteForMidi(midi, pool, currentKey) {
+      const candidates = pool.filter(n => n.midi === midi);
+      if (candidates.length === 1) return candidates[0];
+      
+      const keyAccs = keySigs[currentKey] || [];
+      
+      for (let cand of candidates) {
+        const keyAcc = keyAccs.find(k => k.p === cand.pitch);
+        if (keyAcc && keyAcc.a === cand.trueAcc) return cand; // Natively fits the key
+        if (!keyAcc && cand.trueAcc === '') return cand; // Naturally fits standard C Maj slots
+      }
+      
+      const hasFlats = keyAccs.some(k => k.a === 'b');
+      const prefAcc = hasFlats ? 'b' : '#';
+      const alignedCand = candidates.find(c => c.trueAcc === prefAcc);
+      
+      return alignedCand || candidates[0];
+    }
+
+    const NoteGenerator = {
+      chordQueue: [],
+      
+      uniform: function() {
+        const pool = appSettings.clef === 'treble' ? treblePool : bassPool;
+        return pool[Math.floor(Math.random() * pool.length)];
+      },
+      
+      chords: function() {
+        if (this.chordQueue.length > 0) {
+          return this.chordQueue.shift();
+        }
+
+        const pool = appSettings.clef === 'treble' ? treblePool : bassPool;
+        const maxMidi = Math.max(...pool.map(p => p.midi));
+        
+        // Allowed Intervals: Maj7, Min7, Maj6, Min6
+        const intervalSets = [
+          [0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]
+        ];
+        
+        // Find a safe root note that won't go out of bounds when we build inversions (+24 max extension)
+        const validRoots = pool.filter(n => n.midi + 24 <= maxMidi);
+        const rootNote = validRoots[Math.floor(Math.random() * validRoots.length)];
+        const rootMidi = rootNote.midi;
+        
+        const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
+        let chordMidis = intervals.map(i => rootMidi + i);
+        
+        // Random Inversion (0 to 3)
+        const inv = Math.floor(Math.random() * 4);
+        for (let i = 0; i < inv; i++) {
+          let minMidi = Math.min(...chordMidis);
+          chordMidis[chordMidis.indexOf(minMidi)] += 12;
+        }
+        
+        chordMidis.sort((a, b) => a - b);
+        
+        // Ascending or Descending Sequence
+        if (Math.random() > 0.5) {
+          chordMidis.reverse();
+        }
+        
+        // Map to exact spelling notes and queue them
+        this.chordQueue = chordMidis.map(m => getBestNoteForMidi(m, pool, appSettings.key));
+        
+        return this.chordQueue.shift();
+      },
+      
+      next: function() {
+        return this[appSettings.mode]();
+      },
+      
+      clearQueue: function() {
+        this.chordQueue = [];
+      }
+    };
+
+    // App Rendering Loop
     function renderNotes() {
       const layer = document.getElementById('notes-layer');
 
@@ -271,37 +583,37 @@
           layer.appendChild(el);
         }
         
-        // Update horizontal position
         el.style.transform = `translateX(${targetX}px)`;
 
-        // To avoid destroying CSS transitions, we only rebuild inner contents when state changes
         const stateKey = n.state + '-' + (n.errorInput || '');
         if (el.getAttribute('data-rendered-state') !== stateKey) {
-          el.innerHTML = ''; // clear contents
+          el.innerHTML = ''; 
           
+          const targetVisualAcc = getVisualAccidental(n.data.pitch, n.data.trueAcc);
+
           if (n.state === 'pending') {
-            appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
+            appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_PENDING, COLOR_PENDING);
           } else if (n.state === 'correct') {
-            appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_CORRECT, COLOR_CORRECT);
+            appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_CORRECT, COLOR_CORRECT);
           } else if (n.state === 'error') {
             const errorData = parseInput(n.errorInput);
             if (!errorData) {
-              appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
+              appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_PENDING, COLOR_PENDING);
             } else {
-              const errorY = calculateY(errorData.pitch, errorData.oct, currentClef);
+              const errorVisualOct = errorData.oct - appSettings.octave;
+              const errorY = calculateY(errorData.pitch, errorVisualOct, appSettings.clef);
+              const errorVisualAcc = getVisualAccidental(errorData.pitch, errorData.acc);
 
               if (errorY !== n.data.y) {
-                // Wrong pitch/octave: Draw target black, error red.
-                appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_PENDING, COLOR_PENDING);
-                appendNoteVisuals(el, errorY, errorData.acc, COLOR_ERROR, COLOR_ERROR);
+                // Wrong pitch line
+                appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_PENDING, COLOR_PENDING);
+                appendNoteVisuals(el, errorY, errorVisualAcc, COLOR_ERROR, COLOR_ERROR);
               } else {
-                // Pitch/octave match, accidental is wrong
-                if (errorData.acc === '') {
-                  // User omitted accidental: Draw head red, target accidental black
-                  appendNoteVisuals(el, n.data.y, n.data.acc, COLOR_ERROR, COLOR_PENDING);
+                // Same line, accidental mistake
+                if (errorVisualAcc === '') {
+                  appendNoteVisuals(el, n.data.y, targetVisualAcc, COLOR_ERROR, COLOR_PENDING);
                 } else {
-                  // User added wrong accidental: Draw head black, error accidental red
-                  appendNoteVisuals(el, n.data.y, errorData.acc, COLOR_PENDING, COLOR_ERROR);
+                  appendNoteVisuals(el, n.data.y, errorVisualAcc, COLOR_PENDING, COLOR_ERROR);
                 }
               }
             }
@@ -310,11 +622,11 @@
         }
       });
 
-      // Cleanup stale DOM elements with fade out
+      // Cleanup stale DOM elements
       Array.from(layer.children).forEach(child => {
         if (!activeNotes.find(n => n.id === child.id)) {
           child.style.opacity = '0';
-          setTimeout(() => child.remove(), 400); // Wait for CSS transition
+          setTimeout(() => child.remove(), 400); 
         }
       });
     }
@@ -323,31 +635,19 @@
       activeNotes = [];
       currentIndex = 0;
       globalNoteId = 0;
+      NoteGenerator.clearQueue();
       document.getElementById('notes-layer').innerHTML = '';
       
       for (let i = 0; i < 8; i++) {
-        activeNotes.push({
-          data: getRandomNote(),
-          id: 'note-' + globalNoteId++,
-          state: 'pending',
-          errorInput: null
-        });
+        activeNotes.push({ data: NoteGenerator.next(), id: 'note-' + globalNoteId++, state: 'pending', errorInput: null });
       }
       renderNotes();
     }
 
     function shiftNotes() {
-      // Remove first 4 and slide remaining ones
       activeNotes = activeNotes.slice(4);
-      
-      // Append 4 new random notes
       for (let i = 0; i < 4; i++) {
-        activeNotes.push({
-          data: getRandomNote(),
-          id: 'note-' + globalNoteId++,
-          state: 'pending',
-          errorInput: null
-        });
+        activeNotes.push({ data: NoteGenerator.next(), id: 'note-' + globalNoteId++, state: 'pending', errorInput: null });
       }
       currentIndex = 0;
       renderNotes();
@@ -359,33 +659,25 @@
     }
 
     window.addEventListener('keydown', (e) => {
-      if (isShifting) return;
+      // Ignore inputs if shifting or if settings menu is open
+      if (isShifting || document.getElementById('settings-overlay').style.display === 'flex') return;
+      if (appSettings.input === 'mic') return; // Ignore keyboard if mic is selected
       
       const key = e.key.toLowerCase();
       
-      // Number triggers evaluation
       if (key >= '0' && key <= '9') {
         if (inputBuffer.length > 0) {
           inputBuffer += key;
           updateBufferDisplay();
           checkInput();
         }
-      } 
-      // Letter logic
-      else if (key >= 'a' && key <= 'g') {
-        // If buffer already has a pitch and 'b' is typed, it's a flat
-        if (inputBuffer.length === 1 && key === 'b') {
-          inputBuffer += key;
-        } else {
-          // Otherwise, start a brand new note
-          inputBuffer = key;
-        }
+      } else if (key >= 'a' && key <= 'g') {
+        if (inputBuffer.length === 1 && key === 'b') inputBuffer += key; // Flat
+        else inputBuffer = key; // New pitch
         updateBufferDisplay();
-      } 
-      // Sharp logic
-      else if (key === '#') {
+      } else if (key === '#' || key === 's') {
         if (inputBuffer.length === 1) {
-          inputBuffer += key;
+          inputBuffer += '#';
           updateBufferDisplay();
         }
       }
@@ -395,9 +687,9 @@
       const current = activeNotes[currentIndex];
       
       if (inputBuffer === current.data.displayStr) {
-        // Success
         current.state = 'correct';
         current.errorInput = null;
+        stats.correct++;
         currentIndex++;
         renderNotes();
         
@@ -406,35 +698,78 @@
 
         if (currentIndex === 4) {
           isShifting = true;
-          setTimeout(() => {
-            shiftNotes();
-            isShifting = false;
-          }, 350);
+          setTimeout(() => { shiftNotes(); isShifting = false; }, 350);
         }
       } else {
-        // Failure
         current.state = 'error';
         current.errorInput = inputBuffer;
+        stats.mistakes++;
         renderNotes();
         inputBuffer = '';
         setTimeout(updateBufferDisplay, 150);
       }
     }
 
-    // Toggle Clef
-    document.getElementById('clef-container').addEventListener('click', () => {
-      currentClef = currentClef === 'treble' ? 'bass' : 'treble';
-      document.getElementById('treble-clef').style.display = currentClef === 'treble' ? 'block' : 'none';
-      document.getElementById('bass-clef').style.display = currentClef === 'bass' ? 'block' : 'none';
+    // Stats & Settings UI
+    function updateStatsUI() {
+      const elapsedSecs = Math.floor((Date.now() - stats.startTime) / 1000);
+      const minsDisplay = Math.floor(elapsedSecs / 60).toString().padStart(2, '0');
+      const secsDisplay = (elapsedSecs % 60).toString().padStart(2, '0');
       
-      // Reset input state
+      document.getElementById('stat-time').textContent = `${minsDisplay}:${secsDisplay}`;
+      document.getElementById('stat-correct').textContent = stats.correct;
+      document.getElementById('stat-mistakes').textContent = stats.mistakes;
+      
+      const total = stats.correct + stats.mistakes;
+      const ratio = total === 0 ? 0 : Math.round((stats.correct / total) * 100);
+      document.getElementById('stat-ratio').textContent = `${ratio}%`;
+
+      const minsFloat = elapsedSecs / 60;
+      const netNotes = Math.max(0, stats.correct - stats.mistakes);
+      const npm = minsFloat > 0 ? Math.round(netNotes / minsFloat) : 0;
+      document.getElementById('stat-npm').textContent = npm;
+    }
+
+    setInterval(() => updateStatsUI(), 1000);
+
+    document.getElementById('stat-reset').addEventListener('click', () => {
+      stats.startTime = Date.now();
+      stats.correct = 0;
+      stats.mistakes = 0;
+      updateStatsUI();
+    });
+
+    document.getElementById('settings-btn').addEventListener('click', () => {
+      document.getElementById('settings-overlay').style.display = 'flex';
+      updateStatsUI();
+    });
+
+    document.getElementById('settings-save').addEventListener('click', () => {
+      const previousMode = appSettings.mode;
+
+      appSettings.clef = document.getElementById('setting-clef').value;
+      appSettings.key = document.getElementById('setting-key').value;
+      appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
+      appSettings.mode = document.getElementById('setting-mode').value;
+      appSettings.input = document.getElementById('setting-input').value;
+      
+      document.getElementById('settings-overlay').style.display = 'none';
+      
+      // Apply UI changes
+      document.getElementById('treble-clef').style.display = appSettings.clef === 'treble' ? 'block' : 'none';
+      document.getElementById('bass-clef').style.display = appSettings.clef === 'bass' ? 'block' : 'none';
+      
+      // Rebuild and reboot
       inputBuffer = '';
       updateBufferDisplay();
+      buildPools();
+      drawDecorations();
       initNotes();
     });
 
     // Boot App
     buildPools();
+    drawDecorations();
     initNotes();
 
   </script>

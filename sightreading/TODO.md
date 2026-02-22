@@ -1,5 +1,2 @@
-- Add settings menu
-- Add chord generation (as opposed to uniform note generation)
-- Add README
 - Test on mobile
 - Allow for using a mic and a real keyboard to input notes
