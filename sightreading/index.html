@@ -256,6 +256,16 @@
           </select>
         </div>
 
+        <div class="setting-row" id="row-mic-sensitivity" style="display: none;">
+          <label>Mic Sensitivity</label>
+          <select id="setting-mic-sensitivity">
+            <option value="0.01">High (Picks up quiet notes)</option>
+            <option value="0.03" selected>Medium (Default)</option>
+            <option value="0.06">Low (Reduces background noise)</option>
+            <option value="0.10">Very Low (Requires loud playing)</option>
+          </select>
+        </div>
+
         <div class="stats-box">
           <p>Time Elapsed: <span id="stat-time">00:00</span></p>
           <p>Correct: <span id="stat-correct" class="stat-blue">0</span></p>
@@ -289,7 +299,8 @@
       key: 'C',
       octave: 0,
       mode: 'uniform',
-      input: 'keyboard'
+      input: 'keyboard',
+      micSensitivity: 0.03
     };
 
     // App State
@@ -674,7 +685,7 @@
         let rms = 0;
         for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
         rms = Math.sqrt(rms / SIZE);
-        if (rms < 0.01) return -1; // Silence / Background noise
+        if (rms < appSettings.micSensitivity) return -1; // Silence / Background noise
 
         let r1 = 0, r2 = SIZE - 1, thres = 0.2;
         for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buf[i]) < thres) { r1 = i; break; }
@@ -856,7 +867,12 @@
 
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
+      document.getElementById('row-mic-sensitivity').style.display = document.getElementById('setting-input').value === 'mic' ? 'flex' : 'none';
       updateStatsUI();
+    });
+
+    document.getElementById('setting-input').addEventListener('change', (e) => {
+      document.getElementById('row-mic-sensitivity').style.display = e.target.value === 'mic' ? 'flex' : 'none';
     });
 
     document.getElementById('settings-save').addEventListener('click', () => {
@@ -864,6 +880,7 @@
       appSettings.key = document.getElementById('setting-key').value;
       appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
       appSettings.mode = document.getElementById('setting-mode').value;
+      appSettings.micSensitivity = parseFloat(document.getElementById('setting-mic-sensitivity').value);
       
       const prevInput = appSettings.input;
       appSettings.input = document.getElementById('setting-input').value;
