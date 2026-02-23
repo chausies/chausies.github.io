@@ -406,6 +406,32 @@
     const COLOR_CORRECT = '#3b82f6';
     const COLOR_ERROR = '#ef4444';
 
+    // Global Pause State
+    let isAppPaused = false;
+    let pauseTimestamp = 0;
+
+    function checkPauseState() {
+      const p1 = document.getElementById('settings-overlay').style.display === 'flex';
+      const p2 = document.getElementById('stats-overlay').style.display === 'flex';
+      const p3 = document.getElementById('log-overlay').style.display === 'flex';
+      const isFocused = document.hasFocus();
+
+      const shouldBePaused = p1 || p2 || p3 || !isFocused;
+
+      if (shouldBePaused && !isAppPaused) {
+        isAppPaused = true;
+        pauseTimestamp = Date.now();
+      } else if (!shouldBePaused && isAppPaused) {
+        isAppPaused = false;
+        const pauseDuration = Date.now() - pauseTimestamp;
+        stats.startTime += pauseDuration;
+        currentNoteStartTime += pauseDuration;
+      }
+    }
+
+    window.addEventListener('blur', checkPauseState);
+    window.addEventListener('focus', checkPauseState);
+
     // Logger
     const AppLog = {
       messages: [],
@@ -1231,6 +1257,12 @@
 
       tick: function() {
         if (!this.analyser) return;
+
+        if (isAppPaused) {
+          this.loopId = requestAnimationFrame(this.tick.bind(this));
+          return;
+        }
+
         this.analyser.getFloatTimeDomainData(this.rawBuf);
 
         const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
@@ -1348,11 +1380,7 @@
     };
 
     window.addEventListener('keydown', (e) => {
-      const p1 = document.getElementById('settings-overlay').style.display === 'flex';
-      const p2 = document.getElementById('stats-overlay').style.display === 'flex';
-      const p3 = document.getElementById('log-overlay').style.display === 'flex';
-
-      if (isShifting || p1 || p2 || p3) return;
+      if (isAppPaused || isShifting) return;
       if (appSettings.input === 'mic') return; 
       InputManager.handleKeyboardInput(e.key.toLowerCase());
     });
@@ -1365,7 +1393,8 @@
     }
 
     function updateStatsUI() {
-      const elapsedSecs = Math.floor((Date.now() - stats.startTime) / 1000);
+      const now = isAppPaused ? pauseTimestamp : Date.now();
+      const elapsedSecs = Math.floor((now - stats.startTime) / 1000);
       const minsDisplay = Math.floor(elapsedSecs / 60).toString().padStart(2, '0');
       const secsDisplay = (elapsedSecs % 60).toString().padStart(2, '0');
       
@@ -1388,26 +1417,33 @@
     // Overlay Controls
     document.getElementById('log-btn').addEventListener('click', () => {
       document.getElementById('log-overlay').style.display = 'flex';
+      checkPauseState();
       AppLog.render();
     });
 
     document.getElementById('log-return').addEventListener('click', () => {
       document.getElementById('log-overlay').style.display = 'none';
+      checkPauseState();
     });
 
     document.getElementById('stats-btn').addEventListener('click', () => {
       document.getElementById('stats-overlay').style.display = 'flex';
+      checkPauseState();
       updateStatsUI();
     });
 
     document.getElementById('stats-return').addEventListener('click', () => {
       document.getElementById('stats-overlay').style.display = 'none';
+      checkPauseState();
     });
 
     document.getElementById('stat-reset').addEventListener('click', () => {
       stats.startTime = Date.now();
       stats.correct = 0;
       stats.mistakes = 0;
+      if (isAppPaused) {
+        pauseTimestamp = Date.now(); // Anchor the new pause start so we don't accidentally push into the future
+      }
       updateStatsUI();
       AppLog.add("Stats manually reset.");
     });
@@ -1415,6 +1451,7 @@
     // Settings Controls
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
+      checkPauseState();
       
       const isTeaching = document.getElementById('setting-mode').value === 'teaching';
       document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
@@ -1475,12 +1512,13 @@
       else if (appSettings.input === 'keyboard' && prevInput === 'mic') AudioEngine.stop();
       
       document.getElementById('settings-overlay').style.display = 'none';
+      checkPauseState();
       
       inputBuffer = '';
       updateBufferDisplay('');
       buildPools();
       drawDecorations();
-      initNotes();
+      initNotes(); // Resets currentNoteStartTime inherently
     });
 
     // Boot App
