@@ -335,6 +335,9 @@
   </div>
 
   <script>
+    // Configurable Parameters
+    const PITCH_WINDOW_MS = 100; // Analyzation window duration (easily editable)
+
     // Constants
     let X_START = 220;
     const X_STEP = 90;
@@ -839,6 +842,125 @@
     });
 
     // ---------------------------------------------------------
+    // Modular Pitch Detection Engine
+    // ---------------------------------------------------------
+    const PitchDetection = {
+      activeAlgorithm: 'mpm', // Hot-swappable: 'mpm', 'autoCorrelate', etc.
+
+      detect: function(buffer, sampleRate, sensitivity) {
+        // Shared Noise/Silence Gate
+        let rms = 0;
+        for (let i = 0; i < buffer.length; i++) rms += buffer[i] * buffer[i];
+        rms = Math.sqrt(rms / buffer.length);
+        if (rms < sensitivity) return -1; 
+        
+        return this[this.activeAlgorithm](buffer, sampleRate);
+      },
+
+      // McLeod Pitch Method (MPM) - Highly accurate, robust against harmonics
+      mpm: function(buffer, sampleRate) {
+        const n = buffer.length;
+        // Cap tau calculation to human hearing (~25Hz) to save CPU cycles
+        const maxTau = Math.min(n, Math.floor(sampleRate / 25));
+        const nsdf = new Float32Array(maxTau);
+
+        // 1. Calculate Normalized Square Difference Function
+        for (let tau = 0; tau < maxTau; tau++) {
+          let acf = 0;
+          let divisorM = 0;
+          for (let i = 0; i < n - tau; i++) {
+            acf += buffer[i] * buffer[i + tau];
+            divisorM += buffer[i] * buffer[i] + buffer[i + tau] * buffer[i + tau];
+          }
+          nsdf[tau] = divisorM === 0 ? 0 : (2 * acf) / divisorM;
+        }
+
+        // 2. Find local maxima (peaks)
+        let peaks = [];
+        let curMaxPos = 0;
+        let curMaxVal = -1;
+        let state = 0; // 0: looking for pos zero-crossing, 1: inside peak
+
+        for (let tau = 1; tau < maxTau - 1; tau++) {
+          if (state === 0 && nsdf[tau] > 0 && nsdf[tau - 1] <= 0) {
+            state = 1;
+            curMaxVal = nsdf[tau];
+            curMaxPos = tau;
+          } else if (state === 1) {
+            if (nsdf[tau] > curMaxVal) {
+              curMaxVal = nsdf[tau];
+              curMaxPos = tau;
+            }
+            if (nsdf[tau] < 0 && nsdf[tau - 1] >= 0) {
+              state = 0;
+              peaks.push({ pos: curMaxPos, val: curMaxVal });
+            }
+          }
+        }
+
+        if (peaks.length === 0) return -1;
+
+        // 3. Refine peaks using Parabolic Interpolation
+        peaks.forEach(peak => {
+          let tau = peak.pos;
+          if (tau > 0 && tau < maxTau - 1) {
+            let y1 = nsdf[tau - 1];
+            let y2 = nsdf[tau];
+            let y3 = nsdf[tau + 1];
+            let a = (y1 + y3 - 2 * y2) / 2;
+            let b = (y3 - y1) / 2;
+            if (a !== 0) {
+              peak.pos = tau - b / (2 * a);
+              peak.val = y2 - (b * b) / (4 * a);
+            }
+          }
+        });
+
+        // 4. Select the true fundamental peak using McLeod's constant (k = 0.90)
+        let maxPeakVal = peaks.reduce((max, p) => Math.max(max, p.val), -1);
+        const k = 0.90;
+        let threshold = maxPeakVal * k;
+
+        let selectedPeak = peaks.find(p => p.val >= threshold);
+
+        if (selectedPeak && selectedPeak.pos > 0) {
+          return sampleRate / selectedPeak.pos;
+        }
+        return -1;
+      },
+
+      // Legacy Autocorrelation (kept for fallback/comparison)
+      autoCorrelate: function(buffer, sampleRate) {
+        let SIZE = buffer.length;
+        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
+        for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buffer[i]) < thres) { r1 = i; break; }
+        for (let i = 1; i < SIZE / 2; i++) if (Math.abs(buffer[SIZE - i]) < thres) { r2 = SIZE - i; break; }
+        
+        buffer = buffer.slice(r1, r2);
+        SIZE = buffer.length;
+
+        let c = new Array(SIZE).fill(0);
+        for (let i = 0; i < SIZE; i++)
+          for (let j = 0; j < SIZE - i; j++)
+            c[i] = c[i] + buffer[j] * buffer[j + i];
+
+        let d = 0; while (c[d] > c[d + 1]) d++;
+        let maxval = -1, maxpos = -1;
+        for (let i = d; i < SIZE; i++) {
+          if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
+        }
+        
+        let T0 = maxpos;
+        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
+        let a = (x1 + x3 - 2 * x2) / 2;
+        let b = (x3 - x1) / 2;
+        if (a) T0 = T0 - b / (2 * a);
+
+        return sampleRate / T0;
+      }
+    };
+
+    // ---------------------------------------------------------
     // Audio Input Engine (Microphone)
     // ---------------------------------------------------------
     const AudioEngine = {
@@ -846,7 +968,7 @@
       analyser: null,
       stream: null,
       loopId: null,
-      buf: new Float32Array(2048),
+      rawBuf: null, // Full FFT buffer
       pitchHistory: [],
       lastEvaluatedMidi: -1,
       cooldown: false,
@@ -858,7 +980,16 @@
           this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
           this.context = new (window.AudioContext || window.webkitAudioContext)();
           this.analyser = this.context.createAnalyser();
-          this.analyser.fftSize = 2048; 
+
+          // Calculate exact FFT size required to fit our configurable time window
+          const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
+          let fftSize = 32;
+          while (fftSize < requiredSamples && fftSize < 32768) {
+            fftSize *= 2;
+          }
+          this.analyser.fftSize = fftSize;
+          this.rawBuf = new Float32Array(fftSize);
+
           const source = this.context.createMediaStreamSource(this.stream);
           source.connect(this.analyser);
           this.start();
@@ -885,44 +1016,15 @@
         this.tick();
       },
 
-      autoCorrelate: function(buf, sampleRate) {
-        let SIZE = buf.length;
-        let rms = 0;
-        for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
-        rms = Math.sqrt(rms / SIZE);
-        if (rms < appSettings.micSensitivity) return -1; 
-
-        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
-        for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buf[i]) < thres) { r1 = i; break; }
-        for (let i = 1; i < SIZE / 2; i++) if (Math.abs(buf[SIZE - i]) < thres) { r2 = SIZE - i; break; }
-        
-        buf = buf.slice(r1, r2);
-        SIZE = buf.length;
-
-        let c = new Array(SIZE).fill(0);
-        for (let i = 0; i < SIZE; i++)
-          for (let j = 0; j < SIZE - i; j++)
-            c[i] = c[i] + buf[j] * buf[j + i];
-
-        let d = 0; while (c[d] > c[d + 1]) d++;
-        let maxval = -1, maxpos = -1;
-        for (let i = d; i < SIZE; i++) {
-          if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
-        }
-        
-        let T0 = maxpos;
-        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-        let a = (x1 + x3 - 2 * x2) / 2;
-        let b = (x3 - x1) / 2;
-        if (a) T0 = T0 - b / (2 * a);
-
-        return sampleRate / T0;
-      },
-
       tick: function() {
         if (!this.analyser) return;
-        this.analyser.getFloatTimeDomainData(this.buf);
-        const pitch = this.autoCorrelate(this.buf, this.context.sampleRate);
+        this.analyser.getFloatTimeDomainData(this.rawBuf);
+
+        // Slice exactly our required temporal window from the most recent data in the buffer
+        const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
+        const analysisBuffer = this.rawBuf.subarray(this.rawBuf.length - requiredSamples);
+
+        const pitch = PitchDetection.detect(analysisBuffer, this.context.sampleRate, appSettings.micSensitivity);
 
         if (pitch !== -1 && !isShifting && !this.cooldown) {
           const midi = Math.round(12 * (Math.log2(pitch / 440)) + 69);
