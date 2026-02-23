@@ -1,5 +1,3 @@
-- Test on mobile
-- Allow for using a mic and a real keyboard to input notes
-- Test mic functionality
-- Add grand staff option
+- Make mic more robust to background noise, filtering out only the 
+    instrument (too many false positives currently)
 - Add multiple-notes-at-once option

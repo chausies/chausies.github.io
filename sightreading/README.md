@@ -1,8 +1,8 @@
 # **Note Reader Practice**
 
 Sight-reading trainer webapp that supports keyboard input **and** listening
-to a piano being played through a mic. Completely open source and runs
-locally in your browser. Check it out at 
+to an actual piano being played through a mic. Completely open source and
+runs locally in your browser. Check it out at 
 (chausies.xyz/SightReading)[https://chausies.xyz/SightReading].
 
 ## **Overview**
@@ -32,6 +32,6 @@ fluency.
 * **Octave:** Type a number (e.g., 4\) to submit your note guess (e.g. 
     c\#5)  
 * **Settings:** Click the ⚙️ icon in the top right to configure your clef, 
-    key signature, and more.
+    key signature, using mic+piano, and more.
 
 *Note: This project was largely vibecoded using Gemini 3.1 Pro.*
