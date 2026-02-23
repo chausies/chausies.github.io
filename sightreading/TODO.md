@@ -1,3 +1,4 @@
-- Make mic more robust to background noise, filtering out only the 
-    instrument (too many false positives currently)
-- Add multiple-notes-at-once option
+- Add teaching mode, where more notes are gradually introduced/removed 
+    based on performance.  
+- Add multiple-notes-at-once option (polyphony), perhaps through a 
+    filter-bank based method.  
