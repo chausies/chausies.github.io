@@ -1,4 +1,4 @@
-# **Note Reader Practice**
+# **Practice Sight-reading with Mic Support**
 
 Sight-reading trainer webapp that supports keyboard input **and** listening
 to an actual piano being played through a mic. Completely open source and
@@ -7,8 +7,8 @@ runs locally in your browser. Check it out at
 
 ## **Overview**
 
-Note Reader Practice generates an infinite stream of random notes or chords
-on a virtual staff. Users read the notes and input the correct pitch,
+The webapp generates an infinite stream of random notes or chords on a
+virtual staff. Users read the notes and input the correct pitch,
 accidental, and octave (or note on their actual piano) to advance. The app
 tracks your accuracy, correct notes, and calculates your penalized "Net
 Speed" in Notes Per Minute (NPM) to measure your real sight-reading
