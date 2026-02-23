@@ -200,7 +200,7 @@
 <body>
 
   <div id="app-container">
-    <div class="top-btn" id="stats-btn" title="Diagnostics & Stats">📊</div>
+    <div class="top-btn" id="stats-btn" title="Stats">📊</div>
     <div class="top-btn" id="settings-btn" title="Settings">⚙️</div>
 
     <div class="ui-layer instructions" id="instruction-text">
@@ -220,10 +220,10 @@
 
     <div class="ui-layer buffer-display" id="buffer-display"></div>
     
-    <!-- Diagnostics Overlay -->
+    <!-- Stats Overlay -->
     <div class="overlay-container" id="stats-overlay">
       <div class="panel">
-        <h2>Diagnostics</h2>
+        <h2>Stats</h2>
         <div class="stats-list">
           <p>Time Elapsed: <span id="stat-time">00:00</span></p>
           <p>Correct Notes: <span id="stat-correct" class="stat-blue">0</span></p>
@@ -1209,7 +1209,7 @@
 
     setInterval(() => updateStatsUI(), 1000);
 
-    // Diagnostics Controls
+    // Stats Controls
     document.getElementById('stats-btn').addEventListener('click', () => {
       document.getElementById('stats-overlay').style.display = 'flex';
       updateStatsUI();

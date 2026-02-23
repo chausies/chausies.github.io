@@ -21,7 +21,7 @@ session.
     transpositions.  
 * **Microphone (piano) mode:** Listens on your mic for a piano/instrument 
     being played. Great for use with a smart phone/tablet!  
-* **View Diagnostics:** Check your accuracy and penalized notes per minute 
+* **View Stats:** Check your accuracy and penalized notes per minute 
     (NPM).  
 * **Teaching Mode (coming soon):** Start you off with a few notes, and 
     dynamically introduce new notes/bring back old notes based on your
