@@ -2,7 +2,8 @@
 
 Sight-reading trainer webapp that supports keyboard input **and** listening
 to a piano being played through a mic. Completely open source and runs
-locally in your browser.
+locally in your browser. Check it out at 
+(chausies.xyz/SightReading)[https://chausies.xyz/SightReading].
 
 ## **Overview**
 
