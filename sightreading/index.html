@@ -59,6 +59,7 @@
     .top-btn:hover { transform: scale(1.1); }
     #settings-btn { right: 1.5rem; }
     #stats-btn { right: 4.5rem; }
+    #log-btn { right: 7.5rem; }
 
     /* Overlay Panels */
     .overlay-container {
@@ -94,7 +95,7 @@
       margin-bottom: 1rem;
     }
     
-    .setting-row select, .setting-row input[type="range"] {
+    .setting-row select, .setting-row input[type="range"], .setting-row input[type="number"] {
       padding: 0.4rem;
       font-size: 1rem;
       border-radius: 6px;
@@ -125,6 +126,25 @@
     .stat-blue { color: #3b82f6; font-weight: bold; }
     .stat-red { color: #ef4444; font-weight: bold; }
     .stat-green { color: #10b981; font-weight: bold; }
+
+    .log-list {
+      margin-top: 1rem;
+      background: #1e1e1e;
+      color: #4ade80;
+      padding: 1rem;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      max-height: 50vh;
+      overflow-y: auto;
+      text-align: left;
+    }
+    .log-list div {
+      border-bottom: 1px solid #333;
+      padding: 0.4rem 0;
+      word-wrap: break-word;
+    }
+    .log-list div:last-child { border-bottom: none; }
     
     .btn {
       display: block;
@@ -194,12 +214,14 @@
       .top-btn { font-size: 1.6rem; }
       #settings-btn { right: 1rem; top: 1rem; }
       #stats-btn { right: 3.5rem; top: 1rem; }
+      #log-btn { right: 6rem; top: 1rem; }
     }
   </style>
 </head>
 <body>
 
   <div id="app-container">
+    <div class="top-btn" id="log-btn" title="Activity Log">📝</div>
     <div class="top-btn" id="stats-btn" title="Stats">📊</div>
     <div class="top-btn" id="settings-btn" title="Settings">⚙️</div>
 
@@ -220,6 +242,15 @@
 
     <div class="ui-layer buffer-display" id="buffer-display"></div>
     
+    <!-- Logs Overlay -->
+    <div class="overlay-container" id="log-overlay">
+      <div class="panel" style="max-width: 600px;">
+        <h2>Activity Log</h2>
+        <div id="log-list" class="log-list"></div>
+        <button class="btn" id="log-return">Return to Staff</button>
+      </div>
+    </div>
+
     <!-- Stats Overlay -->
     <div class="overlay-container" id="stats-overlay">
       <div class="panel">
@@ -314,7 +345,18 @@
           <select id="setting-mode">
             <option value="uniform" selected>Uniform (Random)</option>
             <option value="chords">Chords Sequences</option>
+            <option value="teaching">Teaching (Adaptive)</option>
           </select>
+        </div>
+
+        <div class="setting-row" id="row-teaching-keys" style="display: none;">
+          <label>Starting Keys (Teaching)</label>
+          <input type="number" id="setting-teaching-keys" min="1" max="20" value="3" style="width: 50%;">
+        </div>
+
+        <div class="setting-row" id="row-teaching-scale" style="display: none;">
+          <label>Adaptation Scale (Teaching)</label>
+          <input type="number" id="setting-teaching-scale" min="5" max="100" value="20" style="width: 50%;">
         </div>
 
         <div class="setting-row">
@@ -364,6 +406,21 @@
     const COLOR_CORRECT = '#3b82f6';
     const COLOR_ERROR = '#ef4444';
 
+    // Logger
+    const AppLog = {
+      messages: [],
+      add: function(msg) {
+        const time = new Date().toLocaleTimeString([], {hour12:false});
+        this.messages.unshift(`[${time}] ${msg}`);
+        if(this.messages.length > 100) this.messages.pop();
+        this.render();
+      },
+      render: function() {
+        const container = document.getElementById('log-list');
+        if(container) container.innerHTML = this.messages.map(m => `<div>${m}</div>`).join('');
+      }
+    };
+
     // Settings State
     const appSettings = {
       clef: 'treble',
@@ -376,6 +433,8 @@
       key: 'C',
       octave: 0,
       mode: 'uniform',
+      teachingKeys: 3,
+      teachingScale: 20,
       input: 'keyboard',
       micSensitivity: 0.03,
       micCooldown: 150
@@ -413,7 +472,7 @@
     let inputBuffer = '';
     let isShifting = false;
     let visibleNoteCount = 8; 
-    let currentNoteStartTime = Date.now(); // Track timing for teaching algo
+    let currentNoteStartTime = Date.now();
 
     // Stats State
     const stats = {
@@ -528,7 +587,6 @@
 
     // Drawing Helpers
     function drawDecorations() {
-      // 1. Staff Lines & Bracket
       const staffGroup = document.getElementById('staff-lines');
       staffGroup.innerHTML = '';
       const drawLines = (startY) => {
@@ -548,10 +606,9 @@
         }));
         staffGroup.appendChild(createSVGElement('line', { x1: 40, x2: 40, y1: 160, y2: 160 + bracketHeight, stroke: '#333', 'stroke-width': 2 }));
       } else {
-        drawLines(160); // Single
+        drawLines(160);
       }
 
-      // 2. Clef Symbols
       const tClef = document.getElementById('treble-clef');
       const bClef = document.getElementById('bass-clef');
       if (appSettings.clef === 'treble') {
@@ -566,7 +623,6 @@
         bClef.setAttribute('y', appSettings.grandMode === 'two-hand' ? '405' : '345');
       }
 
-      // 3. Key Signature
       const group = document.getElementById('key-signature-layer');
       group.innerHTML = '';
       const accs = keySigs[appSettings.key];
@@ -605,7 +661,6 @@
       }
       X_START = Math.max(220, xOffset + 40);
 
-      // 4. Octave Indicator
       const octGroup = document.getElementById('octave-indicator');
       octGroup.innerHTML = '';
       if (appSettings.octave !== 0) {
@@ -729,50 +784,166 @@
     // Stateful Note Generator
     const NoteGenerator = {
       chordQueue: [],
+      teachingPool: [],
+      likelihoods: [],
+      timesQueue: [],
+      recentMisses: [],
       
       init: function() {
         this.chordQueue = [];
-        // Teaching mode initialization will go here
+        this.timesQueue = [];
+        this.recentMisses = [];
+
+        // Build flat active pool depending on clef & accidental settings
+        let activePool = appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool);
+        
+        if (!appSettings.accidentals) {
+          activePool = activePool.filter(n => getVisualAccidental(n.pitch, n.trueAcc) === '');
+        }
+
+        // Sort pool for neighbor adjacency rules: grouped by clef (Bass -> Treble), then strictly ascending pitch
+        this.teachingPool = activePool.slice().sort((a, b) => {
+          if (a.noteClef !== b.noteClef) return a.noteClef === 'bass' ? -1 : 1;
+          return a.midi - b.midi;
+        });
+
+        if (appSettings.mode === 'teaching') {
+           let k = appSettings.teachingKeys;
+           if (k > this.teachingPool.length) k = this.teachingPool.length;
+           
+           this.likelihoods = new Array(this.teachingPool.length).fill(0.0);
+           let anchorIndices = [];
+
+           if (appSettings.clef === 'grand') {
+              let bassIndices = this.teachingPool.map((n, i) => n.noteClef === 'bass' ? i : -1).filter(i => i !== -1);
+              let trebleIndices = this.teachingPool.map((n, i) => n.noteClef === 'treble' ? i : -1).filter(i => i !== -1);
+              
+              let k1 = Math.floor(k / 2);
+              let k2 = Math.floor(k / 2);
+              if (k % 2 !== 0) {
+                 if (Math.random() > 0.5) k1++; else k2++;
+              }
+              
+              const pickRandom = (arr, count) => {
+                  let shuffled = arr.slice().sort(() => 0.5 - Math.random());
+                  return shuffled.slice(0, count);
+              };
+              
+              anchorIndices = [...pickRandom(bassIndices, Math.min(k1, bassIndices.length)), ...pickRandom(trebleIndices, Math.min(k2, trebleIndices.length))];
+           } else {
+              let allIndices = this.teachingPool.map((_, i) => i);
+              anchorIndices = allIndices.sort(() => 0.5 - Math.random()).slice(0, k);
+           }
+
+           anchorIndices.forEach(idx => this.likelihoods[idx] = 1.0);
+           AppLog.add(`NoteGenerator re-initialized in Teaching Mode with ${anchorIndices.length} anchors.`);
+        } else {
+           AppLog.add(`NoteGenerator re-initialized (Mode: ${appSettings.mode}).`);
+        }
       },
 
       generate: function(count) {
         let results = [];
         for (let i = 0; i < count; i++) {
-          if (appSettings.mode === 'uniform') {
-            results.push(this._uniform());
-          } else if (appSettings.mode === 'chords') {
-            results.push(this._chords());
-          }
+          if (appSettings.mode === 'uniform') results.push(this._uniform());
+          else if (appSettings.mode === 'chords') results.push(this._chords());
+          else if (appSettings.mode === 'teaching') results.push(this._teaching());
         }
         return results;
       },
 
       feedback: function(noteData, timeToPlay, mistakes) {
-        // Will be used by the future teaching algorithm
-        // console.log(`Feedback -> ${noteData.displayStr}: ${timeToPlay}ms, ${mistakes} mistakes`);
-      },
+        if (appSettings.mode !== 'teaching') return;
 
-      _getActivePool: function() {
-        if (appSettings.clef === 'bass') return bassPool;
-        if (appSettings.clef === 'grand') return Math.random() > 0.5 ? treblePool : bassPool;
-        return treblePool;
+        let idx = this.teachingPool.findIndex(n => n.midi === noteData.midi && n.noteClef === noteData.noteClef && n.trueAcc === noteData.trueAcc);
+        if (idx === -1) return;
+
+        AppLog.add(`Feedback: ${noteData.displayStr} | ${timeToPlay}ms | Mistakes: ${mistakes}`);
+
+        if (mistakes > 0) {
+           this.recentMisses.push(noteData);
+        }
+
+        const s = appSettings.teachingScale;
+        if (this.timesQueue.length === s) {
+            let mean = this.timesQueue.reduce((a,b) => a+b, 0) / s;
+            let variance = this.timesQueue.reduce((a,b) => a + Math.pow(b - mean, 2), 0) / s;
+            let std = Math.sqrt(variance);
+            std = Math.max(50, std);
+
+            if (timeToPlay > mean + 2 * std) {
+                this.likelihoods[idx] += 1.0;
+                AppLog.add(`Teaching: ${noteData.displayStr} took too long (${timeToPlay}ms). Likelihood +1.0 applied.`);
+            } else {
+                this.timesQueue.push(timeToPlay);
+                this.timesQueue.shift();
+            }
+        } else {
+            this.timesQueue.push(timeToPlay);
+        }
       },
 
       _uniform: function() {
-        const activePool = this._getActivePool();
-        let selectable = activePool;
+        if (this.teachingPool.length === 0) return treblePool[0]; // Failsafe
+        return this.teachingPool[Math.floor(Math.random() * this.teachingPool.length)];
+      },
 
-        if (!appSettings.accidentals) {
-          selectable = activePool.filter(n => getVisualAccidental(n.pitch, n.trueAcc) === '');
+      _teaching: function() {
+        if (this.teachingPool.length === 0) return this._uniform();
+
+        let chosenNote = null;
+        let chosenIdx = -1;
+        const q = 1 / 3;
+
+        if (this.recentMisses.length > 0 && Math.random() < q) {
+            chosenNote = this.recentMisses.shift();
+            chosenIdx = this.teachingPool.findIndex(n => n.midi === chosenNote.midi && n.noteClef === chosenNote.noteClef && n.trueAcc === chosenNote.trueAcc);
+            AppLog.add(`Teaching: Sampled from recent misses -> ${chosenNote.displayStr}`);
+        } else {
+            let sum = this.likelihoods.reduce((a, b) => a + b, 0);
+            if (sum <= 0) {
+                chosenIdx = Math.floor(Math.random() * this.teachingPool.length);
+                this.likelihoods[chosenIdx] = 1.0;
+                sum = 1.0;
+            }
+            
+            let r = Math.random() * sum;
+            let runningSum = 0;
+            for (let i = 0; i < this.likelihoods.length; i++) {
+                runningSum += this.likelihoods[i];
+                if (r <= runningSum) {
+                    chosenIdx = i;
+                    break;
+                }
+            }
+            if(chosenIdx === -1) chosenIdx = this.teachingPool.length - 1;
+            chosenNote = this.teachingPool[chosenIdx];
         }
 
-        return selectable[Math.floor(Math.random() * selectable.length)];
+        // Diffusion Updates
+        if (chosenIdx !== -1) {
+            const s = appSettings.teachingScale;
+            const p = Math.PI / (2 * Math.pow(s + 1/3, 2));
+
+            this.likelihoods[chosenIdx] = Math.max(0, this.likelihoods[chosenIdx] - p);
+
+            [-2, -1, 1, 2].forEach(offset => {
+                let nIdx = chosenIdx + offset;
+                if (nIdx >= 0 && nIdx < this.teachingPool.length) {
+                    if (this.teachingPool[nIdx].noteClef === this.teachingPool[chosenIdx].noteClef) {
+                        this.likelihoods[nIdx] += p / 4;
+                    }
+                }
+            });
+        }
+
+        return chosenNote;
       },
 
       _chords: function() {
         if (this.chordQueue.length > 0) return this.chordQueue.shift();
 
-        const activePool = this._getActivePool();
+        const activePool = this.teachingPool.length > 0 ? this.teachingPool : treblePool;
         const maxMidi = Math.max(...activePool.map(p => p.midi));
         const intervalSets = [[0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]];
         
@@ -783,7 +954,7 @@
           const rootNote = activePool[Math.floor(Math.random() * activePool.length)];
           const rootMidi = rootNote.midi;
 
-          if (rootMidi + 24 > maxMidi) { attempts++; continue; } // Exceeds upper boundary bounds
+          if (rootMidi + 24 > maxMidi) { attempts++; continue; } 
           
           const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
           let chordMidis = intervals.map(i => rootMidi + i);
@@ -799,7 +970,6 @@
           let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, activePool, appSettings.key));
 
           if (!appSettings.accidentals) {
-            // If accidentals are disabled, ensure EVERY note in the chord naturally fits the key signature
             const hasAccidentals = candidateNotes.some(n => getVisualAccidental(n.pitch, n.trueAcc) !== '');
             if (hasAccidentals) {
               attempts++;
@@ -811,7 +981,6 @@
           break;
         }
 
-        // Fallback if we somehow spin 50 times without finding a valid diatonic chord
         if (finalChord.length === 0) finalChord = [activePool[0]];
         
         this.chordQueue = finalChord;
@@ -1033,8 +1202,10 @@
           const source = this.context.createMediaStreamSource(this.stream);
           source.connect(this.analyser);
           this.start();
+          AppLog.add("Microphone Initialized & Listening.");
         } catch (e) {
           console.error('Microphone error:', e);
+          AppLog.add("Microphone access failed.");
           alert('Could not access microphone. Falling back to keyboard.');
           appSettings.input = 'keyboard';
           document.getElementById('setting-input').value = 'keyboard';
@@ -1048,6 +1219,7 @@
         if (this.context) this.context.close();
         this.context = null;
         this.analyser = null;
+        AppLog.add("Microphone Stopped.");
       },
 
       start: function() {
@@ -1156,7 +1328,7 @@
         stats.correct++;
         currentIndex++;
         
-        currentNoteStartTime = Date.now(); // Reset timer for the next note in sequence
+        currentNoteStartTime = Date.now();
         renderNotes();
 
         if (currentIndex === 4) {
@@ -1176,12 +1348,16 @@
     };
 
     window.addEventListener('keydown', (e) => {
-      if (isShifting || document.getElementById('settings-overlay').style.display === 'flex') return;
+      const p1 = document.getElementById('settings-overlay').style.display === 'flex';
+      const p2 = document.getElementById('stats-overlay').style.display === 'flex';
+      const p3 = document.getElementById('log-overlay').style.display === 'flex';
+
+      if (isShifting || p1 || p2 || p3) return;
       if (appSettings.input === 'mic') return; 
       InputManager.handleKeyboardInput(e.key.toLowerCase());
     });
 
-    // Stats & Settings UI
+    // Instructions & Stats UI
     function updateInstructions() {
       const el = document.getElementById('instruction-text');
       if (appSettings.input === 'mic') el.innerHTML = "Microphone Active. Play the note on your instrument.";
@@ -1204,12 +1380,21 @@
       const minsFloat = elapsedSecs / 60;
       const netNotes = Math.max(0, stats.correct - stats.mistakes);
       const npm = minsFloat > 0 ? Math.round(netNotes / minsFloat) : 0;
-      document.getElementById('stat-npm').textContent = npm + ' NPM';
+      document.getElementById('stat-npm').innerHTML = `${npm} <span style="font-size: 0.8rem; font-weight: normal; color: #666;">NPM</span>`;
     }
 
     setInterval(() => updateStatsUI(), 1000);
 
-    // Stats Controls
+    // Overlay Controls
+    document.getElementById('log-btn').addEventListener('click', () => {
+      document.getElementById('log-overlay').style.display = 'flex';
+      AppLog.render();
+    });
+
+    document.getElementById('log-return').addEventListener('click', () => {
+      document.getElementById('log-overlay').style.display = 'none';
+    });
+
     document.getElementById('stats-btn').addEventListener('click', () => {
       document.getElementById('stats-overlay').style.display = 'flex';
       updateStatsUI();
@@ -1217,7 +1402,6 @@
 
     document.getElementById('stats-return').addEventListener('click', () => {
       document.getElementById('stats-overlay').style.display = 'none';
-      // Returning to staff does NOT reset notes.
     });
 
     document.getElementById('stat-reset').addEventListener('click', () => {
@@ -1225,12 +1409,17 @@
       stats.correct = 0;
       stats.mistakes = 0;
       updateStatsUI();
+      AppLog.add("Stats manually reset.");
     });
 
     // Settings Controls
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
       
+      const isTeaching = document.getElementById('setting-mode').value === 'teaching';
+      document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
+      document.getElementById('row-teaching-scale').style.display = isTeaching ? 'flex' : 'none';
+
       const isMic = document.getElementById('setting-input').value === 'mic';
       document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
       document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
@@ -1241,6 +1430,12 @@
 
     document.getElementById('setting-clef').addEventListener('change', (e) => {
       document.getElementById('row-grand-mode').style.display = e.target.value === 'grand' ? 'flex' : 'none';
+    });
+
+    document.getElementById('setting-mode').addEventListener('change', (e) => {
+      const isTeaching = e.target.value === 'teaching';
+      document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
+      document.getElementById('row-teaching-scale').style.display = isTeaching ? 'flex' : 'none';
     });
 
     document.getElementById('setting-input').addEventListener('change', (e) => {
@@ -1260,6 +1455,10 @@
       appSettings.accidentals = document.getElementById('setting-accidentals').value === 'enabled';
       appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
       appSettings.mode = document.getElementById('setting-mode').value;
+      
+      appSettings.teachingKeys = parseInt(document.getElementById('setting-teaching-keys').value, 10);
+      appSettings.teachingScale = parseInt(document.getElementById('setting-teaching-scale').value, 10);
+      
       appSettings.micSensitivity = parseFloat(document.getElementById('setting-mic-sensitivity').value);
       appSettings.micCooldown = parseInt(document.getElementById('setting-mic-cooldown').value, 10);
       
@@ -1285,6 +1484,7 @@
     });
 
     // Boot App
+    AppLog.add("Application Started.");
     buildPools();
     drawDecorations();
     initNotes();

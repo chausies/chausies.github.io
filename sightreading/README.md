@@ -23,8 +23,8 @@ session.
     being played. Great for use with a smart phone/tablet!  
 * **View Stats:** Check your accuracy and penalized notes per minute 
     (NPM).  
-* **Teaching Mode (coming soon):** Start you off with a few notes, and 
-    dynamically introduce new notes/bring back old notes based on your
+* **Teaching Mode:** Starts you off with a few notes, and dynamically 
+    introduce new notes/bring back old notes based on your
     performance.  
 
 ## **Controls**
