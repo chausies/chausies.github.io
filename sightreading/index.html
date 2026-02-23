@@ -946,21 +946,34 @@
             chosenNote = this.teachingPool[chosenIdx];
         }
 
-        // Diffusion Updates
+        // Diffusion Updates (23-width half-step kernel)
         if (chosenIdx !== -1) {
             const s = appSettings.teachingScale;
             const p = Math.PI / (2 * Math.pow(s + 1/3, 2));
 
+            // Subtract center weight
             this.likelihoods[chosenIdx] = Math.max(0, this.likelihoods[chosenIdx] - p);
 
-            [-2, -1, 1, 2].forEach(offset => {
-                let nIdx = chosenIdx + offset;
-                if (nIdx >= 0 && nIdx < this.teachingPool.length) {
-                    if (this.teachingPool[nIdx].noteClef === this.teachingPool[chosenIdx].noteClef) {
-                        this.likelihoods[nIdx] += p / 4;
-                    }
+            // Tier list approx: P5(10), M3/P4(8), m3/M6(6), m6(5), M2(4), m7(3), M7(2), m2/TT(1)
+            const kernelWeights = {
+                1: 1, 2: 4, 3: 6, 4: 8, 5: 8, 6: 1, 
+                7: 10, 8: 5, 9: 6, 10: 3, 11: 2
+            };
+            const kernelSum = 108; // Total sum (54 * 2 directions)
+
+            const centerMidi = this.teachingPool[chosenIdx].midi;
+            const centerClef = this.teachingPool[chosenIdx].noteClef;
+
+            for (let i = 0; i < this.teachingPool.length; i++) {
+                if (i === chosenIdx) continue;
+                if (this.teachingPool[i].noteClef !== centerClef) continue;
+                
+                const diff = Math.abs(this.teachingPool[i].midi - centerMidi);
+                if (diff >= 1 && diff <= 11) {
+                    const normalizedWeight = kernelWeights[diff] / kernelSum;
+                    this.likelihoods[i] += p * normalizedWeight;
                 }
-            });
+            }
         }
 
         return chosenNote;
