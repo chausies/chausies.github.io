@@ -9,14 +9,12 @@
   <meta name="description" content="An open-source, interactive web app to practice sight-reading sheet music with real-time feedback and microphone piano detection.">
   <meta name="author" content="chausies">
   
-  <!-- Open Graph / Facebook / Telegram -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://chausies.xyz/sightreading">
   <meta property="og:title" content="Sight-reading Practice with Mic Support">
   <meta property="og:description" content="Practice sight-reading with an infinite stream of random notes or chords. Supports microphone input from real pianos!">
   <meta property="og:image" content="https://chausies.xyz/sightreading/thumbnail.png">
   
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://chausies.xyz/sightreading">
   <meta name="twitter:title" content="Sight-reading Practice with Mic Support">
@@ -48,21 +46,22 @@
       position: relative;
     }
 
-    /* Settings Button */
-    #settings-btn {
+    /* Top Buttons */
+    .top-btn {
       position: absolute;
       top: 1.5rem;
-      right: 1.5rem;
       font-size: 2rem;
       cursor: pointer;
       z-index: 10;
       transition: transform 0.2s;
       user-select: none;
     }
-    #settings-btn:hover { transform: rotate(45deg); }
+    .top-btn:hover { transform: scale(1.1); }
+    #settings-btn { right: 1.5rem; }
+    #stats-btn { right: 4.5rem; }
 
-    /* Settings Menu Overlay */
-    #settings-overlay {
+    /* Overlay Panels */
+    .overlay-container {
       display: none;
       position: absolute;
       inset: 0;
@@ -74,7 +73,7 @@
       padding: 1rem;
     }
 
-    .settings-panel {
+    .panel {
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 12px;
@@ -86,7 +85,7 @@
       overflow-y: auto;
     }
 
-    .settings-panel h2 { margin-top: 0; text-align: center; }
+    .panel h2 { margin-top: 0; text-align: center; }
     
     .setting-row {
       display: flex;
@@ -95,7 +94,7 @@
       margin-bottom: 1rem;
     }
     
-    .setting-row select {
+    .setting-row select, .setting-row input[type="range"] {
       padding: 0.4rem;
       font-size: 1rem;
       border-radius: 6px;
@@ -113,15 +112,16 @@
       max-width: none;
     }
 
-    .stats-box {
-      margin-top: 1.5rem;
+    .stats-list {
+      margin-top: 1rem;
       padding: 1rem;
       background: #f8f9fa;
       border-radius: 8px;
       border: 1px solid #eee;
     }
 
-    .stats-box p { margin: 0.4rem 0; font-size: 1.1rem; display: flex; justify-content: space-between; }
+    .stats-list p { margin: 0.8rem 0; font-size: 1.2rem; display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding-bottom: 0.4rem;}
+    .stats-list p:last-child { border-bottom: none; padding-bottom: 0; }
     .stat-blue { color: #3b82f6; font-weight: bold; }
     .stat-red { color: #ef4444; font-weight: bold; }
     .stat-green { color: #10b981; font-weight: bold; }
@@ -191,42 +191,54 @@
     @media (max-width: 768px) {
       .instructions { font-size: 0.95rem; }
       .buffer-display { font-size: 1.8rem; bottom: 5vh; }
+      .top-btn { font-size: 1.6rem; }
+      #settings-btn { right: 1rem; top: 1rem; }
+      #stats-btn { right: 3.5rem; top: 1rem; }
     }
   </style>
 </head>
 <body>
 
   <div id="app-container">
-    <div id="settings-btn" title="Settings">⚙️</div>
+    <div class="top-btn" id="stats-btn" title="Diagnostics & Stats">📊</div>
+    <div class="top-btn" id="settings-btn" title="Settings">⚙️</div>
 
     <div class="ui-layer instructions" id="instruction-text">
       Type the note name on your keyboard (e.g. "a4", "c#5"/"cs5", "bb3").
     </div>
 
-    <!-- viewBox dynamically adjusted in JS depending on device width and clef -->
     <svg id="staff-svg" viewBox="0 80 1000 240" preserveAspectRatio="xMidYMid meet">
-      <!-- Staff Lines generated dynamically -->
       <g id="staff-lines"></g>
-
-      <!-- Clefs -->
       <g id="clef-container" fill="#333">
         <text id="treble-clef" x="110" y="238" font-size="130" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle">&#119070;</text>
         <text id="bass-clef" x="110" y="225" font-size="110" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle" style="display: none;">&#119074;</text>
       </g>
-
-      <!-- Key Signature & Indicators -->
       <g id="key-signature-layer"></g>
       <g id="octave-indicator"></g>
-
-      <!-- Dynamic Notes Layer -->
       <g id="notes-layer"></g>
     </svg>
 
     <div class="ui-layer buffer-display" id="buffer-display"></div>
     
+    <!-- Diagnostics Overlay -->
+    <div class="overlay-container" id="stats-overlay">
+      <div class="panel">
+        <h2>Diagnostics</h2>
+        <div class="stats-list">
+          <p>Time Elapsed: <span id="stat-time">00:00</span></p>
+          <p>Correct Notes: <span id="stat-correct" class="stat-blue">0</span></p>
+          <p>Mistakes Made: <span id="stat-mistakes" class="stat-red">0</span></p>
+          <p>Accuracy: <span id="stat-ratio">0%</span></p>
+          <p title="Penalized correct note rate: (Correct - Mistakes) / Minutes">Net Speed: <span id="stat-npm" class="stat-green">0 <span style="font-size: 0.8rem; font-weight: normal; color: #666;">NPM</span></span></p>
+        </div>
+        <button class="btn btn-outline" id="stat-reset">Reset Stats</button>
+        <button class="btn" id="stats-return">Return to Staff</button>
+      </div>
+    </div>
+
     <!-- Settings Overlay -->
-    <div id="settings-overlay">
-      <div class="settings-panel">
+    <div class="overlay-container" id="settings-overlay">
+      <div class="panel">
         <h2>Settings</h2>
         
         <div class="setting-row">
@@ -261,6 +273,14 @@
             <option value="Ab">Ab Major / F minor</option>
             <option value="Db">Db Major / Bb minor</option>
             <option value="Gb">Gb Major / Eb minor</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label>Accidentals</label>
+          <select id="setting-accidentals">
+            <option value="enabled" selected>Enabled</option>
+            <option value="disabled">Disabled (Diatonic to Key Only)</option>
           </select>
         </div>
 
@@ -315,16 +335,15 @@
           </select>
         </div>
 
-        <div class="stats-box">
-          <p>Time Elapsed: <span id="stat-time">00:00</span></p>
-          <p>Correct: <span id="stat-correct" class="stat-blue">0</span></p>
-          <p>Mistakes: <span id="stat-mistakes" class="stat-red">0</span></p>
-          <p>Accuracy: <span id="stat-ratio">0%</span></p>
-          <p title="Penalized correct note rate: (Correct - Mistakes) / Minutes">Net Speed: <span id="stat-npm" class="stat-green">0</span> <span style="font-size: 0.8rem; font-weight: normal;">NPM</span></p>
-          <button class="btn btn-outline" id="stat-reset">Reset Stats</button>
+        <div class="setting-row" id="row-mic-cooldown" style="display: none;">
+          <label>Mic Cooldown</label>
+          <div style="display: flex; align-items: center; width: 55%; gap: 0.5rem;">
+            <input type="range" id="setting-mic-cooldown" min="50" max="500" step="10" value="150" style="flex-grow: 1;">
+            <span id="mic-cooldown-display" style="min-width: 3.5rem; text-align: right; font-size: 0.9rem;">150ms</span>
+          </div>
         </div>
 
-        <button class="btn" id="settings-save">Save & Return</button>
+        <button class="btn" id="settings-save">Save & Reset Staff</button>
         
         <div style="text-align: center; margin-top: 1.5rem;">
           <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
@@ -336,7 +355,7 @@
 
   <script>
     // Configurable Parameters
-    const PITCH_WINDOW_MS = 100; // Analyzation window duration (easily editable)
+    const PITCH_WINDOW_MS = 100;
 
     // Constants
     let X_START = 220;
@@ -349,6 +368,7 @@
     const appSettings = {
       clef: 'treble',
       grandMode: 'two-hand',
+      accidentals: true,
       trebleMin: 'd3',
       trebleMax: 'g6',
       bassMin: 'f1',
@@ -357,7 +377,8 @@
       octave: 0,
       mode: 'uniform',
       input: 'keyboard',
-      micSensitivity: 0.03
+      micSensitivity: 0.03,
+      micCooldown: 150
     };
 
     // Range List Setup
@@ -391,7 +412,8 @@
     let globalNoteId = 0;
     let inputBuffer = '';
     let isShifting = false;
-    let visibleNoteCount = 8; // Dynamically adjusts for narrow screens
+    let visibleNoteCount = 8; 
+    let currentNoteStartTime = Date.now(); // Track timing for teaching algo
 
     // Stats State
     const stats = {
@@ -617,7 +639,6 @@
         staffTop = 160; staffBottom = 240; 
       }
 
-      // Generic smart ledger lines handling above/below logic automatically
       if (y <= staffTop - 20) {
         for (let ly = staffTop - 20; ly >= y; ly -= 20) drawLine(ly);
       }
@@ -629,9 +650,7 @@
         cx: 0, cy: y, rx: 14, ry: 10, transform: `rotate(-20 0 ${y})`, fill: headColor
       }));
 
-      // Stem points to the middle of the active staff
       const isStemUp = y > (staffTop + 40);
-
       g.appendChild(createSVGElement('line', {
         x1: isStemUp ? 12 : -12, x2: isStemUp ? 12 : -12,
         y1: y, y2: isStemUp ? y - 35 : y + 35, stroke: headColor, 'stroke-width': 2
@@ -707,44 +726,97 @@
       return alignedCand || candidates[0];
     }
 
+    // Stateful Note Generator
     const NoteGenerator = {
       chordQueue: [],
-      uniform: function() {
-        let activePool = treblePool;
-        if (appSettings.clef === 'bass') activePool = bassPool;
-        else if (appSettings.clef === 'grand') activePool = Math.random() > 0.5 ? treblePool : bassPool;
-        return activePool[Math.floor(Math.random() * activePool.length)];
+      
+      init: function() {
+        this.chordQueue = [];
+        // Teaching mode initialization will go here
       },
-      chords: function() {
+
+      generate: function(count) {
+        let results = [];
+        for (let i = 0; i < count; i++) {
+          if (appSettings.mode === 'uniform') {
+            results.push(this._uniform());
+          } else if (appSettings.mode === 'chords') {
+            results.push(this._chords());
+          }
+        }
+        return results;
+      },
+
+      feedback: function(noteData, timeToPlay, mistakes) {
+        // Will be used by the future teaching algorithm
+        // console.log(`Feedback -> ${noteData.displayStr}: ${timeToPlay}ms, ${mistakes} mistakes`);
+      },
+
+      _getActivePool: function() {
+        if (appSettings.clef === 'bass') return bassPool;
+        if (appSettings.clef === 'grand') return Math.random() > 0.5 ? treblePool : bassPool;
+        return treblePool;
+      },
+
+      _uniform: function() {
+        const activePool = this._getActivePool();
+        let selectable = activePool;
+
+        if (!appSettings.accidentals) {
+          selectable = activePool.filter(n => getVisualAccidental(n.pitch, n.trueAcc) === '');
+        }
+
+        return selectable[Math.floor(Math.random() * selectable.length)];
+      },
+
+      _chords: function() {
         if (this.chordQueue.length > 0) return this.chordQueue.shift();
 
-        let activePool = treblePool;
-        if (appSettings.clef === 'bass') activePool = bassPool;
-        else if (appSettings.clef === 'grand') activePool = Math.random() > 0.5 ? treblePool : bassPool;
-
+        const activePool = this._getActivePool();
         const maxMidi = Math.max(...activePool.map(p => p.midi));
         const intervalSets = [[0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]];
         
-        const validRoots = activePool.filter(n => n.midi + 24 <= maxMidi);
-        const rootNote = validRoots[Math.floor(Math.random() * validRoots.length)];
-        const rootMidi = rootNote.midi;
-        
-        const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
-        let chordMidis = intervals.map(i => rootMidi + i);
-        
-        const inv = Math.floor(Math.random() * 4);
-        for (let i = 0; i < inv; i++) {
-          let minMidi = Math.min(...chordMidis);
-          chordMidis[chordMidis.indexOf(minMidi)] += 12;
+        let finalChord = [];
+        let attempts = 0;
+
+        while (attempts < 50) {
+          const rootNote = activePool[Math.floor(Math.random() * activePool.length)];
+          const rootMidi = rootNote.midi;
+
+          if (rootMidi + 24 > maxMidi) { attempts++; continue; } // Exceeds upper boundary bounds
+          
+          const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
+          let chordMidis = intervals.map(i => rootMidi + i);
+          
+          const inv = Math.floor(Math.random() * 4);
+          for (let i = 0; i < inv; i++) {
+            let minMidi = Math.min(...chordMidis);
+            chordMidis[chordMidis.indexOf(minMidi)] += 12;
+          }
+          chordMidis.sort((a, b) => a - b);
+          if (Math.random() > 0.5) chordMidis.reverse();
+          
+          let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, activePool, appSettings.key));
+
+          if (!appSettings.accidentals) {
+            // If accidentals are disabled, ensure EVERY note in the chord naturally fits the key signature
+            const hasAccidentals = candidateNotes.some(n => getVisualAccidental(n.pitch, n.trueAcc) !== '');
+            if (hasAccidentals) {
+              attempts++;
+              continue;
+            }
+          }
+
+          finalChord = candidateNotes;
+          break;
         }
-        chordMidis.sort((a, b) => a - b);
-        if (Math.random() > 0.5) chordMidis.reverse();
+
+        // Fallback if we somehow spin 50 times without finding a valid diatonic chord
+        if (finalChord.length === 0) finalChord = [activePool[0]];
         
-        this.chordQueue = chordMidis.map(m => getBestNoteForMidi(m, activePool, appSettings.key));
+        this.chordQueue = finalChord;
         return this.chordQueue.shift();
-      },
-      next: function() { return this[appSettings.mode](); },
-      clearQueue: function() { this.chordQueue = []; }
+      }
     };
 
     // App Rendering Loop
@@ -811,25 +883,31 @@
       activeNotes = [];
       currentIndex = 0;
       globalNoteId = 0;
-      NoteGenerator.clearQueue();
+      
+      NoteGenerator.init();
       document.getElementById('notes-layer').innerHTML = '';
       
-      for (let i = 0; i < visibleNoteCount; i++) {
-        activeNotes.push({ data: NoteGenerator.next(), id: 'note-' + globalNoteId++, state: 'pending', errorInput: null });
-      }
+      const generated = NoteGenerator.generate(visibleNoteCount);
+      generated.forEach(data => {
+        activeNotes.push({ data: data, id: 'note-' + globalNoteId++, state: 'pending', errorInput: null, mistakeCount: 0 });
+      });
+
+      currentNoteStartTime = Date.now();
       renderNotes();
     }
 
     function shiftNotes() {
       activeNotes = activeNotes.slice(4);
-      for (let i = 0; i < 4; i++) {
-        activeNotes.push({ data: NoteGenerator.next(), id: 'note-' + globalNoteId++, state: 'pending', errorInput: null });
-      }
+      const generated = NoteGenerator.generate(4);
+      generated.forEach(data => {
+        activeNotes.push({ data: data, id: 'note-' + globalNoteId++, state: 'pending', errorInput: null, mistakeCount: 0 });
+      });
+
       currentIndex = 0;
+      currentNoteStartTime = Date.now();
       renderNotes();
     }
 
-    // Window Resize Event
     window.addEventListener('resize', () => {
       const wasNarrow = visibleNoteCount === 4;
       const isNarrow = window.innerWidth < 768;
@@ -845,10 +923,9 @@
     // Modular Pitch Detection Engine
     // ---------------------------------------------------------
     const PitchDetection = {
-      activeAlgorithm: 'mpm', // Hot-swappable: 'mpm', 'autoCorrelate', etc.
+      activeAlgorithm: 'mpm',
 
       detect: function(buffer, sampleRate, sensitivity) {
-        // Shared Noise/Silence Gate
         let rms = 0;
         for (let i = 0; i < buffer.length; i++) rms += buffer[i] * buffer[i];
         rms = Math.sqrt(rms / buffer.length);
@@ -857,14 +934,11 @@
         return this[this.activeAlgorithm](buffer, sampleRate);
       },
 
-      // McLeod Pitch Method (MPM) - Highly accurate, robust against harmonics
       mpm: function(buffer, sampleRate) {
         const n = buffer.length;
-        // Cap tau calculation to human hearing (~25Hz) to save CPU cycles
         const maxTau = Math.min(n, Math.floor(sampleRate / 25));
         const nsdf = new Float32Array(maxTau);
 
-        // 1. Calculate Normalized Square Difference Function
         for (let tau = 0; tau < maxTau; tau++) {
           let acf = 0;
           let divisorM = 0;
@@ -875,11 +949,10 @@
           nsdf[tau] = divisorM === 0 ? 0 : (2 * acf) / divisorM;
         }
 
-        // 2. Find local maxima (peaks)
         let peaks = [];
         let curMaxPos = 0;
         let curMaxVal = -1;
-        let state = 0; // 0: looking for pos zero-crossing, 1: inside peak
+        let state = 0; 
 
         for (let tau = 1; tau < maxTau - 1; tau++) {
           if (state === 0 && nsdf[tau] > 0 && nsdf[tau - 1] <= 0) {
@@ -900,7 +973,6 @@
 
         if (peaks.length === 0) return -1;
 
-        // 3. Refine peaks using Parabolic Interpolation
         peaks.forEach(peak => {
           let tau = peak.pos;
           if (tau > 0 && tau < maxTau - 1) {
@@ -916,7 +988,6 @@
           }
         });
 
-        // 4. Select the true fundamental peak using McLeod's constant (k = 0.90)
         let maxPeakVal = peaks.reduce((max, p) => Math.max(max, p.val), -1);
         const k = 0.90;
         let threshold = maxPeakVal * k;
@@ -927,36 +998,6 @@
           return sampleRate / selectedPeak.pos;
         }
         return -1;
-      },
-
-      // Legacy Autocorrelation (kept for fallback/comparison)
-      autoCorrelate: function(buffer, sampleRate) {
-        let SIZE = buffer.length;
-        let r1 = 0, r2 = SIZE - 1, thres = 0.2;
-        for (let i = 0; i < SIZE / 2; i++) if (Math.abs(buffer[i]) < thres) { r1 = i; break; }
-        for (let i = 1; i < SIZE / 2; i++) if (Math.abs(buffer[SIZE - i]) < thres) { r2 = SIZE - i; break; }
-        
-        buffer = buffer.slice(r1, r2);
-        SIZE = buffer.length;
-
-        let c = new Array(SIZE).fill(0);
-        for (let i = 0; i < SIZE; i++)
-          for (let j = 0; j < SIZE - i; j++)
-            c[i] = c[i] + buffer[j] * buffer[j + i];
-
-        let d = 0; while (c[d] > c[d + 1]) d++;
-        let maxval = -1, maxpos = -1;
-        for (let i = d; i < SIZE; i++) {
-          if (c[i] > maxval) { maxval = c[i]; maxpos = i; }
-        }
-        
-        let T0 = maxpos;
-        let x1 = c[T0 - 1], x2 = c[T0], x3 = c[T0 + 1];
-        let a = (x1 + x3 - 2 * x2) / 2;
-        let b = (x3 - x1) / 2;
-        if (a) T0 = T0 - b / (2 * a);
-
-        return sampleRate / T0;
       }
     };
 
@@ -968,10 +1009,10 @@
       analyser: null,
       stream: null,
       loopId: null,
-      rawBuf: null, // Full FFT buffer
+      rawBuf: null,
       pitchHistory: [],
       lastEvaluatedMidi: -1,
-      cooldown: false,
+      cooldownUntil: 0,
       CONSECUTIVE_FRAMES_NEEDED: 5,
 
       init: async function() {
@@ -981,7 +1022,6 @@
           this.context = new (window.AudioContext || window.webkitAudioContext)();
           this.analyser = this.context.createAnalyser();
 
-          // Calculate exact FFT size required to fit our configurable time window
           const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
           let fftSize = 32;
           while (fftSize < requiredSamples && fftSize < 32768) {
@@ -1013,6 +1053,7 @@
       start: function() {
         this.pitchHistory = [];
         this.lastEvaluatedMidi = -1;
+        this.cooldownUntil = 0;
         this.tick();
       },
 
@@ -1020,27 +1061,30 @@
         if (!this.analyser) return;
         this.analyser.getFloatTimeDomainData(this.rawBuf);
 
-        // Slice exactly our required temporal window from the most recent data in the buffer
         const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
         const analysisBuffer = this.rawBuf.subarray(this.rawBuf.length - requiredSamples);
 
         const pitch = PitchDetection.detect(analysisBuffer, this.context.sampleRate, appSettings.micSensitivity);
 
-        if (pitch !== -1 && !isShifting && !this.cooldown) {
+        if (pitch !== -1 && !isShifting) {
           const midi = Math.round(12 * (Math.log2(pitch / 440)) + 69);
           this.pitchHistory.push(midi);
           if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
 
           if (this.pitchHistory.length === this.CONSECUTIVE_FRAMES_NEEDED && this.pitchHistory.every(v => v === midi)) {
-            if (midi !== this.lastEvaluatedMidi) {
+            if (midi !== this.lastEvaluatedMidi || Date.now() > this.cooldownUntil) {
               this.lastEvaluatedMidi = midi;
+              this.cooldownUntil = Date.now() + appSettings.micCooldown;
               InputManager.handleMicInput(midi);
             }
           }
         } else {
           this.pitchHistory.push(-1);
           if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
-          if (this.pitchHistory.every(v => v === -1)) this.lastEvaluatedMidi = -1; 
+          
+          if (this.pitchHistory.every(v => v === -1)) {
+             this.lastEvaluatedMidi = -1; 
+          }
         }
         
         this.loopId = requestAnimationFrame(this.tick.bind(this));
@@ -1083,8 +1127,6 @@
 
         if (current.data.midi === detectedMidi) {
           this.triggerSuccess();
-          AudioEngine.cooldown = true;
-          setTimeout(() => AudioEngine.cooldown = false, 300);
         } else {
           this.triggerError(displayStr);
         }
@@ -1105,10 +1147,16 @@
 
       triggerSuccess: function() {
         const current = activeNotes[currentIndex];
+        const timeToPlay = Date.now() - currentNoteStartTime;
+        
+        NoteGenerator.feedback(current.data, timeToPlay, current.mistakeCount || 0);
+        
         current.state = 'correct';
         current.errorInput = null;
         stats.correct++;
         currentIndex++;
+        
+        currentNoteStartTime = Date.now(); // Reset timer for the next note in sequence
         renderNotes();
 
         if (currentIndex === 4) {
@@ -1121,6 +1169,7 @@
         const current = activeNotes[currentIndex];
         current.state = 'error';
         current.errorInput = errStr;
+        current.mistakeCount = (current.mistakeCount || 0) + 1;
         stats.mistakes++;
         renderNotes();
       }
@@ -1155,10 +1204,21 @@
       const minsFloat = elapsedSecs / 60;
       const netNotes = Math.max(0, stats.correct - stats.mistakes);
       const npm = minsFloat > 0 ? Math.round(netNotes / minsFloat) : 0;
-      document.getElementById('stat-npm').textContent = npm;
+      document.getElementById('stat-npm').textContent = npm + ' NPM';
     }
 
     setInterval(() => updateStatsUI(), 1000);
+
+    // Diagnostics Controls
+    document.getElementById('stats-btn').addEventListener('click', () => {
+      document.getElementById('stats-overlay').style.display = 'flex';
+      updateStatsUI();
+    });
+
+    document.getElementById('stats-return').addEventListener('click', () => {
+      document.getElementById('stats-overlay').style.display = 'none';
+      // Returning to staff does NOT reset notes.
+    });
 
     document.getElementById('stat-reset').addEventListener('click', () => {
       stats.startTime = Date.now();
@@ -1167,9 +1227,14 @@
       updateStatsUI();
     });
 
+    // Settings Controls
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
-      document.getElementById('row-mic-sensitivity').style.display = document.getElementById('setting-input').value === 'mic' ? 'flex' : 'none';
+      
+      const isMic = document.getElementById('setting-input').value === 'mic';
+      document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
+      document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
+      
       document.getElementById('row-grand-mode').style.display = document.getElementById('setting-clef').value === 'grand' ? 'flex' : 'none';
       updateStatsUI();
     });
@@ -1179,16 +1244,24 @@
     });
 
     document.getElementById('setting-input').addEventListener('change', (e) => {
-      document.getElementById('row-mic-sensitivity').style.display = e.target.value === 'mic' ? 'flex' : 'none';
+      const isMic = e.target.value === 'mic';
+      document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
+      document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
+    });
+
+    document.getElementById('setting-mic-cooldown').addEventListener('input', (e) => {
+      document.getElementById('mic-cooldown-display').textContent = e.target.value + 'ms';
     });
 
     document.getElementById('settings-save').addEventListener('click', () => {
       appSettings.clef = document.getElementById('setting-clef').value;
       appSettings.grandMode = document.getElementById('setting-grand-mode').value;
       appSettings.key = document.getElementById('setting-key').value;
+      appSettings.accidentals = document.getElementById('setting-accidentals').value === 'enabled';
       appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
       appSettings.mode = document.getElementById('setting-mode').value;
       appSettings.micSensitivity = parseFloat(document.getElementById('setting-mic-sensitivity').value);
+      appSettings.micCooldown = parseInt(document.getElementById('setting-mic-cooldown').value, 10);
       
       appSettings.trebleMin = document.getElementById('setting-treble-min').value;
       appSettings.trebleMax = document.getElementById('setting-treble-max').value;

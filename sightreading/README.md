@@ -19,10 +19,13 @@ session.
 * **Supports Clefs and Keys:** Use any clef (including both bass and treble 
     aka grand staff) with any major/minor key, as well as 8va/8vb
     transpositions.  
-* **Microphone (piano) mode** Listens on your mic for a piano/instrument 
+* **Microphone (piano) mode:** Listens on your mic for a piano/instrument 
     being played. Great for use with a smart phone/tablet!  
-* **Teaching Mode (coming soon):** Start you off with a few notes, and then 
-    gradually introduce/remove notes as you perform better/worse.  
+* **View Diagnostics:** Check your accuracy and penalized notes per minute 
+    (NPM).  
+* **Teaching Mode (coming soon):** Start you off with a few notes, and 
+    dynamically introduce new notes/bring back old notes based on your
+    performance.  
 
 ## **Controls**
 
