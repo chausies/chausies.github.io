@@ -887,7 +887,10 @@
         AppLog.add(`Feedback: ${noteData.displayStr} | ${timeToPlay}ms | Mistakes: ${mistakes}`);
 
         if (mistakes > 0) {
-           this.recentMisses.push(noteData);
+           const alreadyInQueue = this.recentMisses.some(n => n.midi === noteData.midi && n.noteClef === noteData.noteClef && n.trueAcc === noteData.trueAcc);
+           if (!alreadyInQueue) {
+               this.recentMisses.push(noteData);
+           }
         }
 
         const s = appSettings.teachingScale;
@@ -982,15 +985,21 @@
       _chords: function() {
         if (this.chordQueue.length > 0) return this.chordQueue.shift();
 
-        const activePool = this.teachingPool.length > 0 ? this.teachingPool : treblePool;
-        const maxMidi = Math.max(...activePool.map(p => p.midi));
+        // Get the pool to draw the root note from
+        const rootPool = this.teachingPool.length > 0 ? this.teachingPool : (
+          appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool)
+        );
+        // Full pool without any accidental filtering to guarantee chord spellings don't throw undefined
+        const fullPool = appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool);
+
+        const maxMidi = Math.max(...rootPool.map(p => p.midi));
         const intervalSets = [[0, 4, 7, 11], [0, 3, 7, 10], [0, 4, 7, 9], [0, 3, 7, 9]];
         
         let finalChord = [];
         let attempts = 0;
 
         while (attempts < 50) {
-          const rootNote = activePool[Math.floor(Math.random() * activePool.length)];
+          const rootNote = rootPool[Math.floor(Math.random() * rootPool.length)];
           const rootMidi = rootNote.midi;
 
           if (rootMidi + 24 > maxMidi) { attempts++; continue; } 
@@ -1006,7 +1015,12 @@
           chordMidis.sort((a, b) => a - b);
           if (Math.random() > 0.5) chordMidis.reverse();
           
-          let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, activePool, appSettings.key));
+          let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, fullPool, appSettings.key));
+
+          if (candidateNotes.some(n => !n)) {
+            attempts++;
+            continue;
+          }
 
           if (!appSettings.accidentals) {
             const hasAccidentals = candidateNotes.some(n => getVisualAccidental(n.pitch, n.trueAcc) !== '');
@@ -1020,7 +1034,7 @@
           break;
         }
 
-        if (finalChord.length === 0) finalChord = [activePool[0]];
+        if (finalChord.length === 0) finalChord = [rootPool[0]];
         
         this.chordQueue = finalChord;
         return this.chordQueue.shift();
@@ -1219,8 +1233,7 @@
       loopId: null,
       rawBuf: null,
       pitchHistory: [],
-      lastEvaluatedMidi: -1,
-      cooldownUntil: 0,
+      lastPlayedMidiTimes: {},
       CONSECUTIVE_FRAMES_NEEDED: 5,
 
       init: async function() {
@@ -1263,8 +1276,7 @@
 
       start: function() {
         this.pitchHistory = [];
-        this.lastEvaluatedMidi = -1;
-        this.cooldownUntil = 0;
+        this.lastPlayedMidiTimes = {};
         this.tick();
       },
 
@@ -1289,19 +1301,16 @@
           if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
 
           if (this.pitchHistory.length === this.CONSECUTIVE_FRAMES_NEEDED && this.pitchHistory.every(v => v === midi)) {
-            if (midi !== this.lastEvaluatedMidi || Date.now() > this.cooldownUntil) {
-              this.lastEvaluatedMidi = midi;
-              this.cooldownUntil = Date.now() + appSettings.micCooldown;
+            const now = Date.now();
+            const lastPlayed = this.lastPlayedMidiTimes[midi] || 0;
+            if (now - lastPlayed > appSettings.micCooldown) {
+              this.lastPlayedMidiTimes[midi] = now;
               InputManager.handleMicInput(midi);
             }
           }
         } else {
           this.pitchHistory.push(-1);
           if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
-          
-          if (this.pitchHistory.every(v => v === -1)) {
-             this.lastEvaluatedMidi = -1; 
-          }
         }
         
         this.loopId = requestAnimationFrame(this.tick.bind(this));
