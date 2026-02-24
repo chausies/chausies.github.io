@@ -1302,7 +1302,7 @@
           // 3. Setup AudioContext at hardware default to prevent Firefox crashes
           this.context = new (window.AudioContext || window.webkitAudioContext)();
           
-          // 4. Inject HQ Lanczos-3 Downsampling Worklet
+          // 4. Inject PyTorch-style Sinc-Kaiser Downsampling Worklet
           const config = PitchDetector.getConfig();
           const workletCode = `
             class PitchProcessor extends AudioWorkletProcessor {
@@ -1312,8 +1312,13 @@
                 this.outRate = options.processorOptions.outRate;
                 this.ratio = this.inRate / this.outRate;
                 
-                this.a = 3; 
+                // PyTorch Torchaudio sinc_interp_kaiser parameters
+                this.a = 6; 
+                this.beta = 14.769656459379492; 
+                this.rolloff = 0.99;
+                
                 this.support = this.a * this.ratio; 
+                this.i0Beta = this.besselI0(this.beta);
                 
                 this.inBuffer = new Float32Array(8192); 
                 this.inLen = 0;
@@ -1324,15 +1329,31 @@
                 this.outLen = 0;
               }
               
+              // Modified Bessel function of the first kind (order 0)
+              besselI0(x) {
+                let sum = 1.0;
+                let term = 1.0;
+                const x2_4 = (x * x) / 4.0;
+                for (let k = 1; k < 25; k++) {
+                  term *= x2_4 / (k * k);
+                  sum += term;
+                  if (term < 1e-8 * sum) break;
+                }
+                return sum;
+              }
+              
               sinc(x) {
                 if (x === 0) return 1.0;
                 const piX = Math.PI * x;
                 return Math.sin(piX) / piX;
               }
               
-              lanczos(x) {
+              sincKaiser(x) {
                 if (Math.abs(x) >= this.a) return 0.0;
-                return this.sinc(x) * this.sinc(x / this.a);
+                const sincVal = this.sinc(x * this.rolloff);
+                const arg = Math.sqrt(1.0 - Math.pow(x / this.a, 2));
+                const kaiserVal = this.besselI0(this.beta * arg) / this.i0Beta;
+                return sincVal * kaiserVal;
               }
               
               process(inputs, outputs, parameters) {
@@ -1355,7 +1376,7 @@
                   const end = Math.floor(this.readPos + this.support);
                   
                   for (let i = start; i <= end; i++) {
-                    const weight = this.lanczos((i - this.readPos) / this.ratio);
+                    const weight = this.sincKaiser((i - this.readPos) / this.ratio);
                     sum += this.inBuffer[i] * weight;
                     weightSum += weight;
                   }
