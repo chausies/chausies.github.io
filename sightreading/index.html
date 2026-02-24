@@ -108,6 +108,7 @@
       gap: 0.5rem; 
       width: 55%;
     }
+    
     .range-selects select {
       width: 100%;
       max-width: none;
@@ -121,7 +122,15 @@
       border: 1px solid #eee;
     }
 
-    .stats-list p { margin: 0.8rem 0; font-size: 1.2rem; display: flex; justify-content: space-between; border-bottom: 1px dashed #ddd; padding-bottom: 0.4rem;}
+    .stats-list p { 
+      margin: 0.8rem 0; 
+      font-size: 1.2rem; 
+      display: flex; 
+      justify-content: space-between; 
+      border-bottom: 1px dashed #ddd; 
+      padding-bottom: 0.4rem;
+    }
+    
     .stats-list p:last-child { border-bottom: none; padding-bottom: 0; }
     .stat-blue { color: #3b82f6; font-weight: bold; }
     .stat-red { color: #ef4444; font-weight: bold; }
@@ -139,11 +148,13 @@
       overflow-y: auto;
       text-align: left;
     }
+    
     .log-list div {
       border-bottom: 1px solid #333;
       padding: 0.4rem 0;
       word-wrap: break-word;
     }
+    
     .log-list div:last-child { border-bottom: none; }
     
     .btn {
@@ -159,13 +170,17 @@
       border-radius: 6px;
       cursor: pointer;
     }
-    .btn:hover { background: #555; }
+    
+    .btn:hover:not(:disabled) { background: #555; }
+    .btn:disabled { background: #aaa; cursor: not-allowed; }
+    
     .btn-outline {
       background: transparent;
       color: #333;
       border: 2px solid #333;
       margin-top: 0.5rem;
     }
+    
     .btn-outline:hover { background: #eee; }
 
     /* SVG Canvas */
@@ -217,6 +232,9 @@
       #log-btn { right: 6rem; top: 1rem; }
     }
   </style>
+
+  <!-- ONNX Runtime Web Library for Neural Network Pitch Detection -->
+  <script src="ort.wasm.min.js"></script>
 </head>
 <body>
 
@@ -351,7 +369,7 @@
 
         <div class="setting-row" id="row-teaching-keys" style="display: none;">
           <label>Starting Keys (Teaching)</label>
-          <input type="number" id="setting-teaching-keys" min="1" max="20" value="3" style="width: 50%;">
+          <input type="number" id="setting-teaching-keys" min="1" max="20" value="6" style="width: 50%;">
         </div>
 
         <div class="setting-row" id="row-teaching-scale" style="display: none;">
@@ -370,10 +388,10 @@
         <div class="setting-row" id="row-mic-sensitivity" style="display: none;">
           <label>Mic Sensitivity</label>
           <select id="setting-mic-sensitivity">
-            <option value="0.01">High (Picks up quiet notes)</option>
-            <option value="0.03" selected>Medium (Default)</option>
-            <option value="0.06">Low (Reduces background noise)</option>
-            <option value="0.10">Very Low (Requires loud playing)</option>
+            <option value="0.75">High (Picks up quiet/noisy notes)</option>
+            <option value="0.85" selected>Medium (Default)</option>
+            <option value="0.92">Low (Reduces background noise)</option>
+            <option value="0.96">Very Low (Requires solid playing)</option>
           </select>
         </div>
 
@@ -396,17 +414,18 @@
   </div>
 
   <script>
-    // Configurable Parameters
-    const PITCH_WINDOW_MS = 100;
-
-    // Constants
+    // =========================================================
+    // General Configuration & Constants
+    // =========================================================
     let X_START = 220;
     const X_STEP = 90;
     const COLOR_PENDING = '#333';
     const COLOR_CORRECT = '#3b82f6';
     const COLOR_ERROR = '#ef4444';
 
+    // =========================================================
     // Global Pause State
+    // =========================================================
     let isAppPaused = false;
     let pauseTimestamp = 0;
 
@@ -432,7 +451,9 @@
     window.addEventListener('blur', checkPauseState);
     window.addEventListener('focus', checkPauseState);
 
+    // =========================================================
     // Logger
+    // =========================================================
     const AppLog = {
       messages: [],
       add: function(msg) {
@@ -447,7 +468,9 @@
       }
     };
 
+    // =========================================================
     // Settings State
+    // =========================================================
     const appSettings = {
       clef: 'treble',
       grandMode: 'two-hand',
@@ -462,7 +485,7 @@
       teachingKeys: 6,
       teachingScale: 20,
       input: 'keyboard',
-      micSensitivity: 0.03,
+      micSensitivity: 0.85, // Mapped to Neural Net Confidence
       micCooldown: 150
     };
 
@@ -491,7 +514,9 @@
     populateSelect('setting-bass-min', appSettings.bassMin);
     populateSelect('setting-bass-max', appSettings.bassMax);
 
+    // =========================================================
     // App State
+    // =========================================================
     let activeNotes = [];
     let currentIndex = 0;
     let globalNoteId = 0;
@@ -537,6 +562,9 @@
     const treblePool = [];
     const bassPool = [];
 
+    // =========================================================
+    // Core Logic & View Helpers
+    // =========================================================
     function updateViewBoxAndCount() {
       const isNarrow = window.innerWidth < 768;
       visibleNoteCount = isNarrow ? 4 : 8;
@@ -555,7 +583,6 @@
       }
     }
 
-    // Core Helpers
     function noteStringToIdx(str) {
       if (!str) return 0;
       const p = str[0];
@@ -598,6 +625,11 @@
       return { pitch, acc, oct };
     }
 
+    function hzToMidi(hz) {
+      if (hz < 46.875 || hz > 2093.75) return -1;
+      return Math.round(69 + 12 * Math.log2(hz / 440.0));
+    }
+
     function midiToNoteString(midi) {
       const pitches = ['c', 'c#', 'd', 'd#', 'e', 'f', 'f#', 'g', 'g#', 'a', 'a#', 'b'];
       const oct = Math.floor(midi / 12) - 1;
@@ -611,12 +643,14 @@
       return el;
     }
 
+    // =========================================================
     // Drawing Helpers
+    // =========================================================
     function drawDecorations() {
       const staffGroup = document.getElementById('staff-lines');
       staffGroup.innerHTML = '';
       const drawLines = (startY) => {
-        for (let i=0; i<5; i++) {
+        for (let i = 0; i < 5; i++) {
           staffGroup.appendChild(createSVGElement('line', { x1: 40, x2: 960, y1: startY + i*20, y2: startY + i*20, stroke: '#333', 'stroke-width': 2 }));
         }
       };
@@ -748,7 +782,9 @@
       }
     }
 
+    // =========================================================
     // Modular Note Generation
+    // =========================================================
     function buildPools() {
       treblePool.length = 0; bassPool.length = 0;
       const pitches = ['c', 'd', 'e', 'f', 'g', 'a', 'b'];
@@ -807,7 +843,6 @@
       return alignedCand || candidates[0];
     }
 
-    // Stateful Note Generator
     const NoteGenerator = {
       chordQueue: [],
       teachingPool: [],
@@ -820,51 +855,49 @@
         this.timesQueue = [];
         this.recentMisses = [];
 
-        // Build flat active pool depending on clef & accidental settings
         let activePool = appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool);
         
         if (!appSettings.accidentals) {
           activePool = activePool.filter(n => getVisualAccidental(n.pitch, n.trueAcc) === '');
         }
 
-        // Sort pool for neighbor adjacency rules: grouped by clef (Bass -> Treble), then strictly ascending pitch
         this.teachingPool = activePool.slice().sort((a, b) => {
           if (a.noteClef !== b.noteClef) return a.noteClef === 'bass' ? -1 : 1;
           return a.midi - b.midi;
         });
 
         if (appSettings.mode === 'teaching') {
-           let k = appSettings.teachingKeys;
-           if (k > this.teachingPool.length) k = this.teachingPool.length;
+          let k = appSettings.teachingKeys;
+          if (k > this.teachingPool.length) k = this.teachingPool.length;
            
-           this.likelihoods = new Array(this.teachingPool.length).fill(0.0);
-           let anchorIndices = [];
+          this.likelihoods = new Array(this.teachingPool.length).fill(0.0);
+          let anchorIndices = [];
 
-           if (appSettings.clef === 'grand') {
-              let bassIndices = this.teachingPool.map((n, i) => n.noteClef === 'bass' ? i : -1).filter(i => i !== -1);
-              let trebleIndices = this.teachingPool.map((n, i) => n.noteClef === 'treble' ? i : -1).filter(i => i !== -1);
+          if (appSettings.clef === 'grand') {
+            let bassIndices = this.teachingPool.map((n, i) => n.noteClef === 'bass' ? i : -1).filter(i => i !== -1);
+            let trebleIndices = this.teachingPool.map((n, i) => n.noteClef === 'treble' ? i : -1).filter(i => i !== -1);
               
-              let k1 = Math.floor(k / 2);
-              let k2 = Math.floor(k / 2);
-              if (k % 2 !== 0) {
-                 if (Math.random() > 0.5) k1++; else k2++;
-              }
+            let k1 = Math.floor(k / 2);
+            let k2 = Math.floor(k / 2);
+            if (k % 2 !== 0) {
+              if (Math.random() > 0.5) k1++; else k2++;
+            }
               
-              const pickRandom = (arr, count) => {
-                  let shuffled = arr.slice().sort(() => 0.5 - Math.random());
-                  return shuffled.slice(0, count);
-              };
+            const pickRandom = (arr, count) => {
+              let shuffled = arr.slice().sort(() => 0.5 - Math.random());
+              return shuffled.slice(0, count);
+            };
               
-              anchorIndices = [...pickRandom(bassIndices, Math.min(k1, bassIndices.length)), ...pickRandom(trebleIndices, Math.min(k2, trebleIndices.length))];
-           } else {
-              let allIndices = this.teachingPool.map((_, i) => i);
-              anchorIndices = allIndices.sort(() => 0.5 - Math.random()).slice(0, k);
-           }
+            anchorIndices = [...pickRandom(bassIndices, Math.min(k1, bassIndices.length)), ...pickRandom(trebleIndices, Math.min(k2, trebleIndices.length))];
+          } else {
+            let allIndices = this.teachingPool.map((_, i) => i);
+            anchorIndices = allIndices.sort(() => 0.5 - Math.random()).slice(0, k);
+          }
 
-           anchorIndices.forEach(idx => this.likelihoods[idx] = 1.0);
-           AppLog.add(`NoteGenerator re-initialized in Teaching Mode with ${anchorIndices.length} anchors.`);
+          anchorIndices.forEach(idx => this.likelihoods[idx] = 1.0);
+          AppLog.add(`NoteGenerator re-initialized in Teaching Mode with ${anchorIndices.length} anchors.`);
         } else {
-           AppLog.add(`NoteGenerator re-initialized (Mode: ${appSettings.mode}).`);
+          AppLog.add(`NoteGenerator re-initialized (Mode: ${appSettings.mode}).`);
         }
       },
 
@@ -884,31 +917,28 @@
         let idx = this.teachingPool.findIndex(n => n.midi === noteData.midi && n.noteClef === noteData.noteClef && n.trueAcc === noteData.trueAcc);
         if (idx === -1) return;
 
-        AppLog.add(`Feedback: ${noteData.displayStr} | ${timeToPlay}ms | Mistakes: ${mistakes}`);
-
         if (mistakes > 0) {
-           const alreadyInQueue = this.recentMisses.some(n => n.midi === noteData.midi && n.noteClef === noteData.noteClef && n.trueAcc === noteData.trueAcc);
-           if (!alreadyInQueue) {
-               this.recentMisses.push(noteData);
-           }
+          const alreadyInQueue = this.recentMisses.some(n => n.midi === noteData.midi && n.noteClef === noteData.noteClef && n.trueAcc === noteData.trueAcc);
+          if (!alreadyInQueue) {
+            this.recentMisses.push(noteData);
+          }
         }
 
         const s = appSettings.teachingScale;
         if (this.timesQueue.length === s) {
-            let mean = this.timesQueue.reduce((a,b) => a+b, 0) / s;
-            let variance = this.timesQueue.reduce((a,b) => a + Math.pow(b - mean, 2), 0) / s;
-            let std = Math.sqrt(variance);
-            std = Math.max(50, std);
+          let mean = this.timesQueue.reduce((a,b) => a+b, 0) / s;
+          let variance = this.timesQueue.reduce((a,b) => a + Math.pow(b - mean, 2), 0) / s;
+          let std = Math.sqrt(variance);
+          std = Math.max(50, std);
 
-            if (timeToPlay > mean + 2 * std) {
-                this.likelihoods[idx] += 1.0;
-                AppLog.add(`Teaching: ${noteData.displayStr} took too long (${timeToPlay}ms). Likelihood +1.0 applied.`);
-            } else {
-                this.timesQueue.push(timeToPlay);
-                this.timesQueue.shift();
-            }
-        } else {
+          if (timeToPlay > mean + 2 * std) {
+            this.likelihoods[idx] += 1.0;
+          } else {
             this.timesQueue.push(timeToPlay);
+            this.timesQueue.shift();
+          }
+        } else {
+          this.timesQueue.push(timeToPlay);
         }
       },
 
@@ -925,58 +955,55 @@
         const q = 1 / 3;
 
         if (this.recentMisses.length > 0 && Math.random() < q) {
-            chosenNote = this.recentMisses.shift();
-            chosenIdx = this.teachingPool.findIndex(n => n.midi === chosenNote.midi && n.noteClef === chosenNote.noteClef && n.trueAcc === chosenNote.trueAcc);
-            AppLog.add(`Teaching: Sampled from recent misses -> ${chosenNote.displayStr}`);
+          chosenNote = this.recentMisses.shift();
+          chosenIdx = this.teachingPool.findIndex(n => n.midi === chosenNote.midi && n.noteClef === chosenNote.noteClef && n.trueAcc === chosenNote.trueAcc);
         } else {
-            let sum = this.likelihoods.reduce((a, b) => a + b, 0);
-            if (sum <= 0) {
-                chosenIdx = Math.floor(Math.random() * this.teachingPool.length);
-                this.likelihoods[chosenIdx] = 1.0;
-                sum = 1.0;
-            }
+          let sum = this.likelihoods.reduce((a, b) => a + b, 0);
+          if (sum <= 0) {
+            chosenIdx = Math.floor(Math.random() * this.teachingPool.length);
+            this.likelihoods[chosenIdx] = 1.0;
+            sum = 1.0;
+          }
             
-            let r = Math.random() * sum;
-            let runningSum = 0;
-            for (let i = 0; i < this.likelihoods.length; i++) {
-                runningSum += this.likelihoods[i];
-                if (r <= runningSum) {
-                    chosenIdx = i;
-                    break;
-                }
+          let r = Math.random() * sum;
+          let runningSum = 0;
+          for (let i = 0; i < this.likelihoods.length; i++) {
+            runningSum += this.likelihoods[i];
+            if (r <= runningSum) {
+              chosenIdx = i;
+              break;
             }
-            if(chosenIdx === -1) chosenIdx = this.teachingPool.length - 1;
-            chosenNote = this.teachingPool[chosenIdx];
+          }
+          if(chosenIdx === -1) chosenIdx = this.teachingPool.length - 1;
+          chosenNote = this.teachingPool[chosenIdx];
         }
 
         // Diffusion Updates (23-width half-step kernel)
         if (chosenIdx !== -1) {
-            const s = appSettings.teachingScale;
-            const p = Math.PI / (2 * Math.pow(s + 1/3, 2));
+          const s = appSettings.teachingScale;
+          const p = Math.PI / (2 * Math.pow(s + 1/3, 2));
 
-            // Subtract center weight
-            this.likelihoods[chosenIdx] = Math.max(0, this.likelihoods[chosenIdx] - p);
+          this.likelihoods[chosenIdx] = Math.max(0, this.likelihoods[chosenIdx] - p);
 
-            // Tier list approx: P5(10), M3/P4(8), m3/M6(6), m6(5), M2(4), m7(3), M7(2), m2/TT(1)
-            const kernelWeights = {
-                1: 1, 2: 4, 3: 6, 4: 8, 5: 8, 6: 1, 
-                7: 10, 8: 5, 9: 6, 10: 3, 11: 2
-            };
-            const kernelSum = 108; // Total sum (54 * 2 directions)
+          const kernelWeights = {
+            1: 1, 2: 4, 3: 6, 4: 8, 5: 8, 6: 1, 
+            7: 10, 8: 5, 9: 6, 10: 3, 11: 2
+          };
+          const kernelSum = 108; // Total sum (54 * 2 directions)
 
-            const centerMidi = this.teachingPool[chosenIdx].midi;
-            const centerClef = this.teachingPool[chosenIdx].noteClef;
+          const centerMidi = this.teachingPool[chosenIdx].midi;
+          const centerClef = this.teachingPool[chosenIdx].noteClef;
 
-            for (let i = 0; i < this.teachingPool.length; i++) {
-                if (i === chosenIdx) continue;
-                if (this.teachingPool[i].noteClef !== centerClef) continue;
+          for (let i = 0; i < this.teachingPool.length; i++) {
+            if (i === chosenIdx) continue;
+            if (this.teachingPool[i].noteClef !== centerClef) continue;
                 
-                const diff = Math.abs(this.teachingPool[i].midi - centerMidi);
-                if (diff >= 1 && diff <= 11) {
-                    const normalizedWeight = kernelWeights[diff] / kernelSum;
-                    this.likelihoods[i] += p * normalizedWeight;
-                }
+            const diff = Math.abs(this.teachingPool[i].midi - centerMidi);
+            if (diff >= 1 && diff <= 11) {
+              const normalizedWeight = kernelWeights[diff] / kernelSum;
+              this.likelihoods[i] += p * normalizedWeight;
             }
+          }
         }
 
         return chosenNote;
@@ -985,11 +1012,9 @@
       _chords: function() {
         if (this.chordQueue.length > 0) return this.chordQueue.shift();
 
-        // Get the pool to draw the root note from
         const rootPool = this.teachingPool.length > 0 ? this.teachingPool : (
           appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool)
         );
-        // Full pool without any accidental filtering to guarantee chord spellings don't throw undefined
         const fullPool = appSettings.clef === 'bass' ? bassPool : (appSettings.clef === 'grand' ? [...bassPool, ...treblePool] : treblePool);
 
         const maxMidi = Math.max(...rootPool.map(p => p.midi));
@@ -1041,7 +1066,9 @@
       }
     };
 
+    // =========================================================
     // App Rendering Loop
+    // =========================================================
     function renderNotes() {
       const layer = document.getElementById('notes-layer');
 
@@ -1141,124 +1168,227 @@
       }
     });
 
-    // ---------------------------------------------------------
-    // Modular Pitch Detection Engine
-    // ---------------------------------------------------------
-    const PitchDetection = {
-      activeAlgorithm: 'mpm',
-
-      detect: function(buffer, sampleRate, sensitivity) {
-        let rms = 0;
-        for (let i = 0; i < buffer.length; i++) rms += buffer[i] * buffer[i];
-        rms = Math.sqrt(rms / buffer.length);
-        if (rms < sensitivity) return -1; 
-        
-        return this[this.activeAlgorithm](buffer, sampleRate);
+    // =========================================================
+    // Modular Pitch Detection Interface
+    // =========================================================
+    const PitchDetector = {
+      active: 'swiftf0',
+      
+      algorithms: {
+        swiftf0: {
+          sampleRate: 16000, // Neural Network requirement
+          chunkSize: 2048,   // Neural Network requirement
+          session: null,
+          isInferencing: false,
+          
+          init: async function() {
+            if (this.session) return;
+            if (typeof ort === 'undefined') {
+              throw new Error("ONNX Runtime (ort) is not defined. Ensure ort.wasm.min.js is loaded.");
+            }
+            ort.env.wasm.wasmPaths = './';
+            ort.env.wasm.numThreads = 1;
+            const options = { executionProviders: ['wasm'], intraOpNumThreads: 1, interOpNumThreads: 1 };
+            this.session = await ort.InferenceSession.create('model.onnx', options);
+          },
+          
+          detect: async function(buffer) {
+            if (!this.session || this.isInferencing) return null;
+            this.isInferencing = true;
+            try {
+              const tensor = new ort.Tensor('float32', buffer, [1, buffer.length]);
+              const feeds = { [this.session.inputNames[0]]: tensor };
+              const results = await this.session.run(feeds);
+              const pitchOut = results[this.session.outputNames[0]].data;
+              const confOut = results[this.session.outputNames[1]].data;
+              const lastIdx = pitchOut.length - 1;
+              return { pitch: pitchOut[lastIdx], confidence: confOut[lastIdx] };
+            } catch (err) {
+              console.error("Inference Error:", err);
+              return null;
+            } finally {
+              this.isInferencing = false;
+            }
+          }
+        }
+        // Easy to drop in new algorithms here (e.g. 'crepe': { sampleRate: 16000, chunkSize: 1024 ... })
       },
 
-      mpm: function(buffer, sampleRate) {
-        const n = buffer.length;
-        const maxTau = Math.min(n, Math.floor(sampleRate / 25));
-        const nsdf = new Float32Array(maxTau);
+      init: async function() {
+        await this.algorithms[this.active].init();
+      },
 
-        for (let tau = 0; tau < maxTau; tau++) {
-          let acf = 0;
-          let divisorM = 0;
-          for (let i = 0; i < n - tau; i++) {
-            acf += buffer[i] * buffer[i + tau];
-            divisorM += buffer[i] * buffer[i] + buffer[i + tau] * buffer[i + tau];
-          }
-          nsdf[tau] = divisorM === 0 ? 0 : (2 * acf) / divisorM;
-        }
+      getConfig: function() {
+        return this.algorithms[this.active];
+      },
 
-        let peaks = [];
-        let curMaxPos = 0;
-        let curMaxVal = -1;
-        let state = 0; 
-
-        for (let tau = 1; tau < maxTau - 1; tau++) {
-          if (state === 0 && nsdf[tau] > 0 && nsdf[tau - 1] <= 0) {
-            state = 1;
-            curMaxVal = nsdf[tau];
-            curMaxPos = tau;
-          } else if (state === 1) {
-            if (nsdf[tau] > curMaxVal) {
-              curMaxVal = nsdf[tau];
-              curMaxPos = tau;
-            }
-            if (nsdf[tau] < 0 && nsdf[tau - 1] >= 0) {
-              state = 0;
-              peaks.push({ pos: curMaxPos, val: curMaxVal });
-            }
-          }
-        }
-
-        if (peaks.length === 0) return -1;
-
-        peaks.forEach(peak => {
-          let tau = peak.pos;
-          if (tau > 0 && tau < maxTau - 1) {
-            let y1 = nsdf[tau - 1];
-            let y2 = nsdf[tau];
-            let y3 = nsdf[tau + 1];
-            let a = (y1 + y3 - 2 * y2) / 2;
-            let b = (y3 - y1) / 2;
-            if (a !== 0) {
-              peak.pos = tau - b / (2 * a);
-              peak.val = y2 - (b * b) / (4 * a);
-            }
-          }
-        });
-
-        let maxPeakVal = peaks.reduce((max, p) => Math.max(max, p.val), -1);
-        const k = 0.90;
-        let threshold = maxPeakVal * k;
-
-        let selectedPeak = peaks.find(p => p.val >= threshold);
-
-        if (selectedPeak && selectedPeak.pos > 0) {
-          return sampleRate / selectedPeak.pos;
-        }
-        return -1;
+      detect: async function(buffer) {
+        return await this.algorithms[this.active].detect(buffer);
       }
     };
 
-    // ---------------------------------------------------------
-    // Audio Input Engine (Microphone)
-    // ---------------------------------------------------------
+    // =========================================================
+    // Audio Input Engine (Microphone & Worklet)
+    // =========================================================
     const AudioEngine = {
       context: null,
-      analyser: null,
       stream: null,
-      loopId: null,
-      rawBuf: null,
+      workletNode: null,
       pitchHistory: [],
       lastPlayedMidiTimes: {},
-      CONSECUTIVE_FRAMES_NEEDED: 5,
+      CONSECUTIVE_FRAMES_NEEDED: 1, // Number of stable blocks required to trigger note
 
       init: async function() {
         if (this.context) return;
         try {
-          this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          // 1. Init Algorithm
+          AppLog.add("Initializing Pitch Detection Model...");
+          await PitchDetector.init();
+          AppLog.add(`${PitchDetector.active} model loaded successfully.`);
+
+          // 2. Setup Mic Stream (Unfiltered for pure pitch math)
+          this.stream = await navigator.mediaDevices.getUserMedia({ 
+            audio: { echoCancellation: false, autoGainControl: false, noiseSuppression: false } 
+          });
+          
+          // 3. Setup AudioContext at hardware default to prevent Firefox crashes
           this.context = new (window.AudioContext || window.webkitAudioContext)();
-          this.analyser = this.context.createAnalyser();
+          
+          // 4. Inject HQ Lanczos-3 Downsampling Worklet
+          const config = PitchDetector.getConfig();
+          const workletCode = `
+            class PitchProcessor extends AudioWorkletProcessor {
+              constructor(options) {
+                super();
+                this.inRate = options.processorOptions.inRate;
+                this.outRate = options.processorOptions.outRate;
+                this.ratio = this.inRate / this.outRate;
+                
+                this.a = 3; 
+                this.support = this.a * this.ratio; 
+                
+                this.inBuffer = new Float32Array(8192); 
+                this.inLen = 0;
+                this.readPos = this.support; 
+                
+                this.outBufferSize = options.processorOptions.outBufferSize;
+                this.outBuffer = new Float32Array(this.outBufferSize);
+                this.outLen = 0;
+              }
+              
+              sinc(x) {
+                if (x === 0) return 1.0;
+                const piX = Math.PI * x;
+                return Math.sin(piX) / piX;
+              }
+              
+              lanczos(x) {
+                if (Math.abs(x) >= this.a) return 0.0;
+                return this.sinc(x) * this.sinc(x / this.a);
+              }
+              
+              process(inputs, outputs, parameters) {
+                const input = inputs[0];
+                if (!input || input.length === 0) return true;
+                const channelData = input[0];
+                
+                if (this.inLen + channelData.length > this.inBuffer.length) {
+                  this.inLen = 0; 
+                  this.readPos = this.support;
+                }
+                this.inBuffer.set(channelData, this.inLen);
+                this.inLen += channelData.length;
+                
+                while (this.readPos + this.support < this.inLen) {
+                  let sum = 0;
+                  let weightSum = 0;
+                  
+                  const start = Math.floor(this.readPos - this.support) + 1;
+                  const end = Math.floor(this.readPos + this.support);
+                  
+                  for (let i = start; i <= end; i++) {
+                    const weight = this.lanczos((i - this.readPos) / this.ratio);
+                    sum += this.inBuffer[i] * weight;
+                    weightSum += weight;
+                  }
+                  
+                  this.outBuffer[this.outLen++] = weightSum === 0 ? 0 : sum / weightSum;
+                  this.readPos += this.ratio;
+                  
+                  if (this.outLen >= this.outBufferSize) {
+                    this.port.postMessage(new Float32Array(this.outBuffer));
+                    this.outLen = 0;
+                  }
+                }
+                
+                const keepStart = Math.floor(this.readPos - this.support);
+                if (keepStart > 0) {
+                  const keepCount = this.inLen - keepStart;
+                  this.inBuffer.copyWithin(0, keepStart, this.inLen);
+                  this.inLen = keepCount;
+                  this.readPos -= keepStart;
+                }
+                
+                return true;
+              }
+            }
+            registerProcessor('pitch-processor', PitchProcessor);
+          `;
+          
+          const blob = new Blob([workletCode], { type: 'application/javascript' });
+          const workletUrl = URL.createObjectURL(blob);
+          await this.context.audioWorklet.addModule(workletUrl);
 
-          const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
-          let fftSize = 32;
-          while (fftSize < requiredSamples && fftSize < 32768) {
-            fftSize *= 2;
-          }
-          this.analyser.fftSize = fftSize;
-          this.rawBuf = new Float32Array(fftSize);
+          const sourceNode = this.context.createMediaStreamSource(this.stream);
+          this.workletNode = new AudioWorkletNode(this.context, 'pitch-processor', {
+            processorOptions: {
+              inRate: this.context.sampleRate,
+              outRate: config.sampleRate,
+              outBufferSize: config.chunkSize
+            }
+          });
 
-          const source = this.context.createMediaStreamSource(this.stream);
-          source.connect(this.analyser);
-          this.start();
-          AppLog.add("Microphone Initialized & Listening.");
+          // 5. Connect and Handle Inferences
+          this.pitchHistory = [];
+          this.lastPlayedMidiTimes = {};
+
+          this.workletNode.port.onmessage = async (event) => {
+            if (isAppPaused || isShifting) return;
+            
+            const result = await PitchDetector.detect(event.data);
+            if (!result) return;
+            
+            const { pitch, confidence } = result;
+
+            if (pitch > 0 && confidence >= appSettings.micSensitivity) {
+              const midi = hzToMidi(pitch);
+              if (midi !== -1) {
+                this.pitchHistory.push(midi);
+                if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
+
+                if (this.pitchHistory.length === this.CONSECUTIVE_FRAMES_NEEDED && this.pitchHistory.every(v => v === midi)) {
+                  const now = Date.now();
+                  const lastPlayed = this.lastPlayedMidiTimes[midi] || 0;
+                  if (now - lastPlayed > appSettings.micCooldown) {
+                    this.lastPlayedMidiTimes[midi] = now;
+                    InputManager.handleMicInput(midi);
+                  }
+                }
+              } else {
+                this.pitchHistory.push(-1);
+              }
+            } else {
+              this.pitchHistory.push(-1);
+              if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
+            }
+          };
+
+          sourceNode.connect(this.workletNode);
+          AppLog.add("Microphone & AudioWorklet Initialized.");
         } catch (e) {
-          console.error('Microphone error:', e);
-          AppLog.add("Microphone access failed.");
-          alert('Could not access microphone. Falling back to keyboard.');
+          console.error('Microphone/Model error:', e);
+          AppLog.add(`Setup Failed: ${e.message}`);
+          alert('Could not access microphone or load model. Falling back to keyboard.');
           appSettings.input = 'keyboard';
           document.getElementById('setting-input').value = 'keyboard';
           updateInstructions();
@@ -1266,60 +1396,16 @@
       },
 
       stop: function() {
-        if (this.loopId) cancelAnimationFrame(this.loopId);
-        if (this.stream) this.stream.getTracks().forEach(t => t.stop());
-        if (this.context) this.context.close();
-        this.context = null;
-        this.analyser = null;
+        if (this.workletNode) { this.workletNode.disconnect(); this.workletNode = null; }
+        if (this.stream) { this.stream.getTracks().forEach(t => t.stop()); this.stream = null; }
+        if (this.context) { this.context.close(); this.context = null; }
         AppLog.add("Microphone Stopped.");
-      },
-
-      start: function() {
-        this.pitchHistory = [];
-        this.lastPlayedMidiTimes = {};
-        this.tick();
-      },
-
-      tick: function() {
-        if (!this.analyser) return;
-
-        if (isAppPaused) {
-          this.loopId = requestAnimationFrame(this.tick.bind(this));
-          return;
-        }
-
-        this.analyser.getFloatTimeDomainData(this.rawBuf);
-
-        const requiredSamples = Math.floor((this.context.sampleRate * PITCH_WINDOW_MS) / 1000);
-        const analysisBuffer = this.rawBuf.subarray(this.rawBuf.length - requiredSamples);
-
-        const pitch = PitchDetection.detect(analysisBuffer, this.context.sampleRate, appSettings.micSensitivity);
-
-        if (pitch !== -1 && !isShifting) {
-          const midi = Math.round(12 * (Math.log2(pitch / 440)) + 69);
-          this.pitchHistory.push(midi);
-          if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
-
-          if (this.pitchHistory.length === this.CONSECUTIVE_FRAMES_NEEDED && this.pitchHistory.every(v => v === midi)) {
-            const now = Date.now();
-            const lastPlayed = this.lastPlayedMidiTimes[midi] || 0;
-            if (now - lastPlayed > appSettings.micCooldown) {
-              this.lastPlayedMidiTimes[midi] = now;
-              InputManager.handleMicInput(midi);
-            }
-          }
-        } else {
-          this.pitchHistory.push(-1);
-          if (this.pitchHistory.length > this.CONSECUTIVE_FRAMES_NEEDED) this.pitchHistory.shift();
-        }
-        
-        this.loopId = requestAnimationFrame(this.tick.bind(this));
       }
     };
 
-    // ---------------------------------------------------------
+    // =========================================================
     // Unified Input Manager
-    // ---------------------------------------------------------
+    // =========================================================
     function updateBufferDisplay(text) {
       document.getElementById('buffer-display').textContent = text !== undefined ? text : inputBuffer;
     }
@@ -1407,7 +1493,9 @@
       InputManager.handleKeyboardInput(e.key.toLowerCase());
     });
 
+    // =========================================================
     // Instructions & Stats UI
+    // =========================================================
     function updateInstructions() {
       const el = document.getElementById('instruction-text');
       if (appSettings.input === 'mic') el.innerHTML = "Microphone Active. Play the note on your instrument.";
@@ -1436,7 +1524,9 @@
 
     setInterval(() => updateStatsUI(), 1000);
 
+    // =========================================================
     // Overlay Controls
+    // =========================================================
     document.getElementById('log-btn').addEventListener('click', () => {
       document.getElementById('log-overlay').style.display = 'flex';
       checkPauseState();
@@ -1464,13 +1554,15 @@
       stats.correct = 0;
       stats.mistakes = 0;
       if (isAppPaused) {
-        pauseTimestamp = Date.now(); // Anchor the new pause start so we don't accidentally push into the future
+        pauseTimestamp = Date.now();
       }
       updateStatsUI();
       AppLog.add("Stats manually reset.");
     });
 
+    // =========================================================
     // Settings Controls
+    // =========================================================
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
       checkPauseState();
@@ -1507,7 +1599,9 @@
       document.getElementById('mic-cooldown-display').textContent = e.target.value + 'ms';
     });
 
-    document.getElementById('settings-save').addEventListener('click', () => {
+    document.getElementById('settings-save').addEventListener('click', async () => {
+      const saveBtn = document.getElementById('settings-save');
+      
       appSettings.clef = document.getElementById('setting-clef').value;
       appSettings.grandMode = document.getElementById('setting-grand-mode').value;
       appSettings.key = document.getElementById('setting-key').value;
@@ -1530,8 +1624,15 @@
       appSettings.input = document.getElementById('setting-input').value;
       updateInstructions();
 
-      if (appSettings.input === 'mic' && prevInput !== 'mic') AudioEngine.init();
-      else if (appSettings.input === 'keyboard' && prevInput === 'mic') AudioEngine.stop();
+      if (appSettings.input === 'mic' && prevInput !== 'mic') {
+        saveBtn.disabled = true;
+        saveBtn.textContent = "Loading AI Model...";
+        await AudioEngine.init();
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save & Reset Staff";
+      } else if (appSettings.input === 'keyboard' && prevInput === 'mic') {
+        AudioEngine.stop();
+      }
       
       document.getElementById('settings-overlay').style.display = 'none';
       checkPauseState();
@@ -1540,11 +1641,16 @@
       updateBufferDisplay('');
       buildPools();
       drawDecorations();
-      initNotes(); // Resets currentNoteStartTime inherently
+      initNotes();
     });
 
+    // =========================================================
     // Boot App
+    // =========================================================
     AppLog.add("Application Started.");
+    if (typeof ort === 'undefined') {
+      AppLog.add("Warning: ort (ONNX Runtime) not found. Microphone SwiftF0 will not work.");
+    }
     buildPools();
     drawDecorations();
     initNotes();
