@@ -117,7 +117,7 @@
     /* Animation Classes */
     @keyframes highlightRow {
       0%, 100% { background-color: transparent; }
-      20%, 80% { background-color: #dbeafe; } /* Soft tailwind blue */
+      20%, 80% { background-color: #dbeafe; } 
     }
     .flash-highlight {
       animation: highlightRow 3s ease-in-out;
@@ -126,14 +126,15 @@
       padding: 0.5rem;
     }
 
-    @keyframes gaudyRGB {
+    /* Gaudy Green-Red-Blue Flash Sequence */
+    @keyframes gaudyGRB {
       0%, 100% { color: #666; text-shadow: none; transform: scale(1); font-weight: normal; }
-      15%, 85% { color: #e60000; text-shadow: 0 0 10px #e60000, 0 0 15px #e60000; transform: scale(1.05); font-weight: bold; }
-      35% { color: #00aa00; text-shadow: 0 0 10px #00aa00, 0 0 15px #00aa00; transform: scale(1.05); font-weight: bold; }
-      60% { color: #0000ff; text-shadow: 0 0 10px #0000ff, 0 0 15px #0000ff; transform: scale(1.05); font-weight: bold; }
+      15%, 85% { color: #009900; text-shadow: 0 0 10px #009900, 0 0 15px #009900; transform: scale(1.05); font-weight: bold; } /* Green */
+      35% { color: #dd0000; text-shadow: 0 0 10px #dd0000, 0 0 15px #dd0000; transform: scale(1.05); font-weight: bold; } /* Red */
+      60% { color: #0000ff; text-shadow: 0 0 10px #0000ff, 0 0 15px #0000ff; transform: scale(1.05); font-weight: bold; } /* Blue */
     }
     .flash-text-gaudy {
-      animation: gaudyRGB 4s ease-in-out 1;
+      animation: gaudyGRB 4.0s ease-in-out 1;
       display: inline-block;
       transition: color 0.3s;
     }
@@ -215,6 +216,14 @@
       display: block;
     }
 
+    @font-face {
+      font-family: 'Bravura';
+      src: url('Bravura.woff2') format('woff2');
+    }
+    .clef-text {
+      font-family: 'Bravura', 'Apple Symbols', 'Segoe UI Symbol', sans-serif;
+    }
+
     .note-group {
       transition: transform 0.4s ease-in-out, opacity 0.4s;
     }
@@ -271,15 +280,16 @@
     <div class="ui-layer instructions">
       <div id="instruction-text">
         Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br>
-        or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.
+        <span id="mic-instruction-part">or enable the mic in Settings to use an instrument.</span>
       </div>
     </div>
 
     <svg id="staff-svg" viewBox="0 80 1000 240" preserveAspectRatio="xMidYMid meet">
       <g id="staff-lines"></g>
       <g id="clef-container" fill="#333">
-        <text id="treble-clef" x="110" y="238" font-size="130" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle">&#119070;</text>
-        <text id="bass-clef" x="110" y="225" font-size="110" font-family="'Apple Symbols', 'Segoe UI Symbol', 'Noto Music', 'Bravura', sans-serif" text-anchor="middle" style="display: none;">&#119074;</text>
+        <!-- Font-size and Y positions are now managed dynamically by Javascript to scale with the staff -->
+        <text id="treble-clef" class="clef-text" x="110" text-anchor="middle">&#119070;</text>
+        <text id="bass-clef" class="clef-text" x="110" text-anchor="middle" style="display: none;">&#119074;</text>
       </g>
       <g id="key-signature-layer"></g>
       <g id="octave-indicator"></g>
@@ -340,8 +350,8 @@
         <div class="setting-row" id="row-mic-cooldown" style="display: none;">
           <label>Mic Cooldown</label>
           <div style="display: flex; align-items: center; width: 55%; gap: 0.5rem;">
-            <input type="range" id="setting-mic-cooldown" min="50" max="500" step="10" value="150" style="flex-grow: 1;">
-            <span id="mic-cooldown-display" style="min-width: 3.5rem; text-align: right; font-size: 0.9rem;">150ms</span>
+            <input type="range" id="setting-mic-cooldown" min="50" max="2000" step="10" value="400" style="flex-grow: 1;">
+            <span id="mic-cooldown-display" style="min-width: 3.5rem; text-align: right; font-size: 0.9rem;">400ms</span>
           </div>
         </div>
 
@@ -454,7 +464,7 @@
         <button class="btn" id="settings-save">Save & Reset Staff</button>
         
         <div style="text-align: center; margin-top: 1.5rem;">
-          <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
+          <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading/README.md" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
         </div>
       </div>
     </div>
@@ -470,6 +480,16 @@
     const COLOR_PENDING = '#333';
     const COLOR_CORRECT = '#3b82f6';
     const COLOR_ERROR = '#ef4444';
+
+    // =========================================================
+    // Clef Visual Configuration (Tune these for the Bravura font)
+    // =========================================================
+    // For a 20px staff spacing, SMuFL fonts like Bravura map 4 spaces to exactly 80px font-size.
+    // The yOffset is added to the Y-coordinate of the top line of the staff.
+    const CLEF_CONFIG = {
+      treble: { size: 82, yOffset: 60 }, // Baseline aligns to the G line (which is 60px down from staff top)
+      bass:   { size: 82, yOffset: 20 }  // Baseline aligns to the F line (which is 20px down from staff top)
+    };
 
     // =========================================================
     // Global Pause State
@@ -531,12 +551,12 @@
       octave: 0,
       mode: 'chords',
       chordStyle: 'random',
-      chordAlternate: false, // Updated to disabled by default
-      teachingKeys: 7, // Updated to default to 7
+      chordAlternate: false, 
+      teachingKeys: 7, 
       teachingScale: 20,
       input: 'keyboard',
       micSensitivity: 0.85, 
-      micCooldown: 150
+      micCooldown: 400
     };
 
     // Range List Setup
@@ -719,18 +739,27 @@
         drawLines(160);
       }
 
+      // Clef Placement using CLEF_CONFIG constants
       const tClef = document.getElementById('treble-clef');
       const bClef = document.getElementById('bass-clef');
+      
+      tClef.setAttribute('font-size', CLEF_CONFIG.treble.size);
+      bClef.setAttribute('font-size', CLEF_CONFIG.bass.size);
+
       if (appSettings.clef === 'treble') {
-        tClef.style.display = 'block'; tClef.setAttribute('y', '238');
+        tClef.style.display = 'block'; 
+        tClef.setAttribute('y', 160 + CLEF_CONFIG.treble.yOffset);
         bClef.style.display = 'none';
       } else if (appSettings.clef === 'bass') {
         tClef.style.display = 'none';
-        bClef.style.display = 'block'; bClef.setAttribute('y', '225');
-      } else if (appSettings.clef === 'grand') {
-        tClef.style.display = 'block'; tClef.setAttribute('y', '238');
         bClef.style.display = 'block'; 
-        bClef.setAttribute('y', appSettings.grandMode === 'two-hand' ? '405' : '345');
+        bClef.setAttribute('y', 160 + CLEF_CONFIG.bass.yOffset);
+      } else if (appSettings.clef === 'grand') {
+        tClef.style.display = 'block'; 
+        tClef.setAttribute('y', 160 + CLEF_CONFIG.treble.yOffset);
+        bClef.style.display = 'block'; 
+        const bassStaffTop = appSettings.grandMode === 'two-hand' ? 340 : 280;
+        bClef.setAttribute('y', bassStaffTop + CLEF_CONFIG.bass.yOffset);
       }
 
       const group = document.getElementById('key-signature-layer');
@@ -1662,7 +1691,7 @@
       if (appSettings.input === 'mic') {
         el.innerHTML = "Microphone Active. Play the note on your instrument.";
       } else {
-        el.innerHTML = 'Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br>or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.';
+        el.innerHTML = 'Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br><span id="mic-instruction-part">or enable the mic in Settings to use an instrument.</span>';
       }
     }
 
