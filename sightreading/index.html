@@ -126,13 +126,14 @@
       padding: 0.5rem;
     }
 
-    @keyframes gaudyNeon {
+    @keyframes gaudyRGB {
       0%, 100% { color: #666; text-shadow: none; transform: scale(1); font-weight: normal; }
-      10%, 50%, 90% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; transform: scale(1.05); font-weight: bold; }
-      30%, 70% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; transform: scale(1.05); font-weight: bold; }
+      15%, 85% { color: #e60000; text-shadow: 0 0 10px #e60000, 0 0 15px #e60000; transform: scale(1.05); font-weight: bold; }
+      35% { color: #00aa00; text-shadow: 0 0 10px #00aa00, 0 0 15px #00aa00; transform: scale(1.05); font-weight: bold; }
+      60% { color: #0000ff; text-shadow: 0 0 10px #0000ff, 0 0 15px #0000ff; transform: scale(1.05); font-weight: bold; }
     }
     .flash-text-gaudy {
-      animation: gaudyNeon 3.5s ease-in-out 1;
+      animation: gaudyRGB 4s ease-in-out 1;
       display: inline-block;
       transition: color 0.3s;
     }
@@ -234,6 +235,7 @@
       color: #666;
       font-size: 1.2rem;
       padding: 0 1rem;
+      line-height: 1.4;
     }
 
     .buffer-display {
@@ -268,7 +270,8 @@
 
     <div class="ui-layer instructions">
       <div id="instruction-text">
-        Type the note name on your keyboard, or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.
+        Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br>
+        or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.
       </div>
     </div>
 
@@ -415,7 +418,7 @@
 
         <div class="setting-row" id="row-teaching-keys" style="display: none;">
           <label>Starting Keys (Teaching)</label>
-          <input type="number" id="setting-teaching-keys" min="1" max="20" value="6" style="width: 50%;">
+          <input type="number" id="setting-teaching-keys" min="1" max="20" value="7" style="width: 50%;">
         </div>
 
         <div class="setting-row" id="row-teaching-scale" style="display: none;">
@@ -529,7 +532,7 @@
       mode: 'chords',
       chordStyle: 'random',
       chordAlternate: false, // Updated to disabled by default
-      teachingKeys: 6,
+      teachingKeys: 7, // Updated to default to 7
       teachingScale: 20,
       input: 'keyboard',
       micSensitivity: 0.85, 
@@ -1659,7 +1662,7 @@
       if (appSettings.input === 'mic') {
         el.innerHTML = "Microphone Active. Play the note on your instrument.";
       } else {
-        el.innerHTML = 'Type the note name on your keyboard, or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.';
+        el.innerHTML = 'Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br>or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.';
       }
     }
 
