@@ -7,7 +7,7 @@
   
   <!-- SEO & Link Preview Meta Tags -->
   <meta name="description" content="Practice sight-reading sheet music with mic support for using real instruments or your voice. Open source and runs securely in the browser.">
-  <meta name="author" content="chausies">
+  <meta name="author" content="Ajay Shanker Tripathi">
   
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://chausies.xyz/sightreading">
@@ -114,16 +114,58 @@
       max-width: none;
     }
 
+    /* Info Buttons & Blurbs */
+    .info-btn {
+      cursor: pointer;
+      color: #666;
+      font-size: 0.75rem;
+      margin-left: 0.4rem;
+      user-select: none;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 50%;
+      border: 1px solid #aaa;
+      background: #fdfdfd;
+      vertical-align: middle;
+      transition: all 0.15s ease;
+    }
+    
+    .info-btn:hover {
+      background: #eee;
+      color: #333;
+      border-color: #333;
+    }
+    
+    .info-btn.info-btn-active {
+      border-color: #3b82f6;
+      color: #3b82f6;
+      background: #eff6ff;
+    }
+    
+    .info-blurb {
+      display: none;
+      font-size: 0.85rem;
+      color: #555;
+      background: #f8f9fa;
+      padding: 0.6rem 0.8rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      border-left: 3px solid #ccc;
+      line-height: 1.4;
+    }
+
     /* Animation Classes */
     @keyframes highlightRow {
-      0%, 100% { background-color: transparent; }
-      20%, 80% { background-color: #dbeafe; } 
+      0%, 100% { background-color: transparent; box-shadow: 0 0 0 0 transparent; }
+      20%, 80% { background-color: #dbeafe; box-shadow: 0 0 0 0.5rem #dbeafe; } 
     }
     .flash-highlight {
       animation: highlightRow 3s ease-in-out;
       border-radius: 6px;
-      margin: -0.5rem;
-      padding: 0.5rem;
     }
 
     /* Gaudy Green-Red-Blue Flash Sequence */
@@ -327,18 +369,22 @@
     <div class="overlay-container" id="settings-overlay">
       <div class="panel">
         <h2>Settings</h2>
+        
+        <!-- Pinned Primary Action -->
+        <button class="btn" id="settings-save" style="margin-top: 0; margin-bottom: 1.5rem;">Save & Reset Staff</button>
 
-        <!-- Input Method Pinned To Top -->
+        <!-- Input Method -->
         <div class="setting-row" id="row-input-method">
-          <label>Input Method</label>
+          <label>Input Method <span class="info-btn" onclick="toggleInfo(this, 'info-input')" title="Toggle Info">i</span></label>
           <select id="setting-input">
             <option value="keyboard" selected>Keyboard Typing</option>
             <option value="mic">Mic (Instrument/Voice)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-input">Practice by typing notes on a keyboard, or use a microphone to detect pitch from a real instrument or your voice.</div>
 
         <div class="setting-row" id="row-mic-sensitivity" style="display: none;">
-          <label>Mic Sensitivity</label>
+          <label>Mic Sensitivity <span class="info-btn" onclick="toggleInfo(this, 'info-mic-sensitivity')" title="Toggle Info">i</span></label>
           <select id="setting-mic-sensitivity">
             <option value="0.75">High (Picks up quiet/noisy notes)</option>
             <option value="0.85" selected>Medium (Default)</option>
@@ -346,37 +392,41 @@
             <option value="0.96">Very Low (Requires solid playing)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-mic-sensitivity">Higher sensitivity picks up quieter notes but may trigger on background noise. Lower it if you get false positives.</div>
 
         <div class="setting-row" id="row-mic-cooldown" style="display: none;">
-          <label>Mic Cooldown</label>
+          <label>Mic Cooldown <span class="info-btn" onclick="toggleInfo(this, 'info-mic-cooldown')" title="Toggle Info">i</span></label>
           <div style="display: flex; align-items: center; width: 55%; gap: 0.5rem;">
             <input type="range" id="setting-mic-cooldown" min="50" max="2000" step="10" value="400" style="flex-grow: 1;">
             <span id="mic-cooldown-display" style="min-width: 3.5rem; text-align: right; font-size: 0.9rem;">400ms</span>
           </div>
         </div>
+        <div class="info-blurb" id="info-mic-cooldown">The minimum time required between detecting new notes. Increase this if a single sustained note triggers multiple times.</div>
 
         <hr style="border: 0; border-top: 1px solid #eee; margin: 1.5rem 0;">
 
         <!-- Generative Settings -->
         <div class="setting-row">
-          <label>Clef</label>
+          <label>Clef <span class="info-btn" onclick="toggleInfo(this, 'info-clef')" title="Toggle Info">i</span></label>
           <select id="setting-clef">
             <option value="treble">Treble</option>
             <option value="bass">Bass</option>
             <option value="grand" selected>Grand (Bass+Treble)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-clef">The musical staff to practice on. Grand staff includes both Treble and Bass staves.</div>
 
         <div class="setting-row" id="row-grand-mode">
-          <label>Grand Staff Mode</label>
+          <label>Grand Staff Mode <span class="info-btn" onclick="toggleInfo(this, 'info-grand-mode')" title="Toggle Info">i</span></label>
           <select id="setting-grand-mode">
             <option value="two-hand" selected>Two Hands (Separated)</option>
             <option value="one-hand">One Hand (Interlocked)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-grand-mode">Separated treats left and right hands independently. Interlocked blends them into cohesive chords.</div>
         
         <div class="setting-row">
-          <label>Key Signature</label>
+          <label>Key Signature <span class="info-btn" onclick="toggleInfo(this, 'info-key')" title="Toggle Info">i</span></label>
           <select id="setting-key">
             <option value="C">C Major / A minor</option>
             <option value="G">G Major / E minor</option>
@@ -392,76 +442,84 @@
             <option value="Gb">Gb Major / Eb minor</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-key">The musical key to practice in. This sets the default sharps and flats for the staff.</div>
 
         <div class="setting-row">
-          <label>Accidentals</label>
+          <label>Accidentals <span class="info-btn" onclick="toggleInfo(this, 'info-accidentals')" title="Toggle Info">i</span></label>
           <select id="setting-accidentals">
             <option value="enabled">Enabled</option>
             <option value="disabled" selected>Disabled (Diatonic to Key Only)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-accidentals">When enabled, the generator may include notes with sharps, flats, or naturals outside the current key signature.</div>
 
         <div class="setting-row">
-          <label>Generation Mode</label>
+          <label>Generation Mode <span class="info-btn" onclick="toggleInfo(this, 'info-mode')" title="Toggle Info">i</span></label>
           <select id="setting-mode">
             <option value="uniform">Uniform (Random)</option>
             <option value="chords" selected>Chords Sequences</option>
             <option value="teaching">Teaching (Adaptive)</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-mode">Uniform picks random notes. Chords generates stacked note sequences. Teaching adapts to your mistakes and reaction time.</div>
 
         <div class="setting-row" id="row-chord-style">
-          <label>Chord Playback</label>
+          <label>Chord Playback <span class="info-btn" onclick="toggleInfo(this, 'info-chord-style')" title="Toggle Info">i</span></label>
           <select id="setting-chord-style">
             <option value="arpeggio">Ascending / Descending</option>
             <option value="random" selected>Any Order</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-chord-style">Whether the notes in a chord are presented strictly sequentially (Ascending/Descending) or in any random order.</div>
 
         <div class="setting-row" id="row-chord-alternate">
-          <label>Alternate Hands (Two-Hand)</label>
+          <label>Alternate Hands <span class="info-btn" onclick="toggleInfo(this, 'info-chord-alternate')" title="Toggle Info">i</span></label>
           <select id="setting-chord-alternate">
             <option value="enabled">Enabled</option>
             <option value="disabled" selected>Disabled</option>
           </select>
         </div>
+        <div class="info-blurb" id="info-chord-alternate">Forces chords to strictly alternate between the bass clef (left hand) and treble clef (right hand).</div>
 
         <div class="setting-row" id="row-teaching-keys" style="display: none;">
-          <label>Starting Keys (Teaching)</label>
+          <label>Starting Keys <span class="info-btn" onclick="toggleInfo(this, 'info-teaching-keys')" title="Toggle Info">i</span></label>
           <input type="number" id="setting-teaching-keys" min="1" max="20" value="7" style="width: 50%;">
         </div>
+        <div class="info-blurb" id="info-teaching-keys">The number of initial notes the teaching algorithm will focus on before gradually expanding the range.</div>
 
         <div class="setting-row" id="row-teaching-scale" style="display: none;">
-          <label>Adaptation Scale (Teaching)</label>
+          <label>Adaptation Scale <span class="info-btn" onclick="toggleInfo(this, 'info-teaching-scale')" title="Toggle Info">i</span></label>
           <input type="number" id="setting-teaching-scale" min="5" max="100" value="20" style="width: 50%;">
         </div>
+        <div class="info-blurb" id="info-teaching-scale">Controls how quickly the teaching algorithm introduces new notes. Lower values mean faster adaptation.</div>
 
         <div class="setting-row">
-          <label>Treble Range</label>
+          <label>Treble Range <span class="info-btn" onclick="toggleInfo(this, 'info-treble-range')" title="Toggle Info">i</span></label>
           <div class="range-selects">
             <select id="setting-treble-min"></select>
             <select id="setting-treble-max"></select>
           </div>
         </div>
+        <div class="info-blurb" id="info-treble-range">The lowest and highest notes that can be generated on the Treble clef.</div>
 
         <div class="setting-row">
-          <label>Bass Range</label>
+          <label>Bass Range <span class="info-btn" onclick="toggleInfo(this, 'info-bass-range')" title="Toggle Info">i</span></label>
           <div class="range-selects">
             <select id="setting-bass-min"></select>
             <select id="setting-bass-max"></select>
           </div>
         </div>
+        <div class="info-blurb" id="info-bass-range">The lowest and highest notes that can be generated on the Bass clef.</div>
 
         <div class="setting-row">
-          <label>Octave</label>
+          <label>Octave <span class="info-btn" onclick="toggleInfo(this, 'info-octave')" title="Toggle Info">i</span></label>
           <select id="setting-octave">
             <option value="0" selected>Standard</option>
             <option value="1">8va (Play higher)</option>
             <option value="-1">8vb (Play lower)</option>
           </select>
         </div>
-
-        <button class="btn" id="settings-save">Save & Reset Staff</button>
+        <div class="info-blurb" id="info-octave">Shifts the generated notes up (8va) or down (8vb) an octave from standard pitch.</div>
         
         <div style="text-align: center; margin-top: 1.5rem;">
           <a href="https://github.com/chausies/chausies.github.io/tree/main/sightreading/README.md" target="_blank" style="color: #888; text-decoration: underline; font-size: 0.95rem;">About / Source Code</a>
@@ -484,11 +542,9 @@
     // =========================================================
     // Clef Visual Configuration (Tune these for the Bravura font)
     // =========================================================
-    // For a 20px staff spacing, SMuFL fonts like Bravura map 4 spaces to exactly 80px font-size.
-    // The yOffset is added to the Y-coordinate of the top line of the staff.
     const CLEF_CONFIG = {
-      treble: { size: 82, yOffset: 60 }, // Baseline aligns to the G line (which is 60px down from staff top)
-      bass:   { size: 82, yOffset: 20 }  // Baseline aligns to the F line (which is 20px down from staff top)
+      treble: { size: 82, yOffset: 60 },
+      bass:   { size: 82, yOffset: 20 }
     };
 
     // =========================================================
@@ -537,7 +593,7 @@
     };
 
     // =========================================================
-    // Settings State
+    // Settings State & Hash Sync
     // =========================================================
     const appSettings = {
       clef: 'grand',
@@ -559,6 +615,67 @@
       micCooldown: 400
     };
 
+    function applyHashToSettings() {
+      if (!window.location.hash) return;
+      const params = new URLSearchParams(window.location.hash.substring(1));
+      
+      for (const [key, val] of params.entries()) {
+        if (key in appSettings) {
+          const defaultVal = appSettings[key];
+          if (typeof defaultVal === 'number') {
+            appSettings[key] = Number(val);
+          } else if (typeof defaultVal === 'boolean') {
+            appSettings[key] = (val === 'true' || val === '1');
+          } else {
+            appSettings[key] = val;
+          }
+        }
+      }
+    }
+
+    function syncSettingsToDOM() {
+      document.getElementById('setting-clef').value = appSettings.clef;
+      document.getElementById('setting-grand-mode').value = appSettings.grandMode;
+      document.getElementById('setting-accidentals').value = appSettings.accidentals ? 'enabled' : 'disabled';
+      document.getElementById('setting-treble-min').value = appSettings.trebleMin;
+      document.getElementById('setting-treble-max').value = appSettings.trebleMax;
+      document.getElementById('setting-bass-min').value = appSettings.bassMin;
+      document.getElementById('setting-bass-max').value = appSettings.bassMax;
+      document.getElementById('setting-key').value = appSettings.key;
+      document.getElementById('setting-octave').value = appSettings.octave.toString();
+      document.getElementById('setting-mode').value = appSettings.mode;
+      document.getElementById('setting-chord-style').value = appSettings.chordStyle;
+      document.getElementById('setting-chord-alternate').value = appSettings.chordAlternate ? 'enabled' : 'disabled';
+      document.getElementById('setting-teaching-keys').value = appSettings.teachingKeys;
+      document.getElementById('setting-teaching-scale').value = appSettings.teachingScale;
+      document.getElementById('setting-input').value = appSettings.input;
+      document.getElementById('setting-mic-sensitivity').value = appSettings.micSensitivity.toString();
+      document.getElementById('setting-mic-cooldown').value = appSettings.micCooldown;
+      
+      document.getElementById('mic-cooldown-display').textContent = appSettings.micCooldown + 'ms';
+    }
+
+    function saveSettingsToHash() {
+      const params = new URLSearchParams();
+      for (const key in appSettings) {
+        let val = appSettings[key];
+        if (typeof val === 'boolean') val = val ? '1' : '0';
+        params.set(key, val);
+      }
+      history.replaceState(null, '', '#' + params.toString());
+    }
+
+    function toggleInfo(btnElement, id) {
+      const el = document.getElementById(id);
+      if (el.style.display === 'block') {
+        el.style.display = 'none';
+        btnElement.classList.remove('info-btn-active');
+      } else {
+        el.style.display = 'block';
+        btnElement.classList.add('info-btn-active');
+      }
+    }
+
     // Range List Setup
     const notesList = [];
     for (let oct = 1; oct <= 7; oct++) {
@@ -578,11 +695,6 @@
         el.appendChild(opt);
       });
     }
-
-    populateSelect('setting-treble-min', appSettings.trebleMin);
-    populateSelect('setting-treble-max', appSettings.trebleMax);
-    populateSelect('setting-bass-min', appSettings.bassMin);
-    populateSelect('setting-bass-max', appSettings.bassMax);
 
     // =========================================================
     // App State
@@ -739,7 +851,6 @@
         drawLines(160);
       }
 
-      // Clef Placement using CLEF_CONFIG constants
       const tClef = document.getElementById('treble-clef');
       const bClef = document.getElementById('bass-clef');
       
@@ -905,7 +1016,6 @@
       addNotes(bassPool, bMinIdx, bMaxIdx, 4, 'bass');     
     }
 
-    // Pass a preferredClef parameter to ensure grand-staff chord sequences stay in the same clef
     function getBestNoteForMidi(midi, pool, currentKey, preferredClef = null) {
       let candidates = pool.filter(n => n.midi === midi);
       if (candidates.length === 0) return null;
@@ -1157,7 +1267,6 @@
             }
 
             const rootMidi = rootNote.midi;
-            if (rootMidi + 24 > maxMidi) { attempts++; continue; } 
 
             const intervals = intervalSets[Math.floor(Math.random() * intervalSets.length)];
             let chordMidis = intervals.map(i => rootMidi + i);
@@ -1168,6 +1277,9 @@
               chordMidis[chordMidis.indexOf(minMidi)] += 12;
             }
             chordMidis.sort((a, b) => a - b);
+            
+            if (Math.max(...chordMidis) > maxMidi) { attempts++; continue; }
+            
             if (Math.random() > 0.5) chordMidis.reverse();
 
             // Force getting the note from the same clef as the root note to prevent out-of-hand drops
@@ -1345,8 +1457,8 @@
       
       algorithms: {
         swiftf0: {
-          sampleRate: 16000, // Neural Network requirement
-          chunkSize: 2048,   // Neural Network requirement
+          sampleRate: 16000,
+          chunkSize: 2048,
           session: null,
           isInferencing: false,
           
@@ -1380,7 +1492,6 @@
             }
           }
         }
-        // Easy to drop in new algorithms here (e.g. 'crepe': { sampleRate: 16000, chunkSize: 1024 ... })
       },
 
       init: async function() {
@@ -1405,25 +1516,21 @@
       workletNode: null,
       pitchHistory: [],
       lastPlayedMidiTimes: {},
-      CONSECUTIVE_FRAMES_NEEDED: 1, // Number of stable blocks required to trigger note
+      CONSECUTIVE_FRAMES_NEEDED: 1, 
 
       init: async function() {
         if (this.context) return;
         try {
-          // 1. Init Algorithm
           AppLog.add("Initializing Pitch Detection Model...");
           await PitchDetector.init();
           AppLog.add(`${PitchDetector.active} model loaded successfully.`);
 
-          // 2. Setup Mic Stream (Unfiltered for pure pitch math)
           this.stream = await navigator.mediaDevices.getUserMedia({ 
             audio: { echoCancellation: false, autoGainControl: false, noiseSuppression: false } 
           });
           
-          // 3. Setup AudioContext at hardware default to prevent Firefox crashes
           this.context = new (window.AudioContext || window.webkitAudioContext)();
           
-          // 4. Inject PyTorch-style Sinc-Kaiser Downsampling Worklet
           const config = PitchDetector.getConfig();
           const workletCode = `
             class PitchProcessor extends AudioWorkletProcessor {
@@ -1433,7 +1540,6 @@
                 this.outRate = options.processorOptions.outRate;
                 this.ratio = this.inRate / this.outRate;
                 
-                // PyTorch Torchaudio sinc_interp_kaiser parameters
                 this.a = 6; 
                 this.beta = 14.769656459379492; 
                 this.rolloff = 0.99;
@@ -1450,7 +1556,6 @@
                 this.outLen = 0;
               }
               
-              // Modified Bessel function of the first kind (order 0)
               besselI0(x) {
                 let sum = 1.0;
                 let term = 1.0;
@@ -1538,7 +1643,6 @@
             }
           });
 
-          // 5. Connect and Handle Inferences
           this.pitchHistory = [];
           this.lastPlayedMidiTimes = {};
 
@@ -1582,6 +1686,7 @@
           appSettings.input = 'keyboard';
           document.getElementById('setting-input').value = 'keyboard';
           updateInstructions();
+          updateUIForCurrentSelections();
         }
       },
 
@@ -1686,12 +1791,21 @@
     // =========================================================
     // Instructions & Stats UI
     // =========================================================
-    function updateInstructions() {
+    function updateInstructions(flash = false) {
       const el = document.getElementById('instruction-text');
       if (appSettings.input === 'mic') {
         el.innerHTML = "Microphone Active. Use an instrument or your voice to enter notes.";
       } else {
         el.innerHTML = 'Enter notes with PC keyboard (a4, g#5/gs5, eb3)<br><span id="mic-instruction-part">or enable the mic in Settings to use an instrument or your voice.</span>';
+      }
+      
+      if (flash) {
+        const micInstructionPart = document.getElementById('mic-instruction-part');
+        if (micInstructionPart) {
+          micInstructionPart.classList.remove('flash-text-gaudy');
+          void micInstructionPart.offsetWidth; // Trigger reflow to restart animation
+          micInstructionPart.classList.add('flash-text-gaudy');
+        }
       }
     }
 
@@ -1754,29 +1868,54 @@
     });
 
     // =========================================================
-    // Settings Controls
+    // Settings Controls & UI Visibility
     // =========================================================
+    function updateUIForCurrentSelections() {
+      const isMic = document.getElementById('setting-input').value === 'mic';
+      document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
+      document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
+      
+      const clef = document.getElementById('setting-clef').value;
+      const isGrand = clef === 'grand';
+      document.getElementById('row-grand-mode').style.display = isGrand ? 'flex' : 'none';
+      
+      const mode = document.getElementById('setting-mode').value;
+      const isTeaching = mode === 'teaching';
+      document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
+      document.getElementById('row-teaching-scale').style.display = isTeaching ? 'flex' : 'none';
+
+      const isChords = mode === 'chords';
+      document.getElementById('row-chord-style').style.display = isChords ? 'flex' : 'none';
+      
+      const grandMode = document.getElementById('setting-grand-mode').value;
+      const isTwoHand = grandMode === 'two-hand';
+      document.getElementById('row-chord-alternate').style.display = (isChords && isGrand && isTwoHand) ? 'flex' : 'none';
+
+      // Ensure open info blurbs hide if their parent row becomes hidden
+      const hideIfDisplayNone = (rowId, infoId) => {
+        if (document.getElementById(rowId).style.display === 'none') {
+          document.getElementById(infoId).style.display = 'none';
+          const btn = document.querySelector(`[onclick*="${infoId}"]`);
+          if (btn) btn.classList.remove('info-btn-active');
+        }
+      };
+      hideIfDisplayNone('row-mic-sensitivity', 'info-mic-sensitivity');
+      hideIfDisplayNone('row-mic-cooldown', 'info-mic-cooldown');
+      hideIfDisplayNone('row-grand-mode', 'info-grand-mode');
+      hideIfDisplayNone('row-teaching-keys', 'info-teaching-keys');
+      hideIfDisplayNone('row-teaching-scale', 'info-teaching-scale');
+      hideIfDisplayNone('row-chord-style', 'info-chord-style');
+      hideIfDisplayNone('row-chord-alternate', 'info-chord-alternate');
+    }
+
     let hasOpenedSettings = false;
 
     document.getElementById('settings-btn').addEventListener('click', () => {
       document.getElementById('settings-overlay').style.display = 'flex';
       checkPauseState();
       
-      const isTeaching = document.getElementById('setting-mode').value === 'teaching';
-      document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
-      document.getElementById('row-teaching-scale').style.display = isTeaching ? 'flex' : 'none';
-
-      const isChords = document.getElementById('setting-mode').value === 'chords';
-      document.getElementById('row-chord-style').style.display = isChords ? 'flex' : 'none';
-      
-      const isGrandTwoHand = document.getElementById('setting-clef').value === 'grand' && document.getElementById('setting-grand-mode').value === 'two-hand';
-      document.getElementById('row-chord-alternate').style.display = (isChords && isGrandTwoHand) ? 'flex' : 'none';
-
-      const isMic = document.getElementById('setting-input').value === 'mic';
-      document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
-      document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
-      
-      document.getElementById('row-grand-mode').style.display = document.getElementById('setting-clef').value === 'grand' ? 'flex' : 'none';
+      syncSettingsToDOM(); // Clear uncommitted changes if returning to the menu
+      updateUIForCurrentSelections();
       updateStatsUI();
 
       if (!hasOpenedSettings) {
@@ -1787,40 +1926,11 @@
       }
     });
 
-    document.getElementById('setting-clef').addEventListener('change', (e) => {
-      const isGrand = e.target.value === 'grand';
-      const isChords = document.getElementById('setting-mode').value === 'chords';
-      const isTwoHand = document.getElementById('setting-grand-mode').value === 'two-hand';
-      
-      document.getElementById('row-grand-mode').style.display = isGrand ? 'flex' : 'none';
-      document.getElementById('row-chord-alternate').style.display = (isChords && isGrand && isTwoHand) ? 'flex' : 'none';
-    });
-
-    document.getElementById('setting-grand-mode').addEventListener('change', (e) => {
-      const isChords = document.getElementById('setting-mode').value === 'chords';
-      const isGrand = document.getElementById('setting-clef').value === 'grand';
-      const isTwoHand = e.target.value === 'two-hand';
-      
-      document.getElementById('row-chord-alternate').style.display = (isChords && isGrand && isTwoHand) ? 'flex' : 'none';
-    });
-
-    document.getElementById('setting-mode').addEventListener('change', (e) => {
-      const isTeaching = e.target.value === 'teaching';
-      document.getElementById('row-teaching-keys').style.display = isTeaching ? 'flex' : 'none';
-      document.getElementById('row-teaching-scale').style.display = isTeaching ? 'flex' : 'none';
-
-      const isChords = e.target.value === 'chords';
-      const isGrandTwoHand = document.getElementById('setting-clef').value === 'grand' && document.getElementById('setting-grand-mode').value === 'two-hand';
-      
-      document.getElementById('row-chord-style').style.display = isChords ? 'flex' : 'none';
-      document.getElementById('row-chord-alternate').style.display = (isChords && isGrandTwoHand) ? 'flex' : 'none';
-    });
-
-    document.getElementById('setting-input').addEventListener('change', (e) => {
-      const isMic = e.target.value === 'mic';
-      document.getElementById('row-mic-sensitivity').style.display = isMic ? 'flex' : 'none';
-      document.getElementById('row-mic-cooldown').style.display = isMic ? 'flex' : 'none';
-    });
+    // DRY binding for options that toggle the visibility of other options
+    document.getElementById('setting-clef').addEventListener('change', updateUIForCurrentSelections);
+    document.getElementById('setting-grand-mode').addEventListener('change', updateUIForCurrentSelections);
+    document.getElementById('setting-mode').addEventListener('change', updateUIForCurrentSelections);
+    document.getElementById('setting-input').addEventListener('change', updateUIForCurrentSelections);
 
     document.getElementById('setting-mic-cooldown').addEventListener('input', (e) => {
       document.getElementById('mic-cooldown-display').textContent = e.target.value + 'ms';
@@ -1829,30 +1939,47 @@
     document.getElementById('settings-save').addEventListener('click', async () => {
       const saveBtn = document.getElementById('settings-save');
       
-      appSettings.clef = document.getElementById('setting-clef').value;
-      appSettings.grandMode = document.getElementById('setting-grand-mode').value;
-      appSettings.key = document.getElementById('setting-key').value;
-      appSettings.accidentals = document.getElementById('setting-accidentals').value === 'enabled';
-      appSettings.octave = parseInt(document.getElementById('setting-octave').value, 10);
-      
-      appSettings.mode = document.getElementById('setting-mode').value;
-      appSettings.chordStyle = document.getElementById('setting-chord-style').value;
-      appSettings.chordAlternate = document.getElementById('setting-chord-alternate').value === 'enabled';
-      
-      appSettings.teachingKeys = parseInt(document.getElementById('setting-teaching-keys').value, 10);
-      appSettings.teachingScale = parseInt(document.getElementById('setting-teaching-scale').value, 10);
-      
-      appSettings.micSensitivity = parseFloat(document.getElementById('setting-mic-sensitivity').value);
-      appSettings.micCooldown = parseInt(document.getElementById('setting-mic-cooldown').value, 10);
-      
-      appSettings.trebleMin = document.getElementById('setting-treble-min').value;
-      appSettings.trebleMax = document.getElementById('setting-treble-max').value;
-      appSettings.bassMin = document.getElementById('setting-bass-min').value;
-      appSettings.bassMax = document.getElementById('setting-bass-max').value;
+      const newSettings = {
+        clef: document.getElementById('setting-clef').value,
+        grandMode: document.getElementById('setting-grand-mode').value,
+        key: document.getElementById('setting-key').value,
+        accidentals: document.getElementById('setting-accidentals').value === 'enabled',
+        octave: parseInt(document.getElementById('setting-octave').value, 10),
+        mode: document.getElementById('setting-mode').value,
+        chordStyle: document.getElementById('setting-chord-style').value,
+        chordAlternate: document.getElementById('setting-chord-alternate').value === 'enabled',
+        teachingKeys: parseInt(document.getElementById('setting-teaching-keys').value, 10),
+        teachingScale: parseInt(document.getElementById('setting-teaching-scale').value, 10),
+        micSensitivity: parseFloat(document.getElementById('setting-mic-sensitivity').value),
+        micCooldown: parseInt(document.getElementById('setting-mic-cooldown').value, 10),
+        trebleMin: document.getElementById('setting-treble-min').value,
+        trebleMax: document.getElementById('setting-treble-max').value,
+        bassMin: document.getElementById('setting-bass-min').value,
+        bassMax: document.getElementById('setting-bass-max').value,
+        input: document.getElementById('setting-input').value
+      };
+
+      let hasChanges = false;
+      for (let k in newSettings) {
+        if (appSettings[k] !== newSettings[k]) {
+          hasChanges = true;
+          break;
+        }
+      }
+
+      if (!hasChanges) {
+        document.getElementById('settings-overlay').style.display = 'none';
+        checkPauseState();
+        return;
+      }
 
       const prevInput = appSettings.input;
-      appSettings.input = document.getElementById('setting-input').value;
+      Object.assign(appSettings, newSettings);
+
       updateInstructions();
+
+      // Write settings back to URL
+      saveSettingsToHash();
 
       if (appSettings.input === 'mic' && prevInput !== 'mic') {
         saveBtn.disabled = true;
@@ -1877,15 +2004,33 @@
     // =========================================================
     // Boot App
     // =========================================================
-    const micInstructionPart = document.getElementById('mic-instruction-part');
-    if (micInstructionPart) {
-      micInstructionPart.classList.add('flash-text-gaudy');
-    }
     
+    // 1. Process URL hash into state before hydrating UI
+    applyHashToSettings();
+
+    // 2. Populate options that rely on default state, then sync the rest
+    populateSelect('setting-treble-min', appSettings.trebleMin);
+    populateSelect('setting-treble-max', appSettings.trebleMax);
+    populateSelect('setting-bass-min', appSettings.bassMin);
+    populateSelect('setting-bass-max', appSettings.bassMax);
+    
+    syncSettingsToDOM();
+    updateUIForCurrentSelections();
+
+    // 3. Setup UI instructions
     AppLog.add("Application Started.");
     if (typeof ort === 'undefined') {
       AppLog.add("Warning: ort (ONNX Runtime) not found. Microphone SwiftF0 will not work.");
     }
+
+    // 4. Initialize Mic silently if it was persisted via hash
+    if (appSettings.input === 'mic') {
+       AudioEngine.init().then(() => updateInstructions(true)).catch(e => console.error("Mic boot failed:", e));
+    } else {
+       updateInstructions(true);
+    }
+    
+    // 5. Build Staff
     buildPools();
     drawDecorations();
     initNotes();
