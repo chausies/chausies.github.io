@@ -126,13 +126,15 @@
       padding: 0.5rem;
     }
 
-    @keyframes pulseText {
-      0%, 100% { color: #666; transform: scale(1); }
-      50% { color: #3b82f6; transform: scale(1.02); }
+    @keyframes gaudyNeon {
+      0%, 100% { color: #666; text-shadow: none; transform: scale(1); font-weight: normal; }
+      10%, 50%, 90% { color: #ff00ff; text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; transform: scale(1.05); font-weight: bold; }
+      30%, 70% { color: #00ffff; text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; transform: scale(1.05); font-weight: bold; }
     }
-    .flash-text {
-      animation: pulseText 2s ease-in-out 3;
+    .flash-text-gaudy {
+      animation: gaudyNeon 3.5s ease-in-out 1;
       display: inline-block;
+      transition: color 0.3s;
     }
 
     .stats-list {
@@ -266,7 +268,7 @@
 
     <div class="ui-layer instructions">
       <div id="instruction-text">
-        Type the note name on your keyboard, or enable the mic in Settings to use an instrument.
+        Type the note name on your keyboard, or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.
       </div>
     </div>
 
@@ -406,14 +408,14 @@
         <div class="setting-row" id="row-chord-alternate">
           <label>Alternate Hands (Two-Hand)</label>
           <select id="setting-chord-alternate">
-            <option value="enabled" selected>Enabled</option>
-            <option value="disabled">Disabled</option>
+            <option value="enabled">Enabled</option>
+            <option value="disabled" selected>Disabled</option>
           </select>
         </div>
 
         <div class="setting-row" id="row-teaching-keys" style="display: none;">
           <label>Starting Keys (Teaching)</label>
-          <input type="number" id="setting-teaching-keys" min="1" max="20" value="3" style="width: 50%;">
+          <input type="number" id="setting-teaching-keys" min="1" max="20" value="6" style="width: 50%;">
         </div>
 
         <div class="setting-row" id="row-teaching-scale" style="display: none;">
@@ -526,7 +528,7 @@
       octave: 0,
       mode: 'chords',
       chordStyle: 'random',
-      chordAlternate: true,
+      chordAlternate: false, // Updated to disabled by default
       teachingKeys: 6,
       teachingScale: 20,
       input: 'keyboard',
@@ -871,8 +873,16 @@
       addNotes(bassPool, bMinIdx, bMaxIdx, 4, 'bass');     
     }
 
-    function getBestNoteForMidi(midi, pool, currentKey) {
-      const candidates = pool.filter(n => n.midi === midi);
+    // Pass a preferredClef parameter to ensure grand-staff chord sequences stay in the same clef
+    function getBestNoteForMidi(midi, pool, currentKey, preferredClef = null) {
+      let candidates = pool.filter(n => n.midi === midi);
+      if (candidates.length === 0) return null;
+      
+      if (preferredClef) {
+        const clefCands = candidates.filter(n => n.noteClef === preferredClef);
+        if (clefCands.length > 0) candidates = clefCands;
+      }
+      
       if (candidates.length === 1) return candidates[0];
       
       const keyAccs = keySigs[currentKey] || [];
@@ -1128,7 +1138,8 @@
             chordMidis.sort((a, b) => a - b);
             if (Math.random() > 0.5) chordMidis.reverse();
 
-            let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, fullPool, appSettings.key));
+            // Force getting the note from the same clef as the root note to prevent out-of-hand drops
+            let candidateNotes = chordMidis.map(m => getBestNoteForMidi(m, fullPool, appSettings.key, rootNote.noteClef));
             if (candidateNotes.some(n => !n)) { attempts++; continue; }
 
             if (!appSettings.accidentals) {
@@ -1648,7 +1659,7 @@
       if (appSettings.input === 'mic') {
         el.innerHTML = "Microphone Active. Play the note on your instrument.";
       } else {
-        el.innerHTML = "Type the note name on your keyboard, or enable the mic in Settings to use an instrument.";
+        el.innerHTML = 'Type the note name on your keyboard, or <span id="mic-instruction-part">enable the mic in Settings to use an instrument</span>.';
       }
     }
 
@@ -1834,7 +1845,10 @@
     // =========================================================
     // Boot App
     // =========================================================
-    document.getElementById('instruction-text').classList.add('flash-text');
+    const micInstructionPart = document.getElementById('mic-instruction-part');
+    if (micInstructionPart) {
+      micInstructionPart.classList.add('flash-text-gaudy');
+    }
     
     AppLog.add("Application Started.");
     if (typeof ort === 'undefined') {
