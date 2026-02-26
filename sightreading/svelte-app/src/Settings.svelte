@@ -108,7 +108,7 @@
           <span style="min-width: 3.5rem; text-align: right; font-size: 0.9rem;">{localSettings.micCooldown}ms</span>
         </div>
       </div>
-      {#if openInfos['cool']} <div class="info-blurb">The minimum time required between detecting new notes.</div> {/if}
+      {#if openInfos['cool']} <div class="info-blurb">The minimum time before accepting the same note again.</div> {/if}
     {/if}
 
     <hr style="border: 0; border-top: 1px solid #eee; margin: 1.5rem 0;">
