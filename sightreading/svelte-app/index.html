@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sight-reading Practice with Mic Support</title>
+  
+  <!-- SEO & Link Preview Meta Tags -->
+  <meta name="description" content="Practice sight-reading sheet music with mic support for using real instruments or your voice. Open source and runs securely in the browser.">
+  <meta name="author" content="Ajay Shanker Tripathi">
+  
+  <meta property="og:type" content="website">
+  <!-- Note: When Vite builds, it will inject the styles and JS right here automatically -->
+  
+  <style>
+    /* True global styles that belong on the document body */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #fdfdfd;
+      color: #333;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+    @font-face {
+      font-family: 'Bravura';
+      src: url('Bravura.woff2') format('woff2');
+    }
+  </style>
+
+  <!-- Load ONNX Runtime dynamically to prevent Vite single-file plugin from throwing bundling errors -->
+  <script>
+    (function() {
+      var script = document.createElement('script');
+      script.src = 'ort.wasm.min.js';
+      document.head.appendChild(script);
+    })();
+  </script>
+</head>
+<body>
+  <!-- Svelte will mount the application inside this div -->
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

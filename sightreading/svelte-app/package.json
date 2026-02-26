@@ -1,0 +1,17 @@
+{
+  "name": "sightreading-svelte",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node -e \"require('fs').copyFileSync('dist/index.html', '../index.html')\"",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.0.2",
+    "svelte": "^4.2.12",
+    "vite": "^5.1.4",
+    "vite-plugin-singlefile": "^2.0.1"
+  }
+}
