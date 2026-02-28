@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         4Chat
 // @namespace    Violent Monkey Script
-// @version      1.0.0
+// @version      1.0.1
 // @description  Live scroll, "Best of" filtering, and thread zoom controls.
 // @match        *://boards.4chan.org/*/thread/*
 // @match        *://boards.4channel.org/*/thread/*

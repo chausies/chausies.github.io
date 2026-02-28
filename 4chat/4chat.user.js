@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         4Chat
 // @namespace    Violent Monkey Script
-// @version      1.0.0
-// @description  Live scroll, "Best of" filtering, and thread zoom controls.
+// @version      1.0.1
+// @description  Adds live scroll and "Best of" filtering to 4chan threads. Great for stickies and generals.
 // @match        *://boards.4chan.org/*/thread/*
 // @match        *://boards.4channel.org/*/thread/*
 // @updateURL    https://raw.githubusercontent.com/chausies/chausies.github.io/refs/heads/main/4chat/4chat.meta.js
@@ -50,7 +50,8 @@
   const state = {
     isLive: false,
     isBestOf: false,
-    isFrozen: false,          // NEW: Tracks if Best Of is in the "Held" handoff state
+    isFrozen: false,          // Tracks if Best Of is in the "Held" handoff state
+    isPaused: false,          // Tracks if user has scrolled, pausing the Live autoscroll
     tickerId: null,           // Holds the setInterval ID for the live update loop
     timeRemaining: 0,         // Countdown to next thread update
     totalKnownPosts: 0,       // Tracks total posts to calculate delta when new posts arrive
@@ -68,7 +69,8 @@
     zoomLabel: document.createElement('span'),
     settingsBtn: document.createElement('button'),
     modal: document.createElement('div'),
-    zoomStyle: document.createElement('style')
+    zoomStyle: document.createElement('style'),
+    resumePopup: document.createElement('div')
   };
 
   // ==========================================
@@ -94,6 +96,8 @@
       .fcl-tooltip { cursor: help; color: #555; font-size: 0.9em; margin-left: 5px; }
       #fcl-modal-close { margin-top: 15px; width: 100%; padding: 8px; cursor: pointer; font-weight: bold; }
       .thread > .postContainer.fcl-hidden { display: none !important; }
+      #fcl-resume-popup { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.85); color: #fff; padding: 10px 20px; border-radius: 20px; cursor: pointer; z-index: 1000000; font-family: arial, sans-serif; font-size: 14px; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: background 0.2s; }
+      #fcl-resume-popup:hover { background: #000; }
     `;
     document.head.appendChild(style);
     document.head.appendChild(ui.zoomStyle);
@@ -123,6 +127,17 @@
 
     ui.container.append(ui.liveBtn, ui.bestOfBtn, ui.dynamicLabel, ui.zoomLabel, ui.settingsBtn);
     document.body.appendChild(ui.container);
+
+    ui.resumePopup.id = 'fcl-resume-popup';
+    ui.resumePopup.innerText = 'Scroll paused. Click to resume.';
+    ui.resumePopup.addEventListener('click', resumeLiveScroll);
+    document.body.appendChild(ui.resumePopup);
+
+    // Bind interaction detectors for auto-pause functionality
+    window.addEventListener('wheel', handleUserInteraction, { passive: true });
+    window.addEventListener('touchmove', handleUserInteraction, { passive: true });
+    window.addEventListener('mousedown', handleUserInteraction);
+    window.addEventListener('keydown', handleUserScrollKey);
 
     buildSettingsModal();
     updateVisuals();
@@ -279,13 +294,22 @@
   function updateVisuals() {
     // 1. Live Mode Button
     if (state.isLive) {
-      ui.liveBtn.innerText = `🟢 Live: ON (${state.timeRemaining}s)`;
-      ui.liveBtn.style.backgroundColor = '#c0f0c0';
-      ui.liveBtn.style.border = '1px solid #008000';
+      if (state.isPaused) {
+        ui.liveBtn.innerText = '🟡 Live: PAUSED';
+        ui.liveBtn.style.backgroundColor = '#fff0c0';
+        ui.liveBtn.style.border = '1px solid #b8860b';
+        ui.resumePopup.style.display = 'block';
+      } else {
+        ui.liveBtn.innerText = `🟢 Live: ON (${state.timeRemaining}s)`;
+        ui.liveBtn.style.backgroundColor = '#c0f0c0';
+        ui.liveBtn.style.border = '1px solid #008000';
+        ui.resumePopup.style.display = 'none';
+      }
     } else {
       ui.liveBtn.innerText = '🔴 Live: OFF';
       ui.liveBtn.style.backgroundColor = '#f0c0c0';
       ui.liveBtn.style.border = '1px solid #800000';
+      ui.resumePopup.style.display = 'none';
     }
 
     // 2. Best Of Mode Button & Dynamic Label
@@ -452,10 +476,47 @@
   // ==========================================
 
   /**
+   * Catches user scroll, click, or touch interactions to pause the live auto-scroll.
+   */
+  function handleUserInteraction(e) {
+    // Ignore interactions with the script's own UI elements
+    if (e && e.target && e.target.closest && e.target.closest('#fcl-container')) return;
+    if (e && e.target && e.target.id === 'fcl-resume-popup') return;
+
+    if (state.isLive && !state.isPaused) {
+      state.isPaused = true;
+      updateVisuals();
+    }
+  }
+
+  /**
+   * Checks for specific keyboard keys that indicate scrolling intent.
+   */
+  function handleUserScrollKey(e) {
+    // Ignore if typing in an input/textarea (e.g., quick reply box)
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', ' ', 'Home', 'End'];
+    if (scrollKeys.includes(e.key)) {
+      handleUserInteraction(e);
+    }
+  }
+
+  /**
+   * Re-engages the live scroll lock from a paused state.
+   */
+  function resumeLiveScroll() {
+    if (state.isLive && state.isPaused) {
+      state.isPaused = false;
+      updateVisuals();
+      scrollToLastVisiblePost();
+    }
+  }
+
+  /**
    * Scrolls the page so the last non-hidden post aligns with the bottom of the screen.
    */
   function scrollToLastVisiblePost() {
-    if (!state.isLive) return;
+    if (!state.isLive || state.isPaused) return;
     const posts = Array.from(document.querySelectorAll('.postContainer')).filter(p => !p.classList.contains('fcl-hidden'));
     if (posts.length > 0) posts[posts.length - 1].scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
@@ -471,7 +532,7 @@
     
     applyBestOfFilter();
     updateVisuals();
-    if (state.isLive) scrollToLastVisiblePost();
+    if (state.isLive && !state.isPaused) scrollToLastVisiblePost();
   }
 
   /**
@@ -507,6 +568,7 @@
 
   function toggleLiveMode() {
     state.isLive = !state.isLive;
+    state.isPaused = false; // Always clear the paused state on toggle
 
     if (state.isLive) {
       // Setup state for new Live session
@@ -567,7 +629,7 @@
           if (state.isBestOf) applyBestOfFilter();
           
           // Give the browser 100ms to render heights/images before scrolling
-          if (state.isLive) setTimeout(scrollToLastVisiblePost, 100);
+          if (state.isLive && !state.isPaused) setTimeout(scrollToLastVisiblePost, 100);
         }
       }
     });
