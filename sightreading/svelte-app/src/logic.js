@@ -369,10 +369,26 @@ export const NoteGenerator = {
     };
 
     if (settings.clef === 'grand' && settings.grandMode === 'two-hand' && settings.chordAlternate) {
-      let bassChord = buildChord(bassPool);
-      const targetClass = (bassChord[0].midi % 12 + [5, 7, 4, 9][Math.floor(Math.random() * 4)]) % 12;
-      let trebleChord = buildChord(treblePool, targetClass);
-      if (trebleChord.length === 1) trebleChord = buildChord(treblePool, null, bassChord[0].midi % 12);
+      let bassChord, trebleChord;
+      let valid = false;
+      let generateAttempts = 0;
+
+      // Generate independent chords and check for overlap to avoid biasing either hand's range
+      while (!valid && generateAttempts < 100) {
+        bassChord = buildChord(bassPool);
+        
+        const targetClass = (bassChord[0].midi % 12 + [5, 7, 4, 9][Math.floor(Math.random() * 4)]) % 12;
+        trebleChord = buildChord(treblePool, targetClass);
+        if (trebleChord.length === 1) trebleChord = buildChord(treblePool, null, bassChord[0].midi % 12);
+
+        let maxBassMidi = Math.max(...bassChord.map(n => n.midi));
+        let minTrebleMidi = Math.min(...trebleChord.map(n => n.midi));
+        
+        if (minTrebleMidi >= maxBassMidi) {
+          valid = true;
+        }
+        generateAttempts++;
+      }
 
       if (settings.chordStyle === 'random') { bassChord.sort(() => 0.5-Math.random()); trebleChord.sort(() => 0.5-Math.random()); }
       let interleaved = []; let startLeft = Math.random() > 0.5;
@@ -502,6 +518,14 @@ export const AudioEngine = {
     if (this.context) return;
     try {
       addLog("Initializing Pitch Detection Model...");
+      
+      // Fix: Poll for window.ort to be loaded if triggered immediately via hash params
+      let retries = 0;
+      while (typeof window.ort === 'undefined' && retries < 50) {
+        await new Promise(r => setTimeout(r, 100)); // wait up to 5 seconds
+        retries++;
+      }
+
       if (typeof window.ort === 'undefined') throw new Error("ONNX Runtime not loaded.");
       
       window.ort.env.wasm.wasmPaths = './';
@@ -552,9 +576,9 @@ export const AudioEngine = {
       
       const workletUrl = URL.createObjectURL(new Blob([workletCode], { type: 'application/javascript' }));
       await this.context.audioWorklet.addModule(workletUrl);
-
+      
       const sourceNode = this.context.createMediaStreamSource(this.stream);
-      this.workletNode = new AudioWorkletNode(this.context, 'pitch-processor', { processorOptions: { inRate: this.context.sampleRate }});
+      this.workletNode = new AudioWorkletNode(this.context, 'pitch-processor', { processorOptions: { inRate: this.context.sampleRate }})
 
       this.pitchHistory = []; this.lastPlayedMidiTimes = {};
 
