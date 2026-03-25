@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kanji Endless Flashcards</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Japanese Font Stack 
+      Ensures proper Japanese glyph rendering rather than falling back to Chinese glyphs.
+    */
+    :root {
+      --jp-font: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", "Yu Gothic", sans-serif;
+      color-scheme: dark;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Card Styling */
+    #flashcard-container {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 32rem;
+      min-height: 24rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kanji-display {
+      font-family: var(--jp-font);
+      text-align: center;
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+
+    /* The Spoiler Style */
+    .individual-spoiler {
+      background-color: #374151; /* gray-700 */
+      color: #374151;            /* Text hidden */
+      padding: 2px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s ease-in-out;
+      display: inline-block;
+      border: 1px solid #4b5563; /* gray-600 */
+      /* user-select: none; REMOVED to allow highlighting */
+      font-family: var(--jp-font);
+    }
+
+    .individual-spoiler.revealed {
+      background-color: transparent;
+      color: #f3f4f6;            /* gray-100 Text visible */
+      border: 1px solid transparent;
+    }
+
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.7);
+      z-index: 50;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 42rem;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100">
+
+  <!-- Top Navigation -->
+  <header class="w-full p-4 flex justify-between items-center border-b border-gray-800 bg-gray-800 shadow-md">
+    <h1 class="text-xl font-bold text-gray-100">Kanji Endless Trainer</h1>
+    <button id="btn-open-settings" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded text-sm font-medium transition">
+      Settings
+    </button>
+  </header>
+
+  <!-- Flashcard Area -->
+  <main id="flashcard-container" class="p-4 sm:p-6">
+    <div class="card relative bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
+      <!-- Front: Kanji -->
+      <div id="card-front" class="flex-grow flex flex-col justify-center">
+        <div id="kanji-text" class="kanji-display text-7xl sm:text-[80px]"></div>
+      </div>
+
+      <!-- Back: Spoilers -->
+      <div id="card-back" class="hidden flex-col flex-grow w-full">
+        <hr class="my-4 border-gray-700">
+        <div id="multi-spoiler-container" class="text-left text-lg leading-relaxed flex-grow overflow-y-auto pr-2">
+          <!-- Spoilers injected here via JS -->
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="mt-6">
+        <!-- Show Answer Button -->
+        <div id="controls-front" class="flex justify-center">
+          <button id="btn-show-answer" class="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition text-lg">
+            Show Answer
+          </button>
+        </div>
+
+        <!-- Grading Buttons -->
+        <!-- Used grid-cols-2 on mobile so buttons aren't squished, expands to grid-cols-4 on larger screens -->
+        <div id="controls-back" class="hidden grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          <button class="grade-btn py-3 bg-red-900/40 hover:bg-red-900/70 border border-red-800/50 text-red-300 font-bold rounded transition" data-pool="A">Again</button>
+          <button class="grade-btn py-3 bg-orange-900/40 hover:bg-orange-900/70 border border-orange-800/50 text-orange-300 font-bold rounded transition" data-pool="H">Hard</button>
+          <button class="grade-btn py-3 bg-blue-900/40 hover:bg-blue-900/70 border border-blue-800/50 text-blue-300 font-bold rounded transition" data-pool="N">Normal</button>
+          <button class="grade-btn py-3 bg-green-900/40 hover:bg-green-900/70 border border-green-800/50 text-green-300 font-bold rounded transition" data-pool="E">Easy</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Missing File Overlay -->
+  <div id="file-prompt-modal" class="modal">
+    <div class="modal-content bg-gray-800 rounded-xl p-6 sm:p-8 max-w-md text-center shadow-2xl border border-gray-700">
+      <h2 class="text-xl font-bold mb-4 text-white">Notes File Required</h2>
+      <p class="text-gray-400 mb-6 text-sm leading-relaxed">
+        Could not automatically load <code class="bg-gray-700 px-1.5 py-0.5 rounded text-gray-200">anki_notes.txt</code> (likely due to browser security rules for local files). Please select it manually below.
+      </p>
+      <input type="file" id="notes-file-input" accept=".txt" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-200 hover:file:bg-blue-800/50 mb-4 cursor-pointer"/>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content overflow-hidden bg-gray-800 rounded-xl shadow-2xl border border-gray-700">
+      <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-800">
+        <h2 class="text-lg font-bold text-white">Settings & State Management</h2>
+        <button id="btn-close-settings" class="text-gray-400 hover:text-white font-bold text-2xl leading-none">&times;</button>
+      </div>
+      
+      <div class="p-4 sm:p-6 overflow-y-auto" style="max-height: calc(90vh - 70px);">
+        
+        <!-- Session File IO -->
+        <div class="mb-6 pb-6 border-b border-gray-700">
+          <h3 class="font-bold text-gray-200 mb-3">Session File</h3>
+          <div class="flex flex-wrap gap-3">
+            <button id="btn-export-session" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium transition">Save Session to File</button>
+            <label class="px-4 py-2 bg-gray-700 text-gray-200 hover:bg-gray-600 rounded text-sm font-medium cursor-pointer transition">
+              Restore Session from File
+              <input type="file" id="session-file-input" accept=".json" class="hidden">
+            </label>
+          </div>
+        </div>
+
+        <!-- Target Rates -->
+        <div class="mb-6 pb-6 border-b border-gray-700">
+          <h3 class="font-bold text-gray-200 mb-3">Algorithm Tuning (Average appearances)</h3>
+          <div class="grid grid-cols-3 gap-4 text-sm">
+            <div>
+              <label class="block text-gray-400 mb-1">Again (A)</label>
+              <input type="number" id="input-rate-a" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Hard (H)</label>
+              <input type="number" id="input-rate-h" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-1">Easy (E)</label>
+              <input type="number" id="input-rate-e" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Pool Editing -->
+        <div class="mb-6 pb-6 border-b border-gray-700">
+          <h3 class="font-bold text-gray-200 mb-3">Manual Pool Assignments</h3>
+          <input type="text" id="pool-search" placeholder="Search kanji..." class="w-full bg-gray-900 border border-gray-600 text-white placeholder-gray-500 rounded p-2 mb-3 text-sm focus:outline-none focus:border-blue-500">
+          <div id="pool-list" class="max-h-48 overflow-y-auto border border-gray-700 rounded divide-y divide-gray-700 text-sm bg-gray-800">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- History Viewer -->
+        <div class="mb-6 pb-6 border-b border-gray-700">
+          <h3 class="font-bold text-gray-200 mb-3">History (Last <span id="history-count-display"></span> cards)</h3>
+          <div id="history-list" class="max-h-32 overflow-y-auto border border-gray-700 rounded p-3 text-sm font-mono whitespace-pre text-gray-400 bg-gray-900">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div>
+          <h3 class="font-bold text-red-400 mb-3">Danger Zone</h3>
+          <button id="btn-reset-session" class="w-full py-2.5 bg-red-900/60 border border-red-800 hover:bg-red-800 text-red-100 font-bold rounded text-sm transition">
+            Reset Entire Session
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==========================================================================
+       CONFIG & CONSTANTS
+       ========================================================================== */
+    const CONSTANTS = {
+      NOTES_FILENAME: 'anki_notes.txt',
+      STORAGE_KEY: 'kanji_trainer_state',
+      MAX_HISTORY: 1000,
+      DEFAULT_RATES: {
+        A: 10,
+        H: 30,
+        E: 500
+      }
+    };
+
+    /* ==========================================================================
+       STATE MANAGEMENT
+       ========================================================================== */
+    // Note format: { kanji: string, words: string, kana: string, english: string }
+    let rawNotes = {}; 
+
+    // Session State (persisted to localStorage)
+    let state = {
+      pools: {}, // Record<Kanji, 'A'|'H'|'N'|'E'>
+      history: [], // Array of { id: number, kanji: string, pool: string }
+      rates: { ...CONSTANTS.DEFAULT_RATES },
+      historyCounter: 0
+    };
+
+    let currentCardKanji = null;
+
+    // Load state from localStorage
+    function loadState() {
+      const saved = localStorage.getItem(CONSTANTS.STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          state.pools = parsed.pools || {};
+          state.history = parsed.history || [];
+          state.rates = parsed.rates || { ...CONSTANTS.DEFAULT_RATES };
+          state.historyCounter = parsed.historyCounter || state.history.length;
+        } catch (e) {
+          console.error("Failed to parse local storage state", e);
+        }
+      }
+    }
+
+    // Save state to localStorage
+    function saveState() {
+      localStorage.setItem(CONSTANTS.STORAGE_KEY, JSON.stringify(state));
+    }
+
+    /* ==========================================================================
+       NOTES PARSING & SYNCING
+       ========================================================================== */
+    function parseNotesData(text) {
+      const lines = text.split('\n');
+      const parsedNotes = {};
+
+      lines.forEach(line => {
+        const parts = line.split('|').map(s => s.trim());
+        if (parts.length >= 4 && parts[0]) {
+          parsedNotes[parts[0]] = {
+            kanji: parts[0],
+            words: parts[1],
+            kana: parts[2],
+            english: parts[3]
+          };
+        }
+      });
+
+      return parsedNotes;
+    }
+
+    function syncNotesWithState(newNotes) {
+      rawNotes = newNotes;
+      const validKanjis = new Set(Object.keys(rawNotes));
+      let stateChanged = false;
+
+      // 1. Remove kanji from pools that are no longer in notes
+      for (const kanji in state.pools) {
+        if (!validKanjis.has(kanji)) {
+          delete state.pools[kanji];
+          stateChanged = true;
+        }
+      }
+
+      // 2. Add new kanji to Normal pool
+      for (const kanji in rawNotes) {
+        if (!state.pools[kanji]) {
+          state.pools[kanji] = 'N';
+          stateChanged = true;
+        }
+      }
+
+      if (stateChanged) saveState();
+    }
+
+    /* ==========================================================================
+       SCHEDULING ALGORITHM (MEMORYLESS / BERNOULLI)
+       ========================================================================== */
+    function chooseNextCard() {
+      const availableKanjis = Object.keys(rawNotes);
+      if (availableKanjis.length === 0) return null;
+
+      // Group kanjis by their current pool
+      const poolLists = { A: [], H: [], N: [], E: [] };
+      availableKanjis.forEach(k => {
+        const pool = state.pools[k] || 'N';
+        poolLists[pool].push(k);
+      });
+
+      // Calculate the probability mass of drawing from A, H, or E.
+      // E.g., if target is 1 in 10, total probability mass for that pool is (size / 10)
+      const pA = poolLists.A.length / state.rates.A;
+      const pH = poolLists.H.length / state.rates.H;
+      const pE = poolLists.E.length / state.rates.E;
+      const sumP = pA + pH + pE;
+
+      let r = Math.random();
+      let selectedPool = 'N';
+
+      if (sumP >= 1) {
+        // If system is overwhelmed, normalize the probabilities so they sum to 1.
+        // The Normal pool gets squeezed out (probability 0) until backlog clears.
+        r = r * sumP;
+        if (r < pA) selectedPool = 'A';
+        else if (r < pA + pH) selectedPool = 'H';
+        else selectedPool = 'E';
+      } else {
+        // Normal case: remainder of probability goes to the Normal pool
+        if (r < pA) selectedPool = 'A';
+        else if (r < pA + pH) selectedPool = 'H';
+        else if (r < sumP) selectedPool = 'E';
+        else selectedPool = 'N';
+      }
+
+      // Fallback mechanism: if the mathematical choice results in an empty pool,
+      // fallback in order of priority (Normal, Again, Hard, Easy)
+      if (poolLists[selectedPool].length === 0) {
+        const fallbacks = ['N', 'A', 'H', 'E'];
+        for (let fb of fallbacks) {
+          if (poolLists[fb].length > 0) {
+            selectedPool = fb;
+            break;
+          }
+        }
+      }
+
+      // Pick a random card from the determined pool
+      const list = poolLists[selectedPool];
+      const randomIndex = Math.floor(Math.random() * list.length);
+      return list[randomIndex];
+    }
+
+    /* ==========================================================================
+       UI RENDERING
+       ========================================================================== */
+    const elFront = document.getElementById('card-front');
+    const elBack = document.getElementById('card-back');
+    const elControlsFront = document.getElementById('controls-front');
+    const elControlsBack = document.getElementById('controls-back');
+    const elKanjiText = document.getElementById('kanji-text');
+    const elSpoilerContainer = document.getElementById('multi-spoiler-container');
+
+    function renderNextCard() {
+      currentCardKanji = chooseNextCard();
+
+      if (!currentCardKanji) {
+        elKanjiText.innerText = "No cards available.";
+        elControlsFront.style.display = 'none';
+        return;
+      }
+
+      // Reset UI to Front View
+      elKanjiText.innerText = currentCardKanji;
+      elBack.classList.add('hidden');
+      elBack.classList.remove('flex');
+      elControlsBack.classList.add('hidden');
+      elControlsBack.classList.remove('grid');
+      elControlsFront.style.display = 'flex';
+      
+      // Clear old spoilers
+      elSpoilerContainer.innerHTML = '';
+    }
+
+    function showAnswer() {
+      if (!currentCardKanji) return;
+      const note = rawNotes[currentCardKanji];
+
+      // Helper to split and clean data
+      const parseField = (text) => text.split(';').map(s => s.trim()).filter(s => s !== "");
+
+      const wordsArr = parseField(note.words);
+      const kanaArr = parseField(note.kana);
+      const englishArr = parseField(note.english);
+
+      const maxRows = Math.max(wordsArr.length, kanaArr.length, englishArr.length);
+
+      // Build Spoiler DOM (User's provided logic adapted for vanilla JS)
+      for (let i = 0; i < maxRows; i++) {
+        const rowDiv = document.createElement('div');
+        rowDiv.style.marginBottom = "10px";
+        
+        const numSpan = document.createElement('b');
+        numSpan.className = "text-gray-400 font-mono text-sm mr-1";
+        numSpan.innerText = `${i + 1}:`;
+        rowDiv.appendChild(numSpan);
+
+        const rowData = [wordsArr[i], kanaArr[i], englishArr[i]];
+
+        rowData.forEach((text, index) => {
+          if (text) {
+            const span = document.createElement('span');
+            span.className = 'individual-spoiler mx-1';
+            span.innerText = text;
+            span.onclick = function(e) { 
+              // Prevent toggling if the user is dragging to highlight text
+              if (window.getSelection().toString().length > 0) return;
+              this.classList.toggle('revealed'); 
+            };
+            rowDiv.appendChild(span);
+
+            if (index < 2 && rowData[index + 1]) {
+              const comma = document.createElement('span');
+              comma.className = "text-gray-500";
+              comma.innerText = ", ";
+              rowDiv.appendChild(comma);
+            }
+          }
+        });
+        elSpoilerContainer.appendChild(rowDiv);
+      }
+
+      // Toggle UI to Back View
+      elControlsFront.style.display = 'none';
+      elBack.classList.remove('hidden');
+      elBack.classList.add('flex');
+      elControlsBack.classList.remove('hidden');
+      elControlsBack.classList.add('grid');
+    }
+
+    function gradeCard(pool) {
+      if (!currentCardKanji) return;
+
+      // Update assignment
+      state.pools[currentCardKanji] = pool;
+
+      // Update history
+      state.historyCounter++;
+      state.history.push({
+        id: state.historyCounter,
+        kanji: currentCardKanji,
+        pool: pool
+      });
+
+      // Trim history if exceeds max
+      if (state.history.length > CONSTANTS.MAX_HISTORY) {
+        state.history.shift();
+      }
+
+      saveState();
+      renderNextCard();
+    }
+
+    /* ==========================================================================
+       SETTINGS & MODALS
+       ========================================================================== */
+    const modalSettings = document.getElementById('settings-modal');
+    
+    function updateSettingsUI() {
+      // Rates
+      document.getElementById('input-rate-a').value = state.rates.A;
+      document.getElementById('input-rate-h').value = state.rates.H;
+      document.getElementById('input-rate-e').value = state.rates.E;
+
+      // History
+      const histContainer = document.getElementById('history-list');
+      document.getElementById('history-count-display').innerText = state.history.length;
+      histContainer.innerHTML = state.history.map(h => `${h.id}: ${h.kanji}${h.pool}`).join('\n');
+      histContainer.scrollTop = histContainer.scrollHeight;
+
+      // Pool Assignments (List)
+      renderPoolList();
+    }
+
+    function renderPoolList(filterText = "") {
+      const container = document.getElementById('pool-list');
+      container.innerHTML = '';
+
+      const filteredKeys = Object.keys(state.pools).filter(k => k.includes(filterText));
+      
+      filteredKeys.forEach(kanji => {
+        const currentPool = state.pools[kanji];
+        
+        const row = document.createElement('div');
+        row.className = "flex justify-between items-center p-2 sm:p-3 hover:bg-gray-700 transition";
+        
+        const label = document.createElement('span');
+        label.className = "font-bold text-lg font-mono text-gray-200";
+        label.innerText = kanji;
+        
+        const select = document.createElement('select');
+        select.className = "border border-gray-600 rounded p-1 text-sm bg-gray-900 text-white focus:outline-none focus:border-blue-500";
+        ['A', 'H', 'N', 'E'].forEach(opt => {
+          const option = document.createElement('option');
+          option.value = opt;
+          option.innerText = opt;
+          if (opt === currentPool) option.selected = true;
+          select.appendChild(option);
+        });
+
+        select.addEventListener('change', (e) => {
+          state.pools[kanji] = e.target.value;
+          saveState();
+        });
+
+        row.appendChild(label);
+        row.appendChild(select);
+        container.appendChild(row);
+      });
+    }
+
+    // Settings Event Listeners
+    document.getElementById('btn-open-settings').addEventListener('click', () => {
+      updateSettingsUI();
+      modalSettings.classList.add('active');
+    });
+
+    document.getElementById('btn-close-settings').addEventListener('click', () => {
+      // Save rates on close
+      const vA = parseInt(document.getElementById('input-rate-a').value) || CONSTANTS.DEFAULT_RATES.A;
+      const vH = parseInt(document.getElementById('input-rate-h').value) || CONSTANTS.DEFAULT_RATES.H;
+      const vE = parseInt(document.getElementById('input-rate-e').value) || CONSTANTS.DEFAULT_RATES.E;
+      state.rates = { A: vA, H: vH, E: vE };
+      saveState();
+      modalSettings.classList.remove('active');
+    });
+
+    document.getElementById('pool-search').addEventListener('input', (e) => {
+      renderPoolList(e.target.value);
+    });
+
+    // Reset Session logic
+    document.getElementById('btn-reset-session').addEventListener('click', () => {
+      const confirmMsg = "Are you absolutely sure you want to reset your session?\n\nThis will permanently delete your pool assignments, history, and algorithm settings. This action cannot be undone.";
+      if (confirm(confirmMsg)) {
+        localStorage.removeItem(CONSTANTS.STORAGE_KEY);
+        location.reload();
+      }
+    });
+
+    // File IO for Sessions
+    document.getElementById('btn-export-session').addEventListener('click', () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const anchor = document.createElement('a');
+      anchor.setAttribute("href", dataStr);
+      anchor.setAttribute("download", "kanji_session.json");
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+    });
+
+    document.getElementById('session-file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        try {
+          const importedState = JSON.parse(evt.target.result);
+          if (importedState.pools && importedState.rates) {
+            state = importedState;
+            syncNotesWithState(rawNotes); // Re-sync against current notes
+            updateSettingsUI();
+            alert("Session restored successfully.");
+          }
+        } catch(err) {
+          alert("Invalid session file.");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    /* ==========================================================================
+       INITIALIZATION & MAIN EVENTS
+       ========================================================================== */
+    document.getElementById('btn-show-answer').addEventListener('click', showAnswer);
+    
+    document.querySelectorAll('.grade-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => gradeCard(e.target.dataset.pool));
+    });
+
+    // Handle initial load of notes
+    function initAppWithNotes(textData) {
+      document.getElementById('file-prompt-modal').classList.remove('active');
+      loadState();
+      const parsedNotes = parseNotesData(textData);
+      syncNotesWithState(parsedNotes);
+      renderNextCard();
+    }
+
+    // Try fetch first (Works if on local web server)
+    fetch(CONSTANTS.NOTES_FILENAME)
+      .then(response => {
+        if (!response.ok) throw new Error("File not found or CORS blocked");
+        return response.text();
+      })
+      .then(text => initAppWithNotes(text))
+      .catch(err => {
+        console.warn("Could not fetch notes automatically. Showing manual file prompt.", err);
+        document.getElementById('file-prompt-modal').classList.add('active');
+      });
+
+    // Manual upload fallback (Works if opened directly via file:///)
+    document.getElementById('notes-file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        initAppWithNotes(evt.target.result);
+      };
+      reader.readAsText(file);
+    });
+
+  </script>
+</body>
+</html>
