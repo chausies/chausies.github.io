@@ -340,9 +340,16 @@
       let r = Math.random();
       let selectedPool = 'N';
 
-      if (sumP >= 1) {
-        // If system is overwhelmed, normalize the probabilities so they sum to 1.
-        // The Normal pool gets squeezed out (probability 0) until backlog clears.
+      if (pA >= 1) {
+        // If A is full, ONLY draw from A
+        selectedPool = 'A';
+      } else if (pA + pH >= 1) {
+        // If A + H combined pushes over 1, only draw from A and H
+        r = r * (pA + pH);
+        if (r < pA) selectedPool = 'A';
+        else selectedPool = 'H';
+      } else if (sumP >= 1) {
+        // If A + H + E pushes over 1, only draw from A, H, and E
         r = r * sumP;
         if (r < pA) selectedPool = 'A';
         else if (r < pA + pH) selectedPool = 'H';
