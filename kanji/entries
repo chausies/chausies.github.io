@@ -72,6 +72,7 @@
 開設|kaisetsu|establishment, opening
 言葉遣い|kotobadukai|wording
 遣う|tsukau|use
+破る|yaburu|to break, tear, defeat
 見破る|miyaburu|see through (a plot), see (into someone's heart)
 覆う|oou|cover/conceal
 覆る|kutsugaeru|topple, overturn
@@ -294,6 +295,7 @@
 地図|chizu|map
 図書館|toshokan|library
 図る|hakaru|to plan, design, devise, attempt
+合図|aizu|sign, signal
 年鑑|nenkan|yearbook
 印鑑|inkan|stamp
 四捨五入|shishagonyuu|round a number
@@ -993,6 +995,7 @@
 記す|shirusu|to write down, to note
 心に記す|kokoro ni shirusu|to remember
 銘記|meiki|suru: keep in mind, take note of
+銘じる|meijiru|to engrave, stamp, inscribe
 増える|fueru|to increase
 増す|masu|to increase, grow
 増加|zouka|increase, increment (反: 減少)
@@ -1386,6 +1389,7 @@
 自ら|mizikara|self
 得る|eru|to acquire
 得意|tokui|good at
+会得|etoku|master, understanding, comprehension
 苦手|nigate|bad at
 心得る|kokoroeru|to understand, to consent/agree
 所得|shotoku|income, earnings
@@ -1397,6 +1401,7 @@
 被害|higai|damage, harm, injury
 公害|kougai|pollution
 利害|rigai|advantages and disadvantages, interests (of parties)
+害意|gaii|malicious intent
 被告|hikoku|defendant, accused
 危害|kigai|harm
 危ない|abunai|dangerous
@@ -1538,6 +1543,8 @@
 先約|senyaku|previous appointment
 節約|setsuyaku|economising, saving
 要る|iru|to need
+要する|yousuru|to need, to require
+要するに|yousuru ni|in short, to sum up, basically
 必ず|kanarazu|with certainty
 必要|hitsuyou|necessary
 要|kaname|pivot, vital point, cornerstone
@@ -1590,3 +1597,60 @@
 緑茶|ryokucha|green tea
 新緑|shinryoku|new green leaves, fresh verdure
 結構|kekkou|good, quite, fairly
+走行|soukou|running (e.g. of a bus)
+走者|sousha|runner
+書き取り|kakitori|dictation, kanji quiz, transcribing/writing down something from another source
+取引|torihiki|dealings, transactions
+取得|shutoku|acquire, obtain
+採取|saishu|picking, collecting, harvesting
+揚げる|ageru|to (deep-)fry, to hoist (sails, a flag)
+揚々|youyou|triumphant, exultant, being in high and proud spirits
+勝者|shousha|winner
+傷ましい|itamashii|pitiful, hearbreaking, tragic
+痛ましい|itamashii|pitiful, hearbreaking, tragic
+苦痛|kutsuu|pain, agony
+頭痛|zutsuu|headache
+腰痛|youtsuu|lower back pain
+地方|chihou|region
+陰|kage|shade
+山陰地方|sanin chihou|sanin region
+陰気|inki|gloomy, melancholy
+陰キャラ|inkyara|gloomy, asocial person
+陰口|kageguchi|malicious gossip, speaking ill behind someone's back
+緑陰|ryokuin|shade of trees
+山陰|sanin|place in shade of a mountain
+中陰|chuuin|buddhist state between death and rebirth
+塚|tsuka|mound, heap
+貝|kai|shellfish
+貝塚|kaiduka|shell heap/mound
+歯医者|haisha|dentist
+歯科|shika|dentistry
+医学|igaku|medical science
+歯科|shika|dentistry
+歯車|haguruma|gear, cog
+野蛮人|yabanjin|barbarians, savages
+継ぐ|tsugu|to succeed (someone)
+後継者|koukeisha|successor
+中継|chuukei|relay
+生中継|namachuukei|live broadcast
+弱点|jakuten|weak point
+形|katachi|shape
+正方形|seihoukei|square
+人形|ningyou|doll, puppet
+形式|keishiki|form (over substance), formality
+長方形|chouhoukei|rectangle
+円形|enkei|round shake
+図形|zukei|figure, shape, graphic
+変形|henkei|transformation, deformation
+魚|sakana|fish
+類|tagui|kind, type
+人類|jinrui|humanity
+書類|shorui|documents
+分類|bunrui|classification
+魚介類|gyokairui|marine products
+指輪|yubiwa|ring
+車輪|sharin|car wheel
+三輪車|sanrinsha|tricycle
+表彰|hyoushou|to publicly commend
+顕彰|kenshou|honouring (publicly)
+中東|chuutou|Middle East
