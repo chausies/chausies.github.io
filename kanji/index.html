@@ -679,7 +679,7 @@
       DEFAULT_RATES: {
         A: 10,
         H: 30,
-        E: 500
+        E: 1500
       }
     };
 
@@ -958,8 +958,13 @@
       // History
       const histContainer = document.getElementById('history-list');
       document.getElementById('history-count-display').innerText = state.history.length;
-      histContainer.innerHTML = state.history.map(h => `${h.id}: ${h.kanji}${h.pool}`).join('\n');
-      histContainer.scrollTop = histContainer.scrollHeight;
+      
+      // Reverse array for display so most recent is top and index 1
+      const reversedHistory = [...state.history].reverse();
+      histContainer.innerHTML = reversedHistory.map((h, i) => `${i + 1}: ${h.kanji}${h.pool}`).join('\n');
+      
+      // Scroll to top to see newest
+      histContainer.scrollTop = 0; 
 
       // Pool Assignments (List)
       renderPoolList();
