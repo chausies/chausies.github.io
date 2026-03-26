@@ -305,10 +305,10 @@
         }
       }
 
-      // 2. Add new kanji to Normal pool
+      // 2. Add new kanji to Again pool
       for (const kanji in rawNotes) {
         if (!state.pools[kanji]) {
-          state.pools[kanji] = 'N';
+          state.pools[kanji] = 'A';
           stateChanged = true;
         }
       }
@@ -326,7 +326,7 @@
       // Group kanjis by their current pool
       const poolLists = { A: [], H: [], N: [], E: [] };
       availableKanjis.forEach(k => {
-        const pool = state.pools[k] || 'N';
+        const pool = state.pools[k] || 'A';
         poolLists[pool].push(k);
       });
 
