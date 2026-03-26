@@ -4,14 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kanji Flashcards</title>
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Japanese Font Stack 
-      Ensures proper Japanese glyph rendering rather than falling back to Chinese glyphs.
+    /* Japanese Font Stack & Language 
+      Explicitly calling out Noto Sans CJK JP ensures Firefox Android falls back 
+      to the correct regional glyphs even if standard Noto Sans JP isn't installed.
     */
     :root {
-      --jp-font: "Noto Sans JP", "Hiragino Kaku Gothic Pro", "Meiryo", "Yu Gothic", sans-serif;
+      --jp-font: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "Meiryo", "Yu Gothic", sans-serif;
       color-scheme: dark;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -20,22 +24,87 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
+      background-color: #111827; /* gray-900 */
+      color: #f3f4f6;            /* gray-100 */
     }
 
-    /* Card Styling */
-    #flashcard-container {
+    /* Top Navigation */
+    header {
+      width: 100%;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #1f2937; /* gray-800 */
+      background-color: #1f2937;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #f3f4f6;
+      margin: 0;
+    }
+
+    .btn-settings {
+      padding: 0.5rem 1rem;
+      background-color: #374151; /* gray-700 */
+      color: #e5e7eb;            /* gray-200 */
+      border: none;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .btn-settings:hover {
+      background-color: #4b5563; /* gray-600 */
+    }
+
+    /* Flashcard Area */
+    main {
+      padding: 1rem;
       flex-grow: 1;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
+    @media (min-width: 640px) {
+      main { padding: 1.5rem; }
+    }
+
     .card {
       width: 100%;
       max-width: 32rem;
       min-height: 24rem;
+      background-color: #1f2937; /* gray-800 */
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+
+    @media (min-width: 640px) {
+      .card { padding: 2rem; }
+    }
+
+    #card-front {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    #card-back {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      width: 100%;
     }
 
     .kanji-display {
@@ -43,19 +112,54 @@
       text-align: center;
       margin-bottom: 1rem;
       line-height: 1.2;
+      font-size: 4.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .kanji-display { font-size: 5rem; }
+    }
+
+    hr {
+      border: 0;
+      border-top: 1px solid #374151; /* gray-700 */
+      margin: 1rem 0;
     }
 
     /* The Spoiler Style */
+    .spoiler-container {
+      text-align: left;
+      font-size: 1.125rem;
+      line-height: 1.625;
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .row-margin {
+      margin-bottom: 10px;
+    }
+
+    .num-span {
+      color: #9ca3af; /* gray-400 */
+      font-family: monospace;
+      font-size: 0.875rem;
+      margin-right: 0.25rem;
+    }
+
+    .comma-span {
+      color: #6b7280; /* gray-500 */
+    }
+
     .individual-spoiler {
       background-color: #374151; /* gray-700 */
       color: #374151;            /* Text hidden */
       padding: 2px 8px;
+      margin: 0 0.25rem;
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease-in-out;
       display: inline-block;
       border: 1px solid #4b5563; /* gray-600 */
-      /* user-select: none; REMOVED to allow highlighting */
       font-family: var(--jp-font);
     }
 
@@ -64,6 +168,82 @@
       color: #f3f4f6;            /* gray-100 Text visible */
       border: 1px solid transparent;
     }
+
+    /* Controls */
+    .controls-container {
+      margin-top: 1.5rem;
+    }
+
+    #controls-front {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .btn-show-answer {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #2563eb; /* blue-600 */
+      color: white;
+      font-size: 1.125rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    @media (min-width: 640px) {
+      .btn-show-answer { padding: 1rem; }
+    }
+
+    .btn-show-answer:hover {
+      background-color: #3b82f6; /* blue-500 */
+    }
+
+    .pool-counts-display {
+      color: #9ca3af; /* gray-400 */
+      font-size: 0.875rem;
+      font-family: monospace;
+      letter-spacing: 0.05em;
+    }
+
+    #controls-back {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 640px) {
+      #controls-back {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+      }
+    }
+
+    .grade-btn {
+      padding: 0.75rem;
+      font-weight: bold;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: background-color 0.15s ease-in-out;
+      font-size: 1rem;
+    }
+
+    .grade-btn[data-pool="A"] { background-color: rgba(127, 29, 29, 0.4); color: #fca5a5; border-color: rgba(153, 27, 27, 0.5); }
+    .grade-btn[data-pool="A"]:hover { background-color: rgba(127, 29, 29, 0.7); }
+    
+    .grade-btn[data-pool="H"] { background-color: rgba(124, 45, 18, 0.4); color: #fdba74; border-color: rgba(154, 52, 18, 0.5); }
+    .grade-btn[data-pool="H"]:hover { background-color: rgba(124, 45, 18, 0.7); }
+    
+    .grade-btn[data-pool="N"] { background-color: rgba(30, 58, 138, 0.4); color: #93c5fd; border-color: rgba(30, 64, 175, 0.5); }
+    .grade-btn[data-pool="N"]:hover { background-color: rgba(30, 58, 138, 0.7); }
+    
+    .grade-btn[data-pool="E"] { background-color: rgba(20, 83, 45, 0.4); color: #86efac; border-color: rgba(22, 101, 52, 0.5); }
+    .grade-btn[data-pool="E"]:hover { background-color: rgba(20, 83, 45, 0.7); }
 
     /* Modals */
     .modal {
@@ -87,51 +267,319 @@
       max-height: 90vh;
       display: flex;
       flex-direction: column;
+      background-color: #1f2937;
+      border-radius: 0.75rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      border: 1px solid #374151;
+      overflow: hidden;
     }
+
+    .modal-header {
+      padding: 1rem;
+      border-bottom: 1px solid #374151;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1f2937;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.125rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+      transition: color 0.15s ease-in-out;
+      font-weight: bold;
+    }
+
+    .btn-close:hover {
+      color: white;
+    }
+
+    .modal-body {
+      padding: 1rem;
+      overflow-y: auto;
+      max-height: calc(90vh - 70px);
+    }
+
+    @media (min-width: 640px) {
+      .modal-body { padding: 1.5rem; }
+    }
+
+    .modal-prompt {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    @media (min-width: 640px) {
+      .modal-prompt { padding: 2rem; }
+    }
+
+    .modal-prompt p {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      line-height: 1.625;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-prompt code {
+      background-color: #374151;
+      padding: 0.125rem 0.375rem;
+      border-radius: 0.25rem;
+      color: #e5e7eb;
+    }
+
+    .file-input-styled {
+      display: block;
+      width: 100%;
+      font-size: 0.875rem;
+      color: #9ca3af;
+      cursor: pointer;
+      margin-bottom: 1rem;
+    }
+    
+    .file-input-styled::file-selector-button {
+      margin-right: 1rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.25rem;
+      border: 0;
+      font-size: 0.875rem;
+      font-weight: 600;
+      background-color: rgba(30, 58, 138, 0.5); /* blue-900/50 */
+      color: #bfdbfe; /* blue-200 */
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .file-input-styled::file-selector-button:hover {
+      background-color: rgba(30, 58, 138, 0.8);
+    }
+
+    /* Settings Elements */
+    .settings-section {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #374151;
+    }
+
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .settings-section h3 {
+      margin-top: 0;
+      margin-bottom: 0.75rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #e5e7eb;
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .btn-action {
+      padding: 0.5rem 1rem;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .btn-action:hover {
+      background-color: #3b82f6;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background-color: #374151;
+      color: #e5e7eb;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .btn-secondary:hover {
+      background-color: #4b5563;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      font-size: 0.875rem;
+    }
+
+    .input-grid label {
+      display: block;
+      color: #9ca3af;
+      margin-bottom: 0.25rem;
+    }
+
+    .input-styled {
+      width: 100%;
+      background-color: #111827;
+      border: 1px solid #4b5563;
+      color: white;
+      padding: 0.5rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+    }
+
+    .input-styled:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .pool-list {
+      max-height: 12rem;
+      overflow-y: auto;
+      border: 1px solid #374151;
+      border-radius: 0.25rem;
+      background-color: #1f2937;
+    }
+
+    .pool-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid #374151;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    @media (min-width: 640px) {
+      .pool-item { padding: 0.75rem; }
+    }
+
+    .pool-item:hover {
+      background-color: #374151;
+    }
+
+    .pool-item:last-child {
+      border-bottom: none;
+    }
+
+    .pool-item span {
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 1.125rem;
+      color: #e5e7eb;
+    }
+
+    .pool-item select {
+      background-color: #111827;
+      border: 1px solid #4b5563;
+      color: white;
+      padding: 0.25rem;
+      border-radius: 0.25rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+    }
+
+    .pool-item select:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    .history-box {
+      max-height: 8rem;
+      overflow-y: auto;
+      border: 1px solid #374151;
+      border-radius: 0.25rem;
+      padding: 0.75rem;
+      font-size: 0.875rem;
+      font-family: monospace;
+      white-space: pre-wrap;
+      color: #9ca3af;
+      background-color: #111827;
+    }
+
+    .danger-text {
+      color: #f87171; /* red-400 */
+    }
+
+    .btn-danger {
+      width: 100%;
+      padding: 0.625rem;
+      background-color: rgba(127, 29, 29, 0.6);
+      border: 1px solid #991b1b;
+      color: #fee2e2;
+      border-radius: 0.25rem;
+      font-weight: bold;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background-color 0.15s ease-in-out;
+    }
+
+    .btn-danger:hover {
+      background-color: rgba(153, 27, 27, 1);
+    }
+
+    /* Utility classes */
+    .hidden { display: none !important; }
   </style>
 </head>
-<body class="bg-gray-900 text-gray-100">
+<body>
 
   <!-- Top Navigation -->
-  <header class="w-full p-4 flex justify-between items-center border-b border-gray-800 bg-gray-800 shadow-md">
-    <h1 class="text-xl font-bold text-gray-100">Kanji Flashcards</h1>
-    <button id="btn-open-settings" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-gray-200 rounded text-sm font-medium transition">
-      Settings
-    </button>
+  <header>
+    <h1 class="header-title">Kanji Flashcards</h1>
+    <button id="btn-open-settings" class="btn-settings">Settings</button>
   </header>
 
   <!-- Flashcard Area -->
-  <main id="flashcard-container" class="p-4 sm:p-6">
-    <div class="card relative bg-gray-800 rounded-xl shadow-lg p-6 sm:p-8">
-      <!-- Front: Kanji -->
-      <div id="card-front" class="flex-grow flex flex-col justify-center">
-        <div id="kanji-text" class="kanji-display text-7xl sm:text-[80px]"></div>
+  <main>
+    <div class="card">
+      <!-- Front: Kanji (explicitly tagged with lang="ja" for correct Han unification fallbacks) -->
+      <div id="card-front">
+        <div id="kanji-text" class="kanji-display" lang="ja"></div>
       </div>
 
       <!-- Back: Spoilers -->
-      <div id="card-back" class="hidden flex-col flex-grow w-full">
-        <hr class="my-4 border-gray-700">
-        <div id="multi-spoiler-container" class="text-left text-lg leading-relaxed flex-grow overflow-y-auto pr-2">
+      <div id="card-back" class="hidden">
+        <hr>
+        <div id="multi-spoiler-container" class="spoiler-container" lang="ja">
           <!-- Spoilers injected here via JS -->
         </div>
       </div>
 
       <!-- Controls -->
-      <div class="mt-6">
-        <!-- Show Answer Button -->
-        <div id="controls-front" class="flex justify-center">
-          <button id="btn-show-answer" class="w-full py-3 sm:py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded shadow transition text-lg">
-            Show Answer
-          </button>
+      <div class="controls-container">
+        <!-- Show Answer Button & Pool Counts -->
+        <div id="controls-front">
+          <button id="btn-show-answer" class="btn-show-answer">Show Answer</button>
+          <div id="pool-counts" class="pool-counts-display"></div>
         </div>
 
         <!-- Grading Buttons -->
-        <!-- Used grid-cols-2 on mobile so buttons aren't squished, expands to grid-cols-4 on larger screens -->
-        <div id="controls-back" class="hidden grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
-          <button class="grade-btn py-3 bg-red-900/40 hover:bg-red-900/70 border border-red-800/50 text-red-300 font-bold rounded transition" data-pool="A">Again</button>
-          <button class="grade-btn py-3 bg-orange-900/40 hover:bg-orange-900/70 border border-orange-800/50 text-orange-300 font-bold rounded transition" data-pool="H">Hard</button>
-          <button class="grade-btn py-3 bg-blue-900/40 hover:bg-blue-900/70 border border-blue-800/50 text-blue-300 font-bold rounded transition" data-pool="N">Normal</button>
-          <button class="grade-btn py-3 bg-green-900/40 hover:bg-green-900/70 border border-green-800/50 text-green-300 font-bold rounded transition" data-pool="E">Easy</button>
+        <div id="controls-back" class="hidden">
+          <button class="grade-btn" data-pool="A">Again</button>
+          <button class="grade-btn" data-pool="H">Hard</button>
+          <button class="grade-btn" data-pool="N">Normal</button>
+          <button class="grade-btn" data-pool="E">Easy</button>
         </div>
       </div>
     </div>
@@ -139,31 +587,33 @@
 
   <!-- Missing File Overlay -->
   <div id="file-prompt-modal" class="modal">
-    <div class="modal-content bg-gray-800 rounded-xl p-6 sm:p-8 max-w-md text-center shadow-2xl border border-gray-700">
-      <h2 class="text-xl font-bold mb-4 text-white">Notes File Required</h2>
-      <p class="text-gray-400 mb-6 text-sm leading-relaxed">
-        Could not automatically load <code class="bg-gray-700 px-1.5 py-0.5 rounded text-gray-200">anki_notes.txt</code> (likely due to browser security rules for local files). Please select it manually below.
-      </p>
-      <input type="file" id="notes-file-input" accept=".txt" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-blue-900/50 file:text-blue-200 hover:file:bg-blue-800/50 mb-4 cursor-pointer"/>
+    <div class="modal-content" style="max-width: 28rem;">
+      <div class="modal-prompt">
+        <h2 style="margin-top: 0; color: white;">Notes File Required</h2>
+        <p>
+          Could not automatically load <code>anki_notes.txt</code> (likely due to browser security rules for local files). Please select it manually below.
+        </p>
+        <input type="file" id="notes-file-input" accept=".txt" class="file-input-styled"/>
+      </div>
     </div>
   </div>
 
   <!-- Settings Modal -->
   <div id="settings-modal" class="modal">
-    <div class="modal-content overflow-hidden bg-gray-800 rounded-xl shadow-2xl border border-gray-700">
-      <div class="p-4 border-b border-gray-700 flex justify-between items-center bg-gray-800">
-        <h2 class="text-lg font-bold text-white">Settings & State Management</h2>
-        <button id="btn-close-settings" class="text-gray-400 hover:text-white font-bold text-2xl leading-none">&times;</button>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Settings & State Management</h2>
+        <button id="btn-close-settings" class="btn-close">&times;</button>
       </div>
       
-      <div class="p-4 sm:p-6 overflow-y-auto" style="max-height: calc(90vh - 70px);">
+      <div class="modal-body">
         
         <!-- Session File IO -->
-        <div class="mb-6 pb-6 border-b border-gray-700">
-          <h3 class="font-bold text-gray-200 mb-3">Session File</h3>
-          <div class="flex flex-wrap gap-3">
-            <button id="btn-export-session" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded text-sm font-medium transition">Save Session to File</button>
-            <label class="px-4 py-2 bg-gray-700 text-gray-200 hover:bg-gray-600 rounded text-sm font-medium cursor-pointer transition">
+        <div class="settings-section">
+          <h3>Session File</h3>
+          <div class="action-buttons">
+            <button id="btn-export-session" class="btn-action">Save Session to File</button>
+            <label class="btn-secondary">
               Restore Session from File
               <input type="file" id="session-file-input" accept=".json" class="hidden">
             </label>
@@ -171,45 +621,45 @@
         </div>
 
         <!-- Target Rates -->
-        <div class="mb-6 pb-6 border-b border-gray-700">
-          <h3 class="font-bold text-gray-200 mb-3">Algorithm Tuning (Average appearances)</h3>
-          <div class="grid grid-cols-3 gap-4 text-sm">
+        <div class="settings-section">
+          <h3>Algorithm Tuning (Average appearances)</h3>
+          <div class="input-grid">
             <div>
-              <label class="block text-gray-400 mb-1">Again (A)</label>
-              <input type="number" id="input-rate-a" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+              <label>Again (A)</label>
+              <input type="number" id="input-rate-a" class="input-styled">
             </div>
             <div>
-              <label class="block text-gray-400 mb-1">Hard (H)</label>
-              <input type="number" id="input-rate-h" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+              <label>Hard (H)</label>
+              <input type="number" id="input-rate-h" class="input-styled">
             </div>
             <div>
-              <label class="block text-gray-400 mb-1">Easy (E)</label>
-              <input type="number" id="input-rate-e" class="w-full bg-gray-900 border border-gray-600 text-white rounded p-2 focus:outline-none focus:border-blue-500">
+              <label>Easy (E)</label>
+              <input type="number" id="input-rate-e" class="input-styled">
             </div>
           </div>
         </div>
 
         <!-- Pool Editing -->
-        <div class="mb-6 pb-6 border-b border-gray-700">
-          <h3 class="font-bold text-gray-200 mb-3">Manual Pool Assignments</h3>
-          <input type="text" id="pool-search" placeholder="Search kanji..." class="w-full bg-gray-900 border border-gray-600 text-white placeholder-gray-500 rounded p-2 mb-3 text-sm focus:outline-none focus:border-blue-500">
-          <div id="pool-list" class="max-h-48 overflow-y-auto border border-gray-700 rounded divide-y divide-gray-700 text-sm bg-gray-800">
+        <div class="settings-section">
+          <h3>Manual Pool Assignments</h3>
+          <input type="text" id="pool-search" placeholder="Search kanji..." class="input-styled" style="margin-bottom: 0.75rem;">
+          <div id="pool-list" class="pool-list">
             <!-- Populated via JS -->
           </div>
         </div>
 
         <!-- History Viewer -->
-        <div class="mb-6 pb-6 border-b border-gray-700">
-          <h3 class="font-bold text-gray-200 mb-3">History (Last <span id="history-count-display"></span> cards)</h3>
-          <div id="history-list" class="max-h-32 overflow-y-auto border border-gray-700 rounded p-3 text-sm font-mono whitespace-pre text-gray-400 bg-gray-900">
+        <div class="settings-section">
+          <h3>History (Last <span id="history-count-display"></span> cards)</h3>
+          <div id="history-list" class="history-box">
             <!-- Populated via JS -->
           </div>
         </div>
 
         <!-- Danger Zone -->
         <div>
-          <h3 class="font-bold text-red-400 mb-3">Danger Zone</h3>
-          <button id="btn-reset-session" class="w-full py-2.5 bg-red-900/60 border border-red-800 hover:bg-red-800 text-red-100 font-bold rounded text-sm transition">
+          <h3 class="danger-text">Danger Zone</h3>
+          <button id="btn-reset-session" class="btn-danger">
             Reset Entire Session
           </button>
         </div>
@@ -389,23 +839,29 @@
     const elControlsBack = document.getElementById('controls-back');
     const elKanjiText = document.getElementById('kanji-text');
     const elSpoilerContainer = document.getElementById('multi-spoiler-container');
+    const elPoolCounts = document.getElementById('pool-counts');
 
     function renderNextCard() {
       currentCardKanji = chooseNextCard();
 
       if (!currentCardKanji) {
         elKanjiText.innerText = "No cards available.";
-        elControlsFront.style.display = 'none';
+        elControlsFront.classList.add('hidden');
         return;
       }
+
+      // Calculate and display current pool sizes on the front view
+      const counts = { A: 0, H: 0, N: 0, E: 0 };
+      for (const k in rawNotes) {
+        counts[state.pools[k] || 'A']++;
+      }
+      elPoolCounts.innerText = `A: ${counts.A} | H: ${counts.H} | N: ${counts.N} | E: ${counts.E}`;
 
       // Reset UI to Front View
       elKanjiText.innerText = currentCardKanji;
       elBack.classList.add('hidden');
-      elBack.classList.remove('flex');
       elControlsBack.classList.add('hidden');
-      elControlsBack.classList.remove('grid');
-      elControlsFront.style.display = 'flex';
+      elControlsFront.classList.remove('hidden');
       
       // Clear old spoilers
       elSpoilerContainer.innerHTML = '';
@@ -424,13 +880,13 @@
 
       const maxRows = Math.max(wordsArr.length, kanaArr.length, englishArr.length);
 
-      // Build Spoiler DOM (User's provided logic adapted for vanilla JS)
+      // Build Spoiler DOM (Vanilla JS implementation)
       for (let i = 0; i < maxRows; i++) {
         const rowDiv = document.createElement('div');
-        rowDiv.style.marginBottom = "10px";
+        rowDiv.className = "row-margin";
         
         const numSpan = document.createElement('b');
-        numSpan.className = "text-gray-400 font-mono text-sm mr-1";
+        numSpan.className = "num-span";
         numSpan.innerText = `${i + 1}:`;
         rowDiv.appendChild(numSpan);
 
@@ -439,7 +895,7 @@
         rowData.forEach((text, index) => {
           if (text) {
             const span = document.createElement('span');
-            span.className = 'individual-spoiler mx-1';
+            span.className = 'individual-spoiler';
             span.innerText = text;
             span.onclick = function(e) { 
               // Prevent toggling if the user is dragging to highlight text
@@ -450,7 +906,7 @@
 
             if (index < 2 && rowData[index + 1]) {
               const comma = document.createElement('span');
-              comma.className = "text-gray-500";
+              comma.className = "comma-span";
               comma.innerText = ", ";
               rowDiv.appendChild(comma);
             }
@@ -460,11 +916,9 @@
       }
 
       // Toggle UI to Back View
-      elControlsFront.style.display = 'none';
+      elControlsFront.classList.add('hidden');
       elBack.classList.remove('hidden');
-      elBack.classList.add('flex');
       elControlsBack.classList.remove('hidden');
-      elControlsBack.classList.add('grid');
     }
 
     function gradeCard(pool) {
@@ -521,14 +975,13 @@
         const currentPool = state.pools[kanji];
         
         const row = document.createElement('div');
-        row.className = "flex justify-between items-center p-2 sm:p-3 hover:bg-gray-700 transition";
+        row.className = "pool-item";
         
         const label = document.createElement('span');
-        label.className = "font-bold text-lg font-mono text-gray-200";
         label.innerText = kanji;
+        label.lang = "ja";
         
         const select = document.createElement('select');
-        select.className = "border border-gray-600 rounded p-1 text-sm bg-gray-900 text-white focus:outline-none focus:border-blue-500";
         ['A', 'H', 'N', 'E'].forEach(opt => {
           const option = document.createElement('option');
           option.value = opt;
