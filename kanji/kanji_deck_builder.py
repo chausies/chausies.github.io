@@ -2,7 +2,7 @@
 Kanji Bundle Manager
 
 Builds dynamic Anki flashcard bundles from vocabulary entries. 
-It groups words, kana, and English definitions by their shared kanji.
+It groups words, kana, English definitions, and readings by their shared kanji.
 Exports to pipe-separated values (|) for easy Anki imports and updates.
 """
 
@@ -14,168 +14,178 @@ KANJI_PATTERN = re.compile(r'[\u4E00-\u9FAF]')
 
 
 def read_txt_file(filepath: str) -> str:
-  """Reads a text file and returns its content as a string."""
   with open(filepath, 'r', encoding='utf-8') as f:
     return f.read()
 
 
 def write_txt_file(filepath: str, text: str) -> None:
-  """Writes a string to a text file."""
   with open(filepath, 'w', encoding='utf-8') as f:
     f.write(text)
 
 
 def get_entries_from_file(filepath: str) -> List[Tuple[str, str, str]]:
-  """
-  Reads a file of pipe-separated entries (word|kana|eng) 
-  and returns a list of (word, kana, eng) tuples.
-  """
   entries = []
   content = read_txt_file(filepath)
-  for line in content.strip().split('\n'):
-    # Ignore empty lines
+  for line_num, line in enumerate(content.strip().split('\n'), 1):
     if not line.strip():
       continue
     
     parts = line.split('|')
-    if len(parts) == 3:
-      entries.append((parts[0].strip(), parts[1].strip(), parts[2].strip()))
+    if len(parts) != 3:
+      print(f"WARNING (Line {line_num}): Does not have exactly 2 pipe separators. Ignoring -> {line}")
+      continue
+    entries.append((parts[0].strip(), parts[1].strip(), parts[2].strip()))
   return entries
 
 
 class KanjiBundleManager:
-  """
-  Manages bundles of kanji vocabulary.
-  
-  Uses a dictionary for O(1) kanji lookups. Tracks 'seen' words in a set 
-  to ensure O(1) duplicate checking when adding new entries.
-  """
-
   def __init__(self):
-    # The structure is: {kanji: {"words": [], "kana": [], "eng": [], "seen": set()}}
     self.bundles: Dict[str, Dict[str, Any]] = {}
 
-  def add_entry(self, word: str, kana: str, eng: str) -> None:
-    """
-    Extracts all kanji from a word and adds the entry to their respective bundles.
-    Example: '警備' updates the bundle for both '警' and '備'.
-    """
-    # Find all unique kanji in the word (filters out 'え', 'る', etc.)
-    kanjis_in_word = set(KANJI_PATTERN.findall(word))
+  def apply_xtsu(self, r: str) -> str:
+    """Replaces trailing lone consonants (except 'n') with 'xtsu'."""
+    if not r: return r
+    last = r[-1].lower()
+    if last in "bcdfghjklmpqrstvwxyz" and last != 'n':
+      return r[:-1] + "xtsu"
+    return r
 
-    for kanji in kanjis_in_word:
-      # Initialize the bundle for this kanji if it doesn't exist
+  def devoice(self, r: str) -> str:
+    """Canonicalizes readings to a base unvoiced form so they group together."""
+    if not r: return r
+    r_lower = r.lower()
+    
+    # Direct full-syllable overrides for irregular Hepburn pairs
+    prefixes = {
+        'ji': 'shi',
+        'di': 'chi',
+        'du': 'tsu',
+        'zu': 'su',
+    }
+    for voiced, unvoiced in prefixes.items():
+        if r_lower.startswith(voiced):
+            return unvoiced + r_lower[len(voiced):]
+            
+    # Generic consonant replacements
+    if r_lower.startswith('g'): return 'k' + r_lower[1:]
+    if r_lower.startswith('z'): return 's' + r_lower[1:]
+    if r_lower.startswith('d'): return 't' + r_lower[1:]
+    if r_lower.startswith('b') or r_lower.startswith('p') or r_lower.startswith('f'): return 'h' + r_lower[1:]
+    if r_lower.startswith('j'): return 'sh' + r_lower[1:]
+    
+    return r_lower
+
+  def score_voicing(self, r: str) -> int:
+    """Helper to pick the unvoiced 'label' from a group of merged readings."""
+    if not r: return 0
+    if r.lower().startswith(('b', 'p', 'd', 'g', 'z', 'j')): return 1
+    return 0
+
+  def add_entry(self, word: str, kana: str, eng: str) -> None:
+    # Ordered list of kanji, allowing safe iteration
+    kanjis_in_word = [char for char in word if KANJI_PATTERN.match(char)]
+    
+    # Extract readings bounded by backticks
+    readings = re.findall(r'`(.*?)`', kana)
+    
+    assigned_readings = {k: [] for k in set(kanjis_in_word)}
+    
+    # CASE A: No backticks (assign whole word reading to all kanji)
+    if len(readings) == 0:
+      clean_kana = kana.replace('`', '').strip()
+      for k in set(kanjis_in_word):
+        assigned_readings[k].append(clean_kana)
+        
+    # CASE B: Valid multiple of readings to kanji count
+    elif len(kanjis_in_word) > 0 and len(readings) % len(kanjis_in_word) == 0:
+      num_k = len(kanjis_in_word)
+      num_sets = len(readings) // num_k
+      for i, k in enumerate(kanjis_in_word):
+        for set_idx in range(num_sets):
+          raw_reading = readings[i + set_idx * num_k]
+          r_norm = self.apply_xtsu(raw_reading)
+          assigned_readings[k].append(r_norm)
+          
+    # CASE C: Format Error
+    else:
+      print(f"WARNING: Mismatched backticks in '{word}'|'{kana}'. Expected multiple of {len(kanjis_in_word)} but got {len(readings)}.")
+      clean_kana = kana.replace('`', '').strip()
+      for k in set(kanjis_in_word):
+        assigned_readings[k].append(clean_kana)
+
+    # Attach to state dictionary
+    for kanji in set(kanjis_in_word):
       if kanji not in self.bundles:
         self.bundles[kanji] = {
-          "words": [], 
-          "kana": [], 
-          "eng": [], 
-          "seen": set()
+          "words": [], "kana": [], "eng": [],
+          "seen": set(), "word_readings": {}
         }
       
       bundle = self.bundles[kanji]
-
-      # Add the entry only if this exact word hasn't been added to this kanji yet
+      
       if word not in bundle["seen"]:
         bundle["seen"].add(word)
         bundle["words"].append(word)
         bundle["kana"].append(kana)
         bundle["eng"].append(eng)
+        bundle["word_readings"][word] = []
+      
+      # Map reading assignment
+      for r in assigned_readings[kanji]:
+        if r not in bundle["word_readings"][word]:
+          bundle["word_readings"][word].append(r)
 
   def export_to_txt(self) -> str:
-    """
-    Generates a pipe-separated string representing all bundles.
-    The primary key (Kanji) is the first column, allowing Anki to 
-    seamlessly update existing notes upon re-import.
-    """
     lines = []
     
     for kanji, data in self.bundles.items():
-      # Join the lists with semicolons to avoid conflicts with English commas
       words_str = "; ".join(data["words"])
       kana_str = "; ".join(data["kana"])
       eng_str = "; ".join(data["eng"])
       
-      # Format: Kanji | Words | Kana | English
-      line = f"{kanji}|{words_str}|{kana_str}|{eng_str}"
+      # 1. Gather all unique readings and map them to unvoiced canonical groups
+      all_readings = set()
+      for rdgs in data["word_readings"].values():
+        all_readings.update(rdgs)
+        
+      groups = {}
+      for r in sorted(all_readings): # Sorted for determinism
+        dv = self.devoice(r)
+        if dv not in groups: groups[dv] = []
+        groups[dv].append(r)
+        
+      # 2. Pick the cleanest representative label for each group
+      reading_to_label = {}
+      for dv in sorted(groups.keys()):
+        # Sort by (voicing presence, length, alphabetically)
+        group_readings = groups[dv]
+        best_label = sorted(group_readings, key=lambda x: (self.score_voicing(x), len(x), x))[0]
+        for r in group_readings:
+            reading_to_label[r] = best_label
+            
+      # 3. Map words to their group labels, maintaining deterministic insertion order
+      label_to_words = {}
+      ordered_labels = []
+      
+      for word in data["words"]:
+        for r in data["word_readings"][word]:
+          label = reading_to_label[r]
+          if label not in label_to_words:
+            label_to_words[label] = []
+            ordered_labels.append(label)
+          if word not in label_to_words[label]:
+            label_to_words[label].append(word)
+            
+      # Format: label1:word1,word2;label2:word3
+      readings_data_parts = []
+      for label in ordered_labels:
+        words_list_str = ",".join(label_to_words[label])
+        readings_data_parts.append(f"{label}:{words_list_str}")
+        
+      readings_str = ";".join(readings_data_parts)
+      
+      # Write 5 columns
+      line = f"{kanji}|{words_str}|{kana_str}|{eng_str}|{readings_str}"
       lines.append(line)
       
     return "\n".join(lines)
-
-  def init_from_txt(self, text: str) -> None:
-    """
-    Parses a pipe-separated string to completely repopulate the manager's state.
-    Allows picking up where you left off from a previously exported file.
-    """
-    self.bundles.clear()
-    
-    # Ignore completely empty strings
-    if not text.strip():
-      return
-
-    for line in text.strip().split('\n'):
-      parts = line.split('|')
-      
-      # Ensure the line has exactly our 4 expected fields
-      if len(parts) == 4:
-        kanji, words_str, kana_str, eng_str = parts
-        
-        # Split the semicolon-separated strings back into lists
-        words_list = words_str.split("; ")
-        kana_list = kana_str.split("; ")
-        eng_list = eng_str.split("; ")
-        
-        # Reconstruct the dictionary state
-        self.bundles[kanji] = {
-          "words": words_list,
-          "kana": kana_list,
-          "eng": eng_list,
-          "seen": set(words_list)
-        }
-
-
-if __name__ == "__main__":
-  # 1. Initialize our manager
-  manager = KanjiBundleManager()
-
-  # 2. Add our sample vocabulary entries
-  sample_entries = [
-    ["備える", "そなえる", "prepare, get ready for"],
-    ["警備", "けいび", "guard, policing"],
-    ["準備", "じゅんび", "prepare, setup"],
-    ["設備", "せつび", "equipment, facilities"],
-    ["情け", "なさけ", "sympathy, mercy"],
-    ["感情", "かんじょう", "emotion, feeling"],
-    ["事情", "じじょう", "circumstances, reasons"],
-    ["情報", "じょうほう", "information, news"]
-  ]
-
-  print("Adding entries...")
-  for word, kana, eng in sample_entries:
-    manager.add_entry(word, kana, eng)
-
-  # 3. Export to our pipe-separated text format
-  exported_text = manager.export_to_txt()
-  print("\n--- Exported Notes ---")
-  print(exported_text)
-
-  # 4. Save to a file (this is what you'd import into Anki)
-  filename = "anki_notes.txt"
-  write_txt_file(filename, exported_text)
-  print(f"\nSaved notes to '{filename}'.")
-
-  # 5. Demonstrate reading back from the string/file to prove 'init_from_txt' works
-  print("\nTesting 'init_from_txt' functionality...")
-  new_manager = KanjiBundleManager()
-  
-  # Read the text we just saved
-  file_content = read_txt_file(filename)
-  
-  # Load it into the new manager
-  new_manager.init_from_txt(file_content)
-  
-  # Add one more word to prove we can seamlessly continue building
-  new_manager.add_entry("友情", "ゆうじょう", "friendship")
-  
-  print("\n--- Updated Notes (After adding '友情') ---")
-  print(new_manager.export_to_txt())

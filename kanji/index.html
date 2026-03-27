@@ -5,18 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kanji Flashcards</title>
   <style>
-    /* Japanese Font Stack & Language 
-      Explicitly calling out Noto Sans CJK JP ensures Firefox Android falls back 
-      to the correct regional glyphs even if standard Noto Sans JP isn't installed.
-    */
     :root {
       --jp-font: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "Meiryo", "Yu Gothic", sans-serif;
       color-scheme: dark;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -24,8 +18,8 @@
       height: 100vh;
       display: flex;
       flex-direction: column;
-      background-color: #111827; /* gray-900 */
-      color: #f3f4f6;            /* gray-100 */
+      background-color: #111827; 
+      color: #f3f4f6;            
     }
 
     /* Top Navigation */
@@ -35,22 +29,17 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #1f2937; /* gray-800 */
+      border-bottom: 1px solid #1f2937;
       background-color: #1f2937;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .header-title {
-      font-size: 1.25rem;
-      font-weight: bold;
-      color: #f3f4f6;
-      margin: 0;
-    }
+    .header-title { font-size: 1.25rem; font-weight: bold; color: #f3f4f6; margin: 0; }
 
     .btn-settings {
       padding: 0.5rem 1rem;
-      background-color: #374151; /* gray-700 */
-      color: #e5e7eb;            /* gray-200 */
+      background-color: #374151;
+      color: #e5e7eb;
       border: none;
       border-radius: 0.25rem;
       font-size: 0.875rem;
@@ -59,9 +48,7 @@
       transition: background-color 0.15s ease-in-out;
     }
 
-    .btn-settings:hover {
-      background-color: #4b5563; /* gray-600 */
-    }
+    .btn-settings:hover { background-color: #4b5563; }
 
     /* Flashcard Area */
     main {
@@ -70,28 +57,26 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow-y: hidden;
     }
 
-    @media (min-width: 640px) {
-      main { padding: 1.5rem; }
-    }
+    @media (min-width: 640px) { main { padding: 1.5rem; } }
 
     .card {
       width: 100%;
-      max-width: 32rem;
+      max-width: 38rem;
       min-height: 24rem;
-      background-color: #1f2937; /* gray-800 */
+      max-height: 100%;
+      background-color: #1f2937;
       border-radius: 0.75rem;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       position: relative;
     }
 
-    @media (min-width: 640px) {
-      .card { padding: 2rem; }
-    }
+    @media (min-width: 640px) { .card { padding: 2rem; } }
 
     #card-front {
       flex-grow: 1;
@@ -105,6 +90,7 @@
       display: flex;
       flex-direction: column;
       width: 100%;
+      overflow: hidden;
     }
 
     .kanji-display {
@@ -115,17 +101,11 @@
       font-size: 4.5rem;
     }
 
-    @media (min-width: 640px) {
-      .kanji-display { font-size: 5rem; }
-    }
+    @media (min-width: 640px) { .kanji-display { font-size: 5rem; } }
 
-    hr {
-      border: 0;
-      border-top: 1px solid #374151; /* gray-700 */
-      margin: 1rem 0;
-    }
+    hr { border: 0; border-top: 1px solid #374151; margin: 1rem 0; }
 
-    /* The Spoiler Style */
+    /* Spoiler Style */
     .spoiler-container {
       text-align: left;
       font-size: 1.125rem;
@@ -135,44 +115,69 @@
       padding-right: 0.5rem;
     }
 
-    .row-margin {
-      margin-bottom: 10px;
-    }
+    .row-margin { margin-bottom: 10px; }
 
     .num-span {
-      color: #9ca3af; /* gray-400 */
+      color: #9ca3af; 
       font-family: monospace;
       font-size: 0.875rem;
       margin-right: 0.25rem;
     }
 
-    .comma-span {
-      color: #6b7280; /* gray-500 */
-    }
+    .comma-span { color: #6b7280; }
 
     .individual-spoiler {
-      background-color: #374151; /* gray-700 */
-      color: #374151;            /* Text hidden */
+      background-color: #374151; 
+      color: #374151; /* Text hidden */
       padding: 2px 8px;
       margin: 0 0.25rem;
       border-radius: 5px;
       cursor: pointer;
       transition: all 0.15s ease-in-out;
       display: inline-block;
-      border: 1px solid #4b5563; /* gray-600 */
+      border: 1px solid #4b5563; 
       font-family: var(--jp-font);
     }
 
     .individual-spoiler.revealed {
       background-color: transparent;
-      color: #f3f4f6;            /* gray-100 Text visible */
+      color: #f3f4f6; /* Text visible */
       border: 1px solid transparent;
     }
 
-    /* Controls */
-    .controls-container {
-      margin-top: 1.5rem;
+    /* Reading-Focused specific classes */
+    .reading-group { margin-bottom: 1.25rem; }
+    
+    .expanded-container {
+      display: none;
+      padding-left: 0.75rem;
+      border-left: 2px solid #4b5563;
+      margin-left: 0.25rem;
+      margin-top: 0.5rem;
     }
+    
+    .expanded-container.active { display: block; }
+
+    .rep-label {
+      font-weight: bold;
+      color: #60a5fa;
+      margin-right: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      font-family: var(--jp-font);
+    }
+
+    .rep-label:hover { text-decoration: underline; }
+
+    .reading-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 0.5rem;
+    }
+
+    /* Controls */
+    .controls-container { margin-top: 1.5rem; }
 
     #controls-front {
       display: flex;
@@ -184,27 +189,23 @@
     .btn-show-answer {
       width: 100%;
       padding: 0.75rem;
-      background-color: #2563eb; /* blue-600 */
+      background-color: #2563eb;
       color: white;
       font-size: 1.125rem;
       font-weight: bold;
       border: none;
       border-radius: 0.5rem;
       cursor: pointer;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
       transition: background-color 0.15s ease-in-out;
     }
 
-    @media (min-width: 640px) {
-      .btn-show-answer { padding: 1rem; }
-    }
+    @media (min-width: 640px) { .btn-show-answer { padding: 1rem; } }
 
-    .btn-show-answer:hover {
-      background-color: #3b82f6; /* blue-500 */
-    }
+    .btn-show-answer:hover { background-color: #3b82f6; }
 
     .pool-counts-display {
-      color: #9ca3af; /* gray-400 */
+      color: #9ca3af;
       font-size: 0.875rem;
       font-family: monospace;
       letter-spacing: 0.05em;
@@ -217,10 +218,7 @@
     }
 
     @media (min-width: 640px) {
-      #controls-back {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 0.75rem;
-      }
+      #controls-back { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
     }
 
     .grade-btn {
@@ -235,13 +233,10 @@
 
     .grade-btn[data-pool="A"] { background-color: rgba(127, 29, 29, 0.4); color: #fca5a5; border-color: rgba(153, 27, 27, 0.5); }
     .grade-btn[data-pool="A"]:hover { background-color: rgba(127, 29, 29, 0.7); }
-    
     .grade-btn[data-pool="H"] { background-color: rgba(124, 45, 18, 0.4); color: #fdba74; border-color: rgba(154, 52, 18, 0.5); }
     .grade-btn[data-pool="H"]:hover { background-color: rgba(124, 45, 18, 0.7); }
-    
     .grade-btn[data-pool="N"] { background-color: rgba(30, 58, 138, 0.4); color: #93c5fd; border-color: rgba(30, 64, 175, 0.5); }
     .grade-btn[data-pool="N"]:hover { background-color: rgba(30, 58, 138, 0.7); }
-    
     .grade-btn[data-pool="E"] { background-color: rgba(20, 83, 45, 0.4); color: #86efac; border-color: rgba(22, 101, 52, 0.5); }
     .grade-btn[data-pool="E"]:hover { background-color: rgba(20, 83, 45, 0.7); }
 
@@ -257,9 +252,7 @@
       padding: 1rem;
     }
 
-    .modal.active {
-      display: flex;
-    }
+    .modal.active { display: flex; }
 
     .modal-content {
       width: 100%;
@@ -283,12 +276,7 @@
       background-color: #1f2937;
     }
 
-    .modal-header h2 {
-      margin: 0;
-      font-size: 1.125rem;
-      font-weight: bold;
-      color: white;
-    }
+    .modal-header h2 { margin: 0; font-size: 1.125rem; font-weight: bold; color: white; }
 
     .btn-close {
       background: none;
@@ -298,247 +286,77 @@
       cursor: pointer;
       line-height: 1;
       padding: 0;
-      transition: color 0.15s ease-in-out;
       font-weight: bold;
     }
-
-    .btn-close:hover {
-      color: white;
-    }
+    .btn-close:hover { color: white; }
 
     .modal-body {
       padding: 1rem;
       overflow-y: auto;
       max-height: calc(90vh - 70px);
     }
+    @media (min-width: 640px) { .modal-body { padding: 1.5rem; } }
 
-    @media (min-width: 640px) {
-      .modal-body { padding: 1.5rem; }
-    }
-
-    .modal-prompt {
-      padding: 1.5rem;
-      text-align: center;
-    }
-
-    @media (min-width: 640px) {
-      .modal-prompt { padding: 2rem; }
-    }
-
-    .modal-prompt p {
-      color: #9ca3af;
-      font-size: 0.875rem;
-      line-height: 1.625;
-      margin-bottom: 1.5rem;
-    }
-
-    .modal-prompt code {
-      background-color: #374151;
-      padding: 0.125rem 0.375rem;
-      border-radius: 0.25rem;
-      color: #e5e7eb;
-    }
+    .modal-prompt { padding: 1.5rem; text-align: center; }
+    .modal-prompt p { color: #9ca3af; font-size: 0.875rem; margin-bottom: 1.5rem; }
+    .modal-prompt code { background-color: #374151; padding: 0.125rem 0.375rem; border-radius: 0.25rem; color: #e5e7eb; }
 
     .file-input-styled {
-      display: block;
-      width: 100%;
-      font-size: 0.875rem;
-      color: #9ca3af;
-      cursor: pointer;
-      margin-bottom: 1rem;
+      display: block; width: 100%; font-size: 0.875rem; color: #9ca3af; cursor: pointer; margin-bottom: 1rem;
     }
     
     .file-input-styled::file-selector-button {
-      margin-right: 1rem;
-      padding: 0.5rem 1rem;
-      border-radius: 0.25rem;
-      border: 0;
-      font-size: 0.875rem;
-      font-weight: 600;
-      background-color: rgba(30, 58, 138, 0.5); /* blue-900/50 */
-      color: #bfdbfe; /* blue-200 */
-      cursor: pointer;
-      transition: background-color 0.15s ease-in-out;
-    }
-
-    .file-input-styled::file-selector-button:hover {
-      background-color: rgba(30, 58, 138, 0.8);
+      margin-right: 1rem; padding: 0.5rem 1rem; border-radius: 0.25rem; border: 0; font-size: 0.875rem; font-weight: 600;
+      background-color: rgba(30, 58, 138, 0.5); color: #bfdbfe; cursor: pointer;
     }
 
     /* Settings Elements */
-    .settings-section {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid #374151;
-    }
+    .settings-section { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid #374151; }
+    .settings-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+    .settings-section h3 { margin-top: 0; margin-bottom: 0.75rem; font-size: 1rem; font-weight: bold; color: #e5e7eb; }
 
-    .settings-section:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-      padding-bottom: 0;
-    }
-
-    .settings-section h3 {
-      margin-top: 0;
-      margin-bottom: 0.75rem;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #e5e7eb;
-    }
-
-    .action-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
+    .action-buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 
     .btn-action {
-      padding: 0.5rem 1rem;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: background-color 0.15s ease-in-out;
+      padding: 0.5rem 1rem; background-color: #2563eb; color: white; border: none; border-radius: 0.25rem;
+      cursor: pointer; font-size: 0.875rem; font-weight: 500;
     }
-
-    .btn-action:hover {
-      background-color: #3b82f6;
-    }
+    .btn-action:hover { background-color: #3b82f6; }
 
     .btn-secondary {
-      display: inline-block;
-      padding: 0.5rem 1rem;
-      background-color: #374151;
-      color: #e5e7eb;
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      font-size: 0.875rem;
-      font-weight: 500;
-      transition: background-color 0.15s ease-in-out;
+      display: inline-block; padding: 0.5rem 1rem; background-color: #374151; color: #e5e7eb; border: none;
+      border-radius: 0.25rem; cursor: pointer; font-size: 0.875rem; font-weight: 500;
     }
 
-    .btn-secondary:hover {
-      background-color: #4b5563;
-    }
-
-    .input-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-      font-size: 0.875rem;
-    }
-
-    .input-grid label {
-      display: block;
-      color: #9ca3af;
-      margin-bottom: 0.25rem;
-    }
-
+    .input-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; font-size: 0.875rem; }
+    .input-grid label { display: block; color: #9ca3af; margin-bottom: 0.25rem; }
     .input-styled {
-      width: 100%;
-      background-color: #111827;
-      border: 1px solid #4b5563;
-      color: white;
-      padding: 0.5rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-    }
-
-    .input-styled:focus {
-      outline: none;
-      border-color: #3b82f6;
+      width: 100%; background-color: #111827; border: 1px solid #4b5563; color: white; padding: 0.5rem;
+      border-radius: 0.25rem; font-size: 0.875rem;
     }
 
     .pool-list {
-      max-height: 12rem;
-      overflow-y: auto;
-      border: 1px solid #374151;
-      border-radius: 0.25rem;
-      background-color: #1f2937;
+      max-height: 12rem; overflow-y: auto; border: 1px solid #374151; border-radius: 0.25rem; background-color: #1f2937;
     }
 
-    .pool-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0.5rem 0.75rem;
-      border-bottom: 1px solid #374151;
-      transition: background-color 0.15s ease-in-out;
-    }
-
-    @media (min-width: 640px) {
-      .pool-item { padding: 0.75rem; }
-    }
-
-    .pool-item:hover {
-      background-color: #374151;
-    }
-
-    .pool-item:last-child {
-      border-bottom: none;
-    }
-
-    .pool-item span {
-      font-weight: bold;
-      font-family: monospace;
-      font-size: 1.125rem;
-      color: #e5e7eb;
-    }
-
-    .pool-item select {
-      background-color: #111827;
-      border: 1px solid #4b5563;
-      color: white;
-      padding: 0.25rem;
-      border-radius: 0.25rem;
-      font-size: 0.875rem;
-      cursor: pointer;
-    }
-
-    .pool-item select:focus {
-      outline: none;
-      border-color: #3b82f6;
-    }
+    .pool-item { display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0.75rem; border-bottom: 1px solid #374151; }
+    @media (min-width: 640px) { .pool-item { padding: 0.75rem; } }
+    .pool-item:last-child { border-bottom: none; }
+    .pool-item span { font-weight: bold; font-family: monospace; font-size: 1.125rem; color: #e5e7eb; }
+    .pool-item select { background-color: #111827; border: 1px solid #4b5563; color: white; padding: 0.25rem; border-radius: 0.25rem; }
 
     .history-box {
-      max-height: 8rem;
-      overflow-y: auto;
-      border: 1px solid #374151;
-      border-radius: 0.25rem;
-      padding: 0.75rem;
-      font-size: 0.875rem;
-      font-family: monospace;
-      white-space: pre-wrap;
-      color: #9ca3af;
-      background-color: #111827;
+      max-height: 8rem; overflow-y: auto; border: 1px solid #374151; border-radius: 0.25rem; padding: 0.75rem;
+      font-size: 0.875rem; font-family: monospace; white-space: pre-wrap; color: #9ca3af; background-color: #111827;
     }
 
-    .danger-text {
-      color: #f87171; /* red-400 */
-    }
-
+    .danger-text { color: #f87171; }
     .btn-danger {
-      width: 100%;
-      padding: 0.625rem;
-      background-color: rgba(127, 29, 29, 0.6);
-      border: 1px solid #991b1b;
-      color: #fee2e2;
-      border-radius: 0.25rem;
-      font-weight: bold;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: background-color 0.15s ease-in-out;
+      width: 100%; padding: 0.625rem; background-color: rgba(127, 29, 29, 0.6); border: 1px solid #991b1b; color: #fee2e2;
+      border-radius: 0.25rem; font-weight: bold; font-size: 0.875rem; cursor: pointer;
     }
+    .btn-danger:hover { background-color: rgba(153, 27, 27, 1); }
 
-    .btn-danger:hover {
-      background-color: rgba(153, 27, 27, 1);
-    }
-
-    /* Utility classes */
     .hidden { display: none !important; }
   </style>
 </head>
@@ -553,7 +371,7 @@
   <!-- Flashcard Area -->
   <main>
     <div class="card">
-      <!-- Front: Kanji (explicitly tagged with lang="ja" for correct Han unification fallbacks) -->
+      <!-- Front: Kanji -->
       <div id="card-front">
         <div id="kanji-text" class="kanji-display" lang="ja"></div>
       </div>
@@ -568,13 +386,11 @@
 
       <!-- Controls -->
       <div class="controls-container">
-        <!-- Show Answer Button & Pool Counts -->
         <div id="controls-front">
           <button id="btn-show-answer" class="btn-show-answer">Show Answer</button>
           <div id="pool-counts" class="pool-counts-display"></div>
         </div>
 
-        <!-- Grading Buttons -->
         <div id="controls-back" class="hidden">
           <button class="grade-btn" data-pool="A">Again</button>
           <button class="grade-btn" data-pool="H">Hard</button>
@@ -590,9 +406,7 @@
     <div class="modal-content" style="max-width: 28rem;">
       <div class="modal-prompt">
         <h2 style="margin-top: 0; color: white;">Notes File Required</h2>
-        <p>
-          Could not automatically load <code>anki_notes.txt</code> (likely due to browser security rules for local files). Please select it manually below.
-        </p>
+        <p>Could not automatically load <code>anki_notes.txt</code>. Please select it manually below.</p>
         <input type="file" id="notes-file-input" accept=".txt" class="file-input-styled"/>
       </div>
     </div>
@@ -608,6 +422,15 @@
       
       <div class="modal-body">
         
+        <!-- UI Toggle -->
+        <div class="settings-section">
+          <h3>Display Mode</h3>
+          <label style="display: flex; align-items: center; cursor: pointer; color: #e5e7eb; font-size: 0.875rem;">
+            <input type="checkbox" id="toggle-reading-mode" style="margin-right: 0.5rem; width: 1rem; height: 1rem;">
+            Enable Reading-Focused Mode (Groups words by kanji reading)
+          </label>
+        </div>
+
         <!-- Session File IO -->
         <div class="settings-section">
           <h3>Session File</h3>
@@ -643,25 +466,19 @@
         <div class="settings-section">
           <h3>Manual Pool Assignments</h3>
           <input type="text" id="pool-search" placeholder="Search kanji..." class="input-styled" style="margin-bottom: 0.75rem;">
-          <div id="pool-list" class="pool-list">
-            <!-- Populated via JS -->
-          </div>
+          <div id="pool-list" class="pool-list"></div>
         </div>
 
         <!-- History Viewer -->
         <div class="settings-section">
           <h3>History (Last <span id="history-count-display"></span> cards)</h3>
-          <div id="history-list" class="history-box">
-            <!-- Populated via JS -->
-          </div>
+          <div id="history-list" class="history-box"></div>
         </div>
 
         <!-- Danger Zone -->
         <div>
           <h3 class="danger-text">Danger Zone</h3>
-          <button id="btn-reset-session" class="btn-danger">
-            Reset Entire Session
-          </button>
+          <button id="btn-reset-session" class="btn-danger">Reset Entire Session</button>
         </div>
 
       </div>
@@ -669,37 +486,24 @@
   </div>
 
   <script>
-    /* ==========================================================================
-       CONFIG & CONSTANTS
-       ========================================================================== */
     const CONSTANTS = {
       NOTES_FILENAME: 'anki_notes.txt',
       STORAGE_KEY: 'kanji_trainer_state',
       MAX_HISTORY: 1000,
-      DEFAULT_RATES: {
-        A: 10,
-        H: 30,
-        E: 1500
-      }
+      DEFAULT_RATES: { A: 10, H: 30, E: 1500 }
     };
 
-    /* ==========================================================================
-       STATE MANAGEMENT
-       ========================================================================== */
-    // Note format: { kanji: string, words: string, kana: string, english: string }
     let rawNotes = {}; 
-
-    // Session State (persisted to localStorage)
     let state = {
-      pools: {}, // Record<Kanji, 'A'|'H'|'N'|'E'>
-      history: [], // Array of { id: number, kanji: string, pool: string }
+      pools: {},
+      history: [],
       rates: { ...CONSTANTS.DEFAULT_RATES },
-      historyCounter: 0
+      historyCounter: 0,
+      readingFocusMode: true // Defaulted ON
     };
 
     let currentCardKanji = null;
 
-    // Load state from localStorage
     function loadState() {
       const saved = localStorage.getItem(CONSTANTS.STORAGE_KEY);
       if (saved) {
@@ -709,24 +513,20 @@
           state.history = parsed.history || [];
           state.rates = parsed.rates || { ...CONSTANTS.DEFAULT_RATES };
           state.historyCounter = parsed.historyCounter || state.history.length;
+          state.readingFocusMode = parsed.readingFocusMode !== undefined ? parsed.readingFocusMode : true;
         } catch (e) {
           console.error("Failed to parse local storage state", e);
         }
       }
     }
 
-    // Save state to localStorage
     function saveState() {
       localStorage.setItem(CONSTANTS.STORAGE_KEY, JSON.stringify(state));
     }
 
-    /* ==========================================================================
-       NOTES PARSING & SYNCING
-       ========================================================================== */
     function parseNotesData(text) {
       const lines = text.split('\n');
       const parsedNotes = {};
-
       lines.forEach(line => {
         const parts = line.split('|').map(s => s.trim());
         if (parts.length >= 4 && parts[0]) {
@@ -734,11 +534,11 @@
             kanji: parts[0],
             words: parts[1],
             kana: parts[2],
-            english: parts[3]
+            english: parts[3],
+            readings: parts[4] || "" // the new 5th column
           };
         }
       });
-
       return parsedNotes;
     }
 
@@ -747,7 +547,6 @@
       const validKanjis = new Set(Object.keys(rawNotes));
       let stateChanged = false;
 
-      // 1. Remove kanji from pools that are no longer in notes
       for (const kanji in state.pools) {
         if (!validKanjis.has(kanji)) {
           delete state.pools[kanji];
@@ -755,33 +554,25 @@
         }
       }
 
-      // 2. Add new kanji to Again pool
       for (const kanji in rawNotes) {
         if (!state.pools[kanji]) {
           state.pools[kanji] = 'A';
           stateChanged = true;
         }
       }
-
       if (stateChanged) saveState();
     }
 
-    /* ==========================================================================
-       SCHEDULING ALGORITHM (MEMORYLESS / BERNOULLI)
-       ========================================================================== */
     function chooseNextCard() {
       const availableKanjis = Object.keys(rawNotes);
       if (availableKanjis.length === 0) return null;
 
-      // Group kanjis by their current pool
       const poolLists = { A: [], H: [], N: [], E: [] };
       availableKanjis.forEach(k => {
         const pool = state.pools[k] || 'A';
         poolLists[pool].push(k);
       });
 
-      // Calculate the probability mass of drawing from A, H, or E.
-      // E.g., if target is 1 in 10, total probability mass for that pool is (size / 10)
       const pA = poolLists.A.length / state.rates.A;
       const pH = poolLists.H.length / state.rates.H;
       const pE = poolLists.E.length / state.rates.E;
@@ -791,29 +582,23 @@
       let selectedPool = 'N';
 
       if (pA >= 1) {
-        // If A is full, ONLY draw from A
         selectedPool = 'A';
       } else if (pA + pH >= 1) {
-        // If A + H combined pushes over 1, only draw from A and H
         r = r * (pA + pH);
         if (r < pA) selectedPool = 'A';
         else selectedPool = 'H';
       } else if (sumP >= 1) {
-        // If A + H + E pushes over 1, only draw from A, H, and E
         r = r * sumP;
         if (r < pA) selectedPool = 'A';
         else if (r < pA + pH) selectedPool = 'H';
         else selectedPool = 'E';
       } else {
-        // Normal case: remainder of probability goes to the Normal pool
         if (r < pA) selectedPool = 'A';
         else if (r < pA + pH) selectedPool = 'H';
         else if (r < sumP) selectedPool = 'E';
         else selectedPool = 'N';
       }
 
-      // Fallback mechanism: if the mathematical choice results in an empty pool,
-      // fallback in order of priority (Normal, Again, Hard, Easy)
       if (poolLists[selectedPool].length === 0) {
         const fallbacks = ['N', 'A', 'H', 'E'];
         for (let fb of fallbacks) {
@@ -824,15 +609,10 @@
         }
       }
 
-      // Pick a random card from the determined pool
       const list = poolLists[selectedPool];
-      const randomIndex = Math.floor(Math.random() * list.length);
-      return list[randomIndex];
+      return list[Math.floor(Math.random() * list.length)];
     }
 
-    /* ==========================================================================
-       UI RENDERING
-       ========================================================================== */
     const elFront = document.getElementById('card-front');
     const elBack = document.getElementById('card-back');
     const elControlsFront = document.getElementById('controls-front');
@@ -850,20 +630,14 @@
         return;
       }
 
-      // Calculate and display current pool sizes on the front view
       const counts = { A: 0, H: 0, N: 0, E: 0 };
-      for (const k in rawNotes) {
-        counts[state.pools[k] || 'A']++;
-      }
+      for (const k in rawNotes) { counts[state.pools[k] || 'A']++; }
       elPoolCounts.innerText = `A: ${counts.A} | H: ${counts.H} | N: ${counts.N} | E: ${counts.E}`;
 
-      // Reset UI to Front View
       elKanjiText.innerText = currentCardKanji;
       elBack.classList.add('hidden');
       elControlsBack.classList.add('hidden');
       elControlsFront.classList.remove('hidden');
-      
-      // Clear old spoilers
       elSpoilerContainer.innerHTML = '';
     }
 
@@ -871,51 +645,164 @@
       if (!currentCardKanji) return;
       const note = rawNotes[currentCardKanji];
 
-      // Helper to split and clean data
-      const parseField = (text) => text.split(';').map(s => s.trim()).filter(s => s !== "");
-
+      const parseField = (text) => text ? text.split(';').map(s => s.trim()).filter(s => s !== "") : [];
+      
       const wordsArr = parseField(note.words);
-      const kanaArr = parseField(note.kana);
+      const kanaArr = parseField(note.kana).map(s => s.replace(/`/g, '')); // Strip backticks
       const englishArr = parseField(note.english);
+      const readingsData = note.readings || "";
 
-      const maxRows = Math.max(wordsArr.length, kanaArr.length, englishArr.length);
+      elSpoilerContainer.innerHTML = '';
 
-      // Build Spoiler DOM (Vanilla JS implementation)
-      for (let i = 0; i < maxRows; i++) {
-        const rowDiv = document.createElement('div');
-        rowDiv.className = "row-margin";
+      if (state.readingFocusMode && readingsData) {
         
-        const numSpan = document.createElement('b');
-        numSpan.className = "num-span";
-        numSpan.innerText = `${i + 1}:`;
-        rowDiv.appendChild(numSpan);
-
-        const rowData = [wordsArr[i], kanaArr[i], englishArr[i]];
-
-        rowData.forEach((text, index) => {
-          if (text) {
-            const span = document.createElement('span');
-            span.className = 'individual-spoiler';
-            span.innerText = text;
-            span.onclick = function(e) { 
-              // Prevent toggling if the user is dragging to highlight text
-              if (window.getSelection().toString().length > 0) return;
-              this.classList.toggle('revealed'); 
-            };
-            rowDiv.appendChild(span);
-
-            if (index < 2 && rowData[index + 1]) {
-              const comma = document.createElement('span');
-              comma.className = "comma-span";
-              comma.innerText = ", ";
-              rowDiv.appendChild(comma);
-            }
-          }
+        // Build Word Data Lookup
+        const wordMap = {};
+        wordsArr.forEach((w, i) => {
+          wordMap[w] = { kana: kanaArr[i] || '', eng: englishArr[i] || '' };
         });
-        elSpoilerContainer.appendChild(rowDiv);
+
+        // Parse Reading Groups
+        const groups = parseField(readingsData).map(g => {
+          const [label, wordsStr] = g.split(':');
+          return { label, words: wordsStr.split(',').filter(Boolean) };
+        });
+
+        groups.forEach((group) => {
+          if (group.words.length === 0) return;
+          
+          const groupDiv = document.createElement('div');
+          groupDiv.className = "reading-group";
+
+          // Random representative
+          const repWord = group.words[Math.floor(Math.random() * group.words.length)];
+          const orderedOthers = group.words.filter(w => w !== repWord);
+
+          // Build Collapsed View (Just the Spoilered Rep)
+          const collapsedDiv = document.createElement('div');
+          const repSpoiler = document.createElement('span');
+          repSpoiler.className = 'individual-spoiler';
+          repSpoiler.innerText = repWord;
+          collapsedDiv.appendChild(repSpoiler);
+
+          // Build Expanded View (Unspoilered Rep + Other Words)
+          const expandedDiv = document.createElement('div');
+          expandedDiv.className = "expanded-container";
+
+          // Row 1: Unspoilered Rep Word + Kana + Eng
+          const repRow = document.createElement('div');
+          repRow.className = "reading-row";
+          
+          const repLabel = document.createElement('span');
+          repLabel.className = 'rep-label';
+          repLabel.innerText = repWord;
+          
+          const rData = wordMap[repWord] || { kana: '?', eng: '?' };
+          const rKana = document.createElement('span'); rKana.className = 'individual-spoiler'; rKana.innerText = rData.kana;
+          const rEng = document.createElement('span'); rEng.className = 'individual-spoiler'; rEng.innerText = rData.eng;
+          
+          repRow.appendChild(repLabel);
+          repRow.appendChild(rKana);
+          
+          const comma = document.createElement('span');
+          comma.className = "comma-span";
+          comma.innerText = ", ";
+          repRow.appendChild(comma);
+          repRow.appendChild(rEng);
+          expandedDiv.appendChild(repRow);
+
+          // Row 2+: Other words in the group
+          orderedOthers.forEach(w => {
+            const oRow = document.createElement('div');
+            oRow.className = "reading-row";
+            
+            const oWord = document.createElement('span'); oWord.className = 'individual-spoiler'; oWord.innerText = w;
+            const oData = wordMap[w] || { kana: '?', eng: '?' };
+            const oKana = document.createElement('span'); oKana.className = 'individual-spoiler'; oKana.innerText = oData.kana;
+            const oEng = document.createElement('span'); oEng.className = 'individual-spoiler'; oEng.innerText = oData.eng;
+            
+            oRow.appendChild(oWord);
+            oRow.appendChild(oKana);
+            
+            const oComma = document.createElement('span');
+            oComma.className = "comma-span";
+            oComma.innerText = ", ";
+            oRow.appendChild(oComma);
+            oRow.appendChild(oEng);
+            expandedDiv.appendChild(oRow);
+
+            // Toggle spoilers for other words
+            [oWord, oKana, oEng].forEach(el => {
+              el.onclick = function(e) {
+                if (window.getSelection().toString().length > 0) return;
+                this.classList.toggle('revealed');
+              }
+            });
+          });
+
+          // Toggles logic between collapsed/expanded states
+          repSpoiler.onclick = function(e) {
+            if (window.getSelection().toString().length > 0) return;
+            collapsedDiv.classList.add('hidden');
+            expandedDiv.classList.add('active');
+          };
+          
+          repLabel.onclick = function(e) {
+            if (window.getSelection().toString().length > 0) return;
+            expandedDiv.classList.remove('active');
+            collapsedDiv.classList.remove('hidden');
+          };
+
+          [rKana, rEng].forEach(el => {
+            el.onclick = function(e) {
+              if (window.getSelection().toString().length > 0) return;
+              this.classList.toggle('revealed');
+            }
+          });
+
+          groupDiv.appendChild(collapsedDiv);
+          groupDiv.appendChild(expandedDiv);
+          elSpoilerContainer.appendChild(groupDiv);
+        });
+
+      } else {
+        // Classic mode / Fallback for old data
+        const maxRows = Math.max(wordsArr.length, kanaArr.length, englishArr.length);
+        for (let i = 0; i < maxRows; i++) {
+          const rowDiv = document.createElement('div');
+          rowDiv.className = "row-margin reading-row";
+          
+          const numSpan = document.createElement('b');
+          numSpan.className = "num-span";
+          numSpan.innerText = `${i + 1}:`;
+          rowDiv.appendChild(numSpan);
+
+          const rowData = [wordsArr[i], kanaArr[i], englishArr[i]];
+
+          rowData.forEach((text, index) => {
+            if (text) {
+              const span = document.createElement('span');
+              span.className = 'individual-spoiler';
+              span.innerText = text;
+              span.onclick = function(e) { 
+                if (window.getSelection().toString().length > 0) return;
+                this.classList.toggle('revealed'); 
+              };
+              rowDiv.appendChild(span);
+
+              if (index < 2 && rowData[index + 1]) {
+                const comma = document.createElement('span');
+                comma.className = "comma-span";
+                comma.innerText = ", ";
+                rowDiv.appendChild(comma);
+              }
+            }
+          });
+          elSpoilerContainer.appendChild(rowDiv);
+        }
       }
 
-      // Toggle UI to Back View
+      // Show Controls
       elControlsFront.classList.add('hidden');
       elBack.classList.remove('hidden');
       elControlsBack.classList.remove('hidden');
@@ -923,62 +810,38 @@
 
     function gradeCard(pool) {
       if (!currentCardKanji) return;
-
-      // Update assignment
       state.pools[currentCardKanji] = pool;
-
-      // Update history
       state.historyCounter++;
-      state.history.push({
-        id: state.historyCounter,
-        kanji: currentCardKanji,
-        pool: pool
-      });
-
-      // Trim history if exceeds max
-      if (state.history.length > CONSTANTS.MAX_HISTORY) {
-        state.history.shift();
-      }
-
+      state.history.push({ id: state.historyCounter, kanji: currentCardKanji, pool: pool });
+      if (state.history.length > CONSTANTS.MAX_HISTORY) state.history.shift();
       saveState();
       renderNextCard();
     }
 
-    /* ==========================================================================
-       SETTINGS & MODALS
-       ========================================================================== */
+    /* Settings UI */
     const modalSettings = document.getElementById('settings-modal');
     
     function updateSettingsUI() {
-      // Rates
+      document.getElementById('toggle-reading-mode').checked = state.readingFocusMode;
       document.getElementById('input-rate-a').value = state.rates.A;
       document.getElementById('input-rate-h').value = state.rates.H;
       document.getElementById('input-rate-e').value = state.rates.E;
 
-      // History
       const histContainer = document.getElementById('history-list');
       document.getElementById('history-count-display').innerText = state.history.length;
-      
-      // Reverse array for display so most recent is top and index 1
       const reversedHistory = [...state.history].reverse();
       histContainer.innerHTML = reversedHistory.map((h, i) => `${i + 1}: ${h.kanji}${h.pool}`).join('\n');
-      
-      // Scroll to top to see newest
       histContainer.scrollTop = 0; 
-
-      // Pool Assignments (List)
       renderPoolList();
     }
 
     function renderPoolList(filterText = "") {
       const container = document.getElementById('pool-list');
       container.innerHTML = '';
-
       const filteredKeys = Object.keys(state.pools).filter(k => k.includes(filterText));
       
       filteredKeys.forEach(kanji => {
         const currentPool = state.pools[kanji];
-        
         const row = document.createElement('div');
         row.className = "pool-item";
         
@@ -1006,14 +869,13 @@
       });
     }
 
-    // Settings Event Listeners
     document.getElementById('btn-open-settings').addEventListener('click', () => {
       updateSettingsUI();
       modalSettings.classList.add('active');
     });
 
     document.getElementById('btn-close-settings').addEventListener('click', () => {
-      // Save rates on close
+      state.readingFocusMode = document.getElementById('toggle-reading-mode').checked;
       const vA = parseInt(document.getElementById('input-rate-a').value) || CONSTANTS.DEFAULT_RATES.A;
       const vH = parseInt(document.getElementById('input-rate-h').value) || CONSTANTS.DEFAULT_RATES.H;
       const vE = parseInt(document.getElementById('input-rate-e').value) || CONSTANTS.DEFAULT_RATES.E;
@@ -1026,16 +888,13 @@
       renderPoolList(e.target.value);
     });
 
-    // Reset Session logic
     document.getElementById('btn-reset-session').addEventListener('click', () => {
-      const confirmMsg = "Are you absolutely sure you want to reset your session?\n\nThis will permanently delete your pool assignments, history, and algorithm settings. This action cannot be undone.";
-      if (confirm(confirmMsg)) {
+      if (confirm("Are you absolutely sure you want to reset your session?\n\nThis will permanently delete your pool assignments, history, and algorithm settings. This action cannot be undone.")) {
         localStorage.removeItem(CONSTANTS.STORAGE_KEY);
         location.reload();
       }
     });
 
-    // File IO for Sessions
     document.getElementById('btn-export-session').addEventListener('click', () => {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
       const anchor = document.createElement('a');
@@ -1055,7 +914,7 @@
           const importedState = JSON.parse(evt.target.result);
           if (importedState.pools && importedState.rates) {
             state = importedState;
-            syncNotesWithState(rawNotes); // Re-sync against current notes
+            syncNotesWithState(rawNotes);
             updateSettingsUI();
             alert("Session restored successfully.");
           }
@@ -1066,16 +925,11 @@
       reader.readAsText(file);
     });
 
-    /* ==========================================================================
-       INITIALIZATION & MAIN EVENTS
-       ========================================================================== */
     document.getElementById('btn-show-answer').addEventListener('click', showAnswer);
-    
     document.querySelectorAll('.grade-btn').forEach(btn => {
       btn.addEventListener('click', (e) => gradeCard(e.target.dataset.pool));
     });
 
-    // Handle initial load of notes
     function initAppWithNotes(textData) {
       document.getElementById('file-prompt-modal').classList.remove('active');
       loadState();
@@ -1084,10 +938,9 @@
       renderNextCard();
     }
 
-    // Try fetch first (Works if on local web server)
     fetch(CONSTANTS.NOTES_FILENAME)
       .then(response => {
-        if (!response.ok) throw new Error("File not found or CORS blocked");
+        if (!response.ok) throw new Error("File not found");
         return response.text();
       })
       .then(text => initAppWithNotes(text))
@@ -1096,14 +949,11 @@
         document.getElementById('file-prompt-modal').classList.add('active');
       });
 
-    // Manual upload fallback (Works if opened directly via file:///)
     document.getElementById('notes-file-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
       const reader = new FileReader();
-      reader.onload = function(evt) {
-        initAppWithNotes(evt.target.result);
-      };
+      reader.onload = function(evt) { initAppWithNotes(evt.target.result); };
       reader.readAsText(file);
     });
 
