@@ -40,6 +40,7 @@ def get_entries_from_file(filepath: str) -> List[Tuple[str, str, str]]:
 
 class KanjiBundleManager:
   def __init__(self):
+    # Standard dicts in Python 3.7+ maintain insertion order automatically.
     self.bundles: Dict[str, Dict[str, Any]] = {}
 
   def apply_xtsu(self, r: str) -> str:
@@ -82,18 +83,21 @@ class KanjiBundleManager:
     return 0
 
   def add_entry(self, word: str, kana: str, eng: str) -> None:
-    # Ordered list of kanji, allowing safe iteration
+    # Ordered list of kanji (allows safe iteration and maintains string order)
     kanjis_in_word = [char for char in word if KANJI_PATTERN.match(char)]
+    
+    # Deduplicate kanji while preserving their first-seen order left-to-right
+    unique_kanjis_ordered = list(dict.fromkeys(kanjis_in_word))
     
     # Extract readings bounded by backticks
     readings = re.findall(r'`(.*?)`', kana)
     
-    assigned_readings = {k: [] for k in set(kanjis_in_word)}
+    assigned_readings = {k: [] for k in unique_kanjis_ordered}
     
     # CASE A: No backticks (assign whole word reading to all kanji)
     if len(readings) == 0:
       clean_kana = kana.replace('`', '').strip()
-      for k in set(kanjis_in_word):
+      for k in unique_kanjis_ordered:
         assigned_readings[k].append(clean_kana)
         
     # CASE B: Valid multiple of readings to kanji count
@@ -110,11 +114,11 @@ class KanjiBundleManager:
     else:
       print(f"WARNING: Mismatched backticks in '{word}'|'{kana}'. Expected multiple of {len(kanjis_in_word)} but got {len(readings)}.")
       clean_kana = kana.replace('`', '').strip()
-      for k in set(kanjis_in_word):
+      for k in unique_kanjis_ordered:
         assigned_readings[k].append(clean_kana)
 
-    # Attach to state dictionary
-    for kanji in set(kanjis_in_word):
+    # Attach to state dictionary, relying on the first-seen order
+    for kanji in unique_kanjis_ordered:
       if kanji not in self.bundles:
         self.bundles[kanji] = {
           "words": [], "kana": [], "eng": [],
@@ -125,12 +129,12 @@ class KanjiBundleManager:
       
       if word not in bundle["seen"]:
         bundle["seen"].add(word)
-        bundle["words"].append(word)
+        bundle["words"].append(word) # Maintains chronological order
         bundle["kana"].append(kana)
         bundle["eng"].append(eng)
         bundle["word_readings"][word] = []
       
-      # Map reading assignment
+      # Map reading assignment, maintaining the order they were assigned
       for r in assigned_readings[kanji]:
         if r not in bundle["word_readings"][word]:
           bundle["word_readings"][word].append(r)
@@ -143,22 +147,25 @@ class KanjiBundleManager:
       kana_str = "; ".join(data["kana"])
       eng_str = "; ".join(data["eng"])
       
-      # 1. Gather all unique readings and map them to unvoiced canonical groups
-      all_readings = set()
-      for rdgs in data["word_readings"].values():
-        all_readings.update(rdgs)
+      # 1. Gather all unique readings in first-appearance order
+      ordered_all_readings = []
+      seen_readings = set()
+      for word in data["words"]:
+        for r in data["word_readings"][word]:
+          if r not in seen_readings:
+            seen_readings.add(r)
+            ordered_all_readings.append(r)
         
       groups = {}
-      for r in sorted(all_readings): # Sorted for determinism
+      for r in ordered_all_readings: 
         dv = self.devoice(r)
         if dv not in groups: groups[dv] = []
         groups[dv].append(r)
         
       # 2. Pick the cleanest representative label for each group
       reading_to_label = {}
-      for dv in sorted(groups.keys()):
-        # Sort by (voicing presence, length, alphabetically)
-        group_readings = groups[dv]
+      for dv, group_readings in groups.items():
+        # Sort internally ONLY to find the best representative label for the group
         best_label = sorted(group_readings, key=lambda x: (self.score_voicing(x), len(x), x))[0]
         for r in group_readings:
             reading_to_label[r] = best_label
