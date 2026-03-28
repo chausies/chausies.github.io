@@ -504,6 +504,31 @@
 
     let currentCardKanji = null;
 
+    // Linguistic helper tools (mirrors Python logic)
+    function applyXtsu(r) {
+      if (!r) return r;
+      let last = r[r.length - 1].toLowerCase();
+      if ("bcdfghjklmpqrstvwxyz".includes(last) && last !== 'n') {
+        return r.slice(0, -1) + "xtsu";
+      }
+      return r;
+    }
+
+    function devoice(r) {
+      if (!r) return r;
+      let lower = r.toLowerCase();
+      const prefixes = { 'ji': 'shi', 'di': 'chi', 'du': 'tsu', 'zu': 'su' };
+      for (const v in prefixes) {
+        if (lower.startsWith(v)) return prefixes[v] + lower.slice(v.length);
+      }
+      if (lower.startsWith('g')) return 'k' + lower.slice(1);
+      if (lower.startsWith('z')) return 's' + lower.slice(1);
+      if (lower.startsWith('d')) return 't' + lower.slice(1);
+      if (lower.startsWith('b') || lower.startsWith('p') || lower.startsWith('f')) return 'h' + lower.slice(1);
+      if (lower.startsWith('j')) return 'sh' + lower.slice(1);
+      return lower;
+    }
+
     function loadState() {
       const saved = localStorage.getItem(CONSTANTS.STORAGE_KEY);
       if (saved) {
@@ -535,7 +560,7 @@
             words: parts[1],
             kana: parts[2],
             english: parts[3],
-            readings: parts[4] || "" // the new 5th column
+            readings: parts[4] || "" 
           };
         }
       });
@@ -648,7 +673,8 @@
       const parseField = (text) => text ? text.split(';').map(s => s.trim()).filter(s => s !== "") : [];
       
       const wordsArr = parseField(note.words);
-      const kanaArr = parseField(note.kana).map(s => s.replace(/`/g, '')); // Strip backticks
+      const kanaRawArr = parseField(note.kana);
+      const kanaArr = kanaRawArr.map(s => s.replace(/`/g, ''));
       const englishArr = parseField(note.english);
       const readingsData = note.readings || "";
 
@@ -656,10 +682,10 @@
 
       if (state.readingFocusMode && readingsData) {
         
-        // Build Word Data Lookup
+        // Build Word Data Lookup - We preserve the raw backticked kana
         const wordMap = {};
         wordsArr.forEach((w, i) => {
-          wordMap[w] = { kana: kanaArr[i] || '', eng: englishArr[i] || '' };
+          wordMap[w] = { kanaRaw: kanaRawArr[i] || '', kana: kanaArr[i] || '', eng: englishArr[i] || '' };
         });
 
         // Parse Reading Groups
@@ -667,6 +693,33 @@
           const [label, wordsStr] = g.split(':');
           return { label, words: wordsStr.split(',').filter(Boolean) };
         });
+
+        // Dynamic Kanja reconstruction: When python deduplicated words, it might have dropped alternative kana.
+        // E.g. word "弾く", rawKana "`haji`ku", groupLabel "hi". We replace "haji" with "hi" -> "hiku".
+        const getDisplayKana = (w, wData, groupLabel) => {
+          let dKana = wData.kana;
+          const kanjisInWord = w.split('').filter(c => c.match(/[\u4E00-\u9FAF]/));
+          const targetIndex = kanjisInWord.indexOf(currentCardKanji);
+          
+          if (targetIndex !== -1 && wData.kanaRaw.includes('`')) {
+            const segments = [];
+            const regex = /`([^`]+)`/g;
+            let match;
+            while ((match = regex.exec(wData.kanaRaw)) !== null) {
+              segments.push({ text: match[1], index: match.index, length: match[0].length });
+            }
+            if (targetIndex < segments.length) {
+              const origReading = segments[targetIndex].text;
+              // Only replace if the base/unvoiced phonetic genuinely mismatches (e.g. koumuru vs kaburu)
+              if (devoice(applyXtsu(origReading)) !== devoice(groupLabel)) {
+                const before = wData.kanaRaw.substring(0, segments[targetIndex].index);
+                const after = wData.kanaRaw.substring(segments[targetIndex].index + segments[targetIndex].length);
+                dKana = (before + groupLabel + after).replace(/`/g, '');
+              }
+            }
+          }
+          return dKana;
+        };
 
         groups.forEach((group) => {
           if (group.words.length === 0) return;
@@ -697,8 +750,10 @@
           repLabel.className = 'rep-label';
           repLabel.innerText = repWord;
           
-          const rData = wordMap[repWord] || { kana: '?', eng: '?' };
-          const rKana = document.createElement('span'); rKana.className = 'individual-spoiler'; rKana.innerText = rData.kana;
+          const rData = wordMap[repWord] || { kanaRaw: '', kana: '?', eng: '?' };
+          const rKanaDisplay = getDisplayKana(repWord, rData, group.label);
+          
+          const rKana = document.createElement('span'); rKana.className = 'individual-spoiler'; rKana.innerText = rKanaDisplay;
           const rEng = document.createElement('span'); rEng.className = 'individual-spoiler'; rEng.innerText = rData.eng;
           
           repRow.appendChild(repLabel);
@@ -717,8 +772,10 @@
             oRow.className = "reading-row";
             
             const oWord = document.createElement('span'); oWord.className = 'individual-spoiler'; oWord.innerText = w;
-            const oData = wordMap[w] || { kana: '?', eng: '?' };
-            const oKana = document.createElement('span'); oKana.className = 'individual-spoiler'; oKana.innerText = oData.kana;
+            const oData = wordMap[w] || { kanaRaw: '', kana: '?', eng: '?' };
+            const oKanaDisplay = getDisplayKana(w, oData, group.label);
+            
+            const oKana = document.createElement('span'); oKana.className = 'individual-spoiler'; oKana.innerText = oKanaDisplay;
             const oEng = document.createElement('span'); oEng.className = 'individual-spoiler'; oEng.innerText = oData.eng;
             
             oRow.appendChild(oWord);
