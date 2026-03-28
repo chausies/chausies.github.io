@@ -732,7 +732,22 @@
             while ((match = regex.exec(wData.kanaRaw)) !== null) {
               segments.push({ text: match[1], index: match.index, length: match[0].length });
             }
-            if (targetIndex < segments.length) {
+            
+            const numKanjis = kanjisInWord.length;
+            if (numKanjis > 0 && segments.length % numKanjis === 0) {
+              let hasMatchingReading = false;
+              for (let i = targetIndex; i < segments.length; i += numKanjis) {
+                if (devoice(applyXtsu(segments[i].text)) === devoice(groupLabel)) {
+                  hasMatchingReading = true;
+                  break;
+                }
+              }
+              if (!hasMatchingReading) {
+                const before = wData.kanaRaw.substring(0, segments[targetIndex].index);
+                const after = wData.kanaRaw.substring(segments[targetIndex].index + segments[targetIndex].length);
+                dKana = (before + groupLabel + after).replace(/`/g, '');
+              }
+            } else if (targetIndex < segments.length) {
               const origReading = segments[targetIndex].text;
               // Only replace if the base/unvoiced phonetic genuinely mismatches (e.g. koumuru vs kaburu)
               if (devoice(applyXtsu(origReading)) !== devoice(groupLabel)) {
