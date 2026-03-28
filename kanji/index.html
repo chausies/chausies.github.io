@@ -494,6 +494,7 @@
     };
 
     let rawNotes = {}; 
+    let mixupGroups = {}; // Used to hold 'easy_to_mixup' relationships
     let state = {
       pools: {},
       history: [],
@@ -565,6 +566,18 @@
         }
       });
       return parsedNotes;
+    }
+
+    function parseMixups(text) {
+      const lines = text.split('\n');
+      lines.forEach(line => {
+        const group = line.trim().split('');
+        if (group.length > 1) {
+          group.forEach(kanji => {
+            mixupGroups[kanji] = group;
+          });
+        }
+      });
     }
 
     function syncNotesWithState(newNotes) {
@@ -647,7 +660,18 @@
     const elPoolCounts = document.getElementById('pool-counts');
 
     function renderNextCard() {
-      currentCardKanji = chooseNextCard();
+      let chosen = chooseNextCard();
+
+      // Intercept and handle easy_to_mixup logic randomly
+      if (chosen && mixupGroups[chosen]) {
+        // Filter the mixup group to ensure the kanji actually exists in our deck
+        const validMixups = mixupGroups[chosen].filter(k => rawNotes[k]);
+        if (validMixups.length > 0) {
+          chosen = validMixups[Math.floor(Math.random() * validMixups.length)];
+        }
+      }
+
+      currentCardKanji = chosen;
 
       if (!currentCardKanji) {
         elKanjiText.innerText = "No cards available.";
@@ -995,16 +1019,27 @@
       renderNextCard();
     }
 
-    fetch(CONSTANTS.NOTES_FILENAME)
-      .then(response => {
-        if (!response.ok) throw new Error("File not found");
-        return response.text();
-      })
-      .then(text => initAppWithNotes(text))
-      .catch(err => {
-        console.warn("Could not fetch notes automatically. Showing manual file prompt.", err);
+    // Simultaneously attempt to load anki_notes.txt and easy_to_mixup
+    Promise.allSettled([
+      fetch(CONSTANTS.NOTES_FILENAME).then(r => { if (!r.ok) throw new Error(); return r.text(); }),
+      fetch('easy_to_mixup').then(r => { if (!r.ok) throw new Error(); return r.text(); }),
+      fetch('easy_to_mixup.txt').then(r => { if (!r.ok) throw new Error(); return r.text(); }) // Optional fallback for txt extension
+    ]).then(results => {
+      const [notesRes, mixupsRes, mixupsTxtRes] = results;
+
+      if (mixupsRes.status === 'fulfilled') {
+        parseMixups(mixupsRes.value);
+      } else if (mixupsTxtRes.status === 'fulfilled') {
+        parseMixups(mixupsTxtRes.value);
+      }
+
+      if (notesRes.status === 'fulfilled') {
+        initAppWithNotes(notesRes.value);
+      } else {
+        console.warn("Could not fetch notes automatically. Showing manual file prompt.");
         document.getElementById('file-prompt-modal').classList.add('active');
-      });
+      }
+    });
 
     document.getElementById('notes-file-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
