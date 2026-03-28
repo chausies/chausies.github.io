@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kanji Flashcards</title>
+  
+  <!-- Preload and fetch Google Fonts (Klee One) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
       --jp-font: "Noto Sans JP", "Noto Sans CJK JP", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "Meiryo", "Yu Gothic", sans-serif;
@@ -486,6 +492,13 @@
   </div>
 
   <script>
+    // Configurable Font List for the main Kanji display
+    const KANJI_FONTS = [
+      "var(--jp-font)",           // The default system font stack
+      "'Klee One', sans-serif"    // Google Font: Klee One
+      // Add more fonts here in the future! E.g., "'Yuji Syuku', serif"
+    ];
+
     const CONSTANTS = {
       NOTES_FILENAME: 'anki_notes.txt',
       STORAGE_KEY: 'kanji_trainer_state',
@@ -682,6 +695,10 @@
       const counts = { A: 0, H: 0, N: 0, E: 0 };
       for (const k in rawNotes) { counts[state.pools[k] || 'A']++; }
       elPoolCounts.innerText = `A: ${counts.A} | H: ${counts.H} | N: ${counts.N} | E: ${counts.E}`;
+
+      // Randomize display font for the kanji
+      const randomFont = KANJI_FONTS[Math.floor(Math.random() * KANJI_FONTS.length)];
+      elKanjiText.style.fontFamily = randomFont;
 
       elKanjiText.innerText = currentCardKanji;
       elBack.classList.add('hidden');
