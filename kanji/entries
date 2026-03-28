@@ -93,7 +93,7 @@
 液|eki|fluid
 苦渋|`ku``juu`|bitter experience, anguish
 苦しい|`kuru`shii|painful
-苦い|`ni`gai|bitter
+苦い|`niga`i|bitter
 渋い|`shibu`i|bitter, sober, somber [e.g. one's expression]
 苦労|`ku``rou`|suffering, struggle
 脳|nou|brain
@@ -138,10 +138,11 @@
 杯|sakazuki|sake cup
 一杯|`ip``pai`|one cup
 碁石|`go``ishi`|go piece
-発育|`hatsu``iku`|(physical) growth (e.g. of a baby)
-教育|`kyou``iku`|teaching
 育つ|`soda`tsu|to be raised, brought up, grow (up)
 育む|`haguku`mu|to raise, rear, bring up
+教育|`kyou``iku`|teaching
+発育|`hatsu``iku`|(physical) growth (e.g. of a baby)
+体育|`tai``iku`|physical education, athletics
 略語|`ryaku``go`|abbreviation
 語る|`kata`ru|to tell (e.g. a story)
 戦略|`sen``ryaku`|strategy, tactics
@@ -214,9 +215,10 @@
 据え置く|`su`e`o`ku|to leave as is untouched
 据える|`su`eru|to place/set/fix something (in position)
 指|yubi|finger, toe
-戦争|`sen``sou`|war
+戦|ikusa|battle
 戦う|`tataka`u|fight
 争う|`araso`u|conflict
+戦争|`sen``sou`|war
 情|nasake|pity, mercy
 愛情|`ai``jou`|love, affection
 愚鈍|`gu``don`|stupid, foolish
@@ -349,7 +351,7 @@
 都合|`tsu``gou`|circumstances
 合う|`a`u|come together
 亜流|`a``ryuu`|(mediocre) imitation
-乳首|`chiku``bi`|nipple
+乳首|`chi``kubi`|nipple
 乳|chichi|breasts
 首|kubi|neck
 東亜|`tou``a`|East Asia/Orient
@@ -422,7 +424,6 @@
 幽霊|`yuu``rei`|ghost
 悪霊|`aku``ryou`|evil spirit
 臆する|`oku`suru|to be timid, nervous, afraid
-臆病|`oku``byou`|cowardly
 遠心力|`en``shin``ryoku`|centrifugal force
 遠い|`too`i|far
 心|kokoro|heart
@@ -940,6 +941,7 @@
 職務|`shoku``mu`|professional duties
 商う|`akina`u|to trade, deal in
 商品|`shou``hin`|merchandise
+売る|`u`ru|to sell
 商売|`shou``bai`|trade, business
 通称|`tsuu``shou`|trade, commerce
 向こう|`mu`kou|opposite side
@@ -992,6 +994,7 @@
 占い|`urana`i|fortune
 占領|`sen``ryou`|occupation, capture
 記す|`shiru`su|to write down, to note
+日記|`nik``ki`|diary
 心に記す|`kokoro` ni `shiru`su|to remember
 銘記|`mei``ki`|suru: keep in mind, take note of
 銘じる|`mei`jiru|to engrave, stamp, inscribe
@@ -1723,3 +1726,73 @@
 親|oya|parents
 親戚|`shin``seki`|relatives
 親類|`shin``rui`|relatives
+光景|`kou``kei`|scene, spectacle, sight, view
+美しい|`utsuku``shii`|beautiful
+ゴムゴムの実|gomugomu no `mi`|gum gum fruit
+鉱脈|`kou``myaku`|vein (e.g. for ore)
+上司|`jou``shi`|one's boss/superior
+部下|`bu``ka`|subordinate
+司会|`shi``kai`|chairmanship, leading a meeting, host, moderator
+司法|`shi``hou`|administration of justice
+酢|su|vinegar
+酢酸|`saku``san`|acetic acid
+防ぐ|`fuse`gu|to defend (against), to prevent
+防止|`bou``shi`|prevention
+予防|`yo``bou`|prevention, precaution
+国防|`koku``bou`|national, defense
+疫病|`eki``byou`|infectious disease
+悪疫|`aku``eki`|epidemic
+防疫|`bou``eki`|prevention of epidemics
+病|yamai|illness
+病む|`ya`mu|to fall ill
+病気|`byou``ki`|sick
+疾病|`ship``pei`|disease, illness
+疾走|`shis``sou`|sprint, dash, scamper
+疾風|`ship``puu`|gale, whirlwind
+臆病|`oku``byou`|cowardly
+紙|kami|paper
+表紙|`hyou``shi`|cover (e.g. of a book)
+用紙|`you``shi`|sheets of paper, blank form
+続く|`tsudu`ku|to continue
+連続|`ren``zoku`|serial, consecutively occurring
+続行|`zok``kou`|continuation
+継続|`kei``zoku`|continuation
+意気揚々と|`i``ki` `you`you to|triumphantly, elatedly
+泥|doro|mud
+泥土|`dei``do`|mud
+垂れる|`ta`reru|to hang, droop, sag
+垂らす|`ta`rasu|to spill
+雨垂れ|`ama``da`re|raindrops (from a tree, roof, etc.)
+垂直|`sui``choku`|vertical, perpendicular
+若者|`waka``mono`|young person
+軽い|`karu`i|light
+軽やか|`karo`yaka|graceful
+手軽|`te``garu`|easy, simple, straightforward
+軽減|`kei``gen`|abatement, reduction
+軽音楽|`kei``on``gaku`|light music, popular music
+軽快|`kei``kai`|casual (e.g. dress), light, numble, jaunty (melody)
+井|i|well
+天井|`ten``jou`|ceiling
+沢|sawa|marsh
+軽井沢|`karu``i``zawa`|Karuizawa (summer resort area nw of tokyo)
+肝|kimo|liver, guts
+肝心|`kan``jin`|essential, crucial, main, fundumental
+斬る|`ki`ru|to cut/kill with a sword
+斬撃|`zan``geki`|slash
+斬新|`zan``shin`|novel, original
+斬殺|`zan``satsu`|killing by sword
+隷従|`rei``juu`|suru: to be enslaved, to be subordinate to
+登る|`nobo`ru|climb
+登場|`tou``jou`|appearance/entry on stage
+先頭|`sen``tou`|head, lead, vanguard
+先登|`sen``tou`|head, lead, vanguard (先頭 much more common)
+登校|`tou``kou`|attendance at/going to school
+登記|`tou``ki`|registration
+登用|`tou``you`|suru: to promote, to appoint
+登山|`to``zan`|mountain-climbing
+見当|`ken``tou`|estimate, guess
+館|yakata|mansion
+旅館|`ryo``kan`|inn
+美術館|`bi``jutsu``kan`|art gallery
+怠惰|`tai``da`|laziness, idleness, sloth
+惰性|`da``sei`|(by force of) habit, inertia, momentum
