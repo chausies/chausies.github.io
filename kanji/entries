@@ -321,7 +321,7 @@
 劇|geki|play, drama
 劇場|`geki``jou`|theatre
 悲劇|`hi``geki`|tragedy
-劇しい|`hage``shii`|violent, fierce
+劇しい|`hage`shii|violent, fierce
 前進|`zen``shin`|proceeding forwards
 進む|`susu`mu|proceed, go ahead
 出納|`sui``tou`|receipts and disbursements
@@ -462,6 +462,8 @@
 茶の間|`cha`no`ma`|living room
 名称|`mei``shou`|name, title
 自称|`ji``shou`|self-proclaimed
+通る|`too`ru|to pass through
+通す|`too`su|to let through
 通称|`tsuu``shou`|popular/nick-name
 愛称|`ai``shou`|pet name (affectionate nickname)
 金銭|`kin``sen`|money
@@ -492,7 +494,7 @@
 時計|`to``kei`|clock
 合計|`gou``kei`|sum total, total amount
 設計|`sek``kei`|plan, design, layout
-家計|`ka``kei`|family finances
+家計|`ka``kei`|household budget, family finances
 生計|`sei``kei`|livlihood, living
 会計|`kai``kei`|accounting, bill (at a restraunt)
 大尉|`tai``i`|captain
@@ -1270,6 +1272,7 @@
 神経|`shin``kei`|nerve
 経由|`kei``yu`|suru: to go by way of, via
 営業|`ei``gyou`|business, trade
+運ぶ|`hako`bu|to carry
 運営|`un``ei`|management, administration
 国営|`koku``ei`|government management
 株式|`kabu``shiki`|stock, shares
@@ -1860,3 +1863,54 @@
 疲れる|`tsuka`reru|to be tired
 疲労|`hi``rou`|fatigue, tiredness, weariness
 天晴|`ap``pare`|praiseworthy, splendid
+暇つぶし|`hima`tsubushi|killing time
+休暇|`kyuu``ka`|holiday, day off, absense from work
+余暇|`yo``ka`|leisure time, spare time
+目次|`moku``ji`|table of contents
+鉄道|`tetsu``dou`|railway
+姿|sugata|appearance, shape
+容姿|`you``shi`|face and figure, appearance
+姿勢|`shi``sei`|attitude, posture, how one carry's themselves
+英才|`ei``sai`|gifted person, person of unusual talent, genius
+英才教育|`ei``sai``kyou``iku`|special education for gifted children
+憎む|`niku`mu|to hate
+憎しみ|`niku`shimi|hatred
+憎らしい|`niku`rashii|detestable
+憎悪|`zou``o`|hatred
+愛憎|`ai``zou`|love and hate
+狂気|`kyou``ki`|madness
+喜ぶ|`yoroko`bu|to rejoice
+喜劇|`ki``geki`|comedy, funny show
+狂喜|`kyou``ki`|wild joy, ecstasy
+将来|`shou``rai`|(in the) future
+鬼|oni|ogre
+鬼才|`ki``sai`|unusual ability, genius (at), a wizard (at)
+才能|`sai``nou`|talent, ability
+便所|`ben``jo`|toilet
+便利|`ben``ri`|convenient
+便箋|`bin``sen`|stationary, writing paper
+制度|`sei``do`|system, institution
+体制|`tai``sei`|order, system, structure, set-up
+強制|`kyou``sei`|forced, compelled, coerced
+制覇|`sei``ha`|domination
+覇権|`ha``ken`|hegemony, dominance
+連覇|`ren``pa`|successive championships
+基づく|`moto`duku|to be grounded on, to be based on, to be due to
+基|motoi|cause, basis
+基本|`ki``hon`|foundation, basis
+基準|`ki``jun`|standard, basis, reference, criterion
+基地|`ki``chi`|base (like a military one)
+延びる|`no`biru|to be postponed, to be prolonged
+延ばす|`no`basu|to postpone, to prolong
+延長|`en``chou`|extension, prolongation
+遅い|`oso`i|slow
+遅れる|`oku`reru|to be late
+遅刻|`chi``koku`|tardiness, being late
+遅延|`chi``en`|delay, latency
+歓迎|`kan``gei`|to welcome
+歓声|`kan``sei`|cheers, shouts of joy
+歓喜|`kan``ki`|jubiliation, delight
+歓楽街|`kan``raku``gai`|entertainment district, pleasure quarter
+溶ける|`to`keru|to melt, dissolve
+主席|`shu``seki`|head, chief chairman
+首席|`shu``seki`|top [first] in the class
