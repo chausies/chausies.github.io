@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>YT Clip Linker</title>
+  
+  <meta property="og:title" content="Video Clip">
+  <meta property="og:description" content="YT Clip Link">
+  <meta property="og:type" content="video.other">
+  <meta name="theme-color" content="#ff0000">
+
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      overflow: hidden;
+    }
+    #player-container {
+      width: 100vw;
+      height: 100vh;
+    }
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+    /* Minimal UI Overlay */
+    #ui {
+      display: none;
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; /* Let user interact with YT player behind the UI */
+      z-index: 10;
+    }
+    .btn {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: auto; /* Enable clicks just for the buttons */
+      padding: 12px 24px;
+      font-size: 16px;
+      font-family: monospace;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+      text-transform: lowercase;
+    }
+    .btn:hover { background: #fff; color: #000; }
+    #btn-replay { top: 25%; }
+    #btn-loop { bottom: 25%; }
+  </style>
+</head>
+<body>
+
+  <div id="player-container"><div id="player"></div></div>
+  <div id="ui">
+    <button id="btn-replay" class="btn">replay clip</button>
+    <button id="btn-loop" class="btn">loop</button>
+  </div>
+
+  <script>
+    // ==========================================
+    // CONFIGURATION: Add any synonyms here
+    // The script checks them in order (first match wins)
+    // ==========================================
+    const ALIASES = {
+      id: ['id', 'i', 'v', `vid`, `video_id`, `vid`],
+      start: ['start', 's', `st`],
+      end: ['end', 'e', `en`, `ed`]
+    };
+    // ==========================================
+
+    function parseTime(t) {
+      if (!t) return null;
+      if (!isNaN(t)) return parseFloat(t);
+      
+      let sec = 0;
+      // Matches formats like 1h, 2m, 36s, 2m36, 5.4s, 5.4
+      const match = t.match(/(?:(\d+)h)?(?:(\d+)m)?(?:([\d.]+)(?:s)?)?/);
+      if (match) {
+        if (match[1]) sec += parseInt(match[1]) * 3600;
+        if (match[2]) sec += parseInt(match[2]) * 60;
+        if (match[3]) sec += parseFloat(match[3]);
+      }
+      return sec;
+    }
+
+    let player;
+    let checkEndInterval;
+    let startSeconds;
+    let endSeconds;
+    let videoId;
+    let isLooping = false;
+    let clipActive = true;
+
+    function initPlayer() {
+      // Prioritize explicit names from our ALIASES config, fallback to Rickroll
+      videoId = getParam(ALIASES.id) || 'dQw4w9WgXcQ';
+      startSeconds = parseTime(getParam(ALIASES.start)) || 0;
+      endSeconds = parseTime(getParam(ALIASES.end));
+
+      // Load YouTube IFrame API dynamically
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        videoId: videoId,
+        playerVars: {
+          'autoplay': 1,
+          'playsinline': 1, // Crucial for mobile
+          'start': Math.floor(startSeconds),
+          'rel': 0,
+          'modestbranding': 1
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      // Force precision seeking for decimal starts
+      player.seekTo(startSeconds, true);
+      event.target.playVideo();
+    }
+
+    function handleClipEnd() {
+      clearInterval(checkEndInterval);
+      if (isLooping) {
+        player.seekTo(startSeconds, true);
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+        document.getElementById('ui').style.display = 'block';
+      }
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING && clipActive) {
+        checkEndInterval = setInterval(() => {
+          let ct = player.getCurrentTime();
+          
+          // Detect if user sought outside bounds (1.5s buffer for loading/precision)
+          if (ct < startSeconds - 1.5 || (endSeconds && ct > endSeconds + 1.5)) {
+            clipActive = false;
+            document.getElementById('ui').style.display = 'none';
+            clearInterval(checkEndInterval);
+            return;
+          }
+
+          if (endSeconds && ct >= endSeconds) {
+            handleClipEnd();
+          }
+        }, 50); 
+      } else if (event.data === YT.PlayerState.ENDED && clipActive && !endSeconds) {
+        // Handle natural video end if no end parameter was provided
+        handleClipEnd();
+      } else {
+        clearInterval(checkEndInterval);
+      }
+    }
+
+    // UI Button Listeners
+    document.getElementById('btn-replay').addEventListener('click', () => {
+      isLooping = false;
+      document.getElementById('ui').style.display = 'none';
+      player.seekTo(startSeconds, true);
+      player.playVideo();
+    });
+
+    document.getElementById('btn-loop').addEventListener('click', () => {
+      isLooping = true;
+      document.getElementById('ui').style.display = 'none';
+      player.seekTo(startSeconds, true);
+      player.playVideo();
+    });
+
+    // --- Execution Logic ---
+    const hashText = window.location.hash.substring(1);
+    const hashParams = new URLSearchParams(hashText);
+    
+    // Helper to grab the first matching parameter from the URL
+    function getParam(paramList) {
+      for (const p of paramList) {
+        if (hashParams.has(p)) return hashParams.get(p);
+      }
+      return null;
+    }
+
+    // Flatten ALIASES to check if the URL contains *any* valid parameters
+    const allKnownParams = [...ALIASES.id, ...ALIASES.start, ...ALIASES.end];
+    const hasAnyParam = allKnownParams.some(key => hashParams.has(key));
+    
+    if (!hasAnyParam && hashText === '') {
+      // Redirect to documentation if accessed naked
+      window.location.replace('https://github.com/chausies/chausies.github.io/blob/main/yt/README.md');
+    } else {
+      initPlayer();
+    }
+  </script>
+</body>
+</html>
