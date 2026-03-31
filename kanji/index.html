@@ -723,17 +723,50 @@
 
       if (state.readingFocusMode && readingsData) {
         
-        // Build Word Data Lookup - We preserve the raw backticked kana
-        const wordMap = {};
-        wordsArr.forEach((w, i) => {
-          wordMap[w] = { kanaRaw: kanaRawArr[i] || '', kana: kanaArr[i] || '', eng: englishArr[i] || '' };
-        });
-
         // Parse Reading Groups
         const groups = parseField(readingsData).map(g => {
           const [label, wordsStr] = g.split(':');
           return { label, words: wordsStr.split(',').filter(Boolean) };
         });
+
+        // Helper to find the specific word occurrence that matches this reading group.
+        // Replaces the old wordMap which overwrote duplicate words with different readings.
+        const getWordData = (targetWord, groupLabel) => {
+          let bestMatch = null;
+          
+          for (let i = 0; i < wordsArr.length; i++) {
+            if (wordsArr[i] === targetWord) {
+              const data = { kanaRaw: kanaRawArr[i] || '', kana: kanaArr[i] || '', eng: englishArr[i] || '' };
+              if (!bestMatch) bestMatch = data; // Keep the first occurrence as a fallback
+              
+              const kanjisInWord = targetWord.split('').filter(c => c.match(/[\u4E00-\u9FAF]/));
+              const targetIndex = kanjisInWord.indexOf(currentCardKanji);
+              
+              if (targetIndex !== -1 && data.kanaRaw.includes('`')) {
+                const segments = [];
+                const regex = /`([^`]+)`/g;
+                let match;
+                while ((match = regex.exec(data.kanaRaw)) !== null) {
+                  segments.push(match[1]);
+                }
+                
+                const numKanjis = kanjisInWord.length;
+                if (numKanjis > 0 && segments.length % numKanjis === 0) {
+                  for (let j = targetIndex; j < segments.length; j += numKanjis) {
+                    if (devoice(applyXtsu(segments[j])) === devoice(groupLabel)) {
+                      return data; // Perfect reading match found!
+                    }
+                  }
+                } else if (targetIndex < segments.length) {
+                  if (devoice(applyXtsu(segments[targetIndex])) === devoice(groupLabel)) {
+                    return data; // Perfect reading match found!
+                  }
+                }
+              }
+            }
+          }
+          return bestMatch || { kanaRaw: '', kana: '?', eng: '?' };
+        };
 
         // Dynamic Kanja reconstruction: When python deduplicated words, it might have dropped alternative kana.
         // E.g. word "弾く", rawKana "`haji`ku", groupLabel "hi". We replace "haji" with "hi" -> "hiku".
@@ -806,7 +839,7 @@
           repLabel.className = 'rep-label';
           repLabel.innerText = repWord;
           
-          const rData = wordMap[repWord] || { kanaRaw: '', kana: '?', eng: '?' };
+          const rData = getWordData(repWord, group.label);
           const rKanaDisplay = getDisplayKana(repWord, rData, group.label);
           
           const rKana = document.createElement('span'); rKana.className = 'individual-spoiler'; rKana.innerText = rKanaDisplay;
@@ -828,7 +861,7 @@
             oRow.className = "reading-row";
             
             const oWord = document.createElement('span'); oWord.className = 'individual-spoiler'; oWord.innerText = w;
-            const oData = wordMap[w] || { kanaRaw: '', kana: '?', eng: '?' };
+            const oData = getWordData(w, group.label);
             const oKanaDisplay = getDisplayKana(w, oData, group.label);
             
             const oKana = document.createElement('span'); oKana.className = 'individual-spoiler'; oKana.innerText = oKanaDisplay;

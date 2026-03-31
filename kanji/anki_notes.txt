@@ -52,7 +52,7 @@
 寄|寄贈; 片寄る; 最寄り; 寄越す|`ki``zou`; `kata``yo`ru; `mo``yori`; `yo``ko`su|donation, gift; to lean on, incline toward; nearest; to hand over (usu. kana only)|ki:寄贈;yo:片寄る,寄越す;yori:最寄り
 入|収入; 四捨五入; 入試|`shuu``nyuu`; `shi``sha``go``nyuu`; `nyuu``shi`|income; round a number; entrance exam|nyuu:収入,四捨五入,入試
 集|収集; 集める; 召集|`shuu``shuu`; `atsu`meru; `shou``shuu`|gathering up, collecting; to gather; convening, calling together (e.g. parliment, strategy meeting, etc.)|shuu:収集,召集;atsu:集める
-回|回収; 回る; 回答; 回復; 撤回; 回路|`kai``shuu`; `mawa`ru; `kai``tou`; `kai``fuku`; `tek``kai`; `kai``ro`|collection, recovery; to go around; reply, answer; recover; to take back, retraction; circuit|kai:回収,回答,回復,撤回,回路;mawa:回る
+回|回収; 回る; 回答; 回復; 回答; 撤回; 回路|`kai``shuu`; `mawa`ru; `kai``tou`; `kai``fuku`; `kai``tou`; `tek``kai`; `kai``ro`|collection, recovery; to go around; reply, answer; recover; answer, solution; to take back, retraction; circuit|kai:回収,回答,回復,撤回,回路;mawa:回る
 事|事件; 出来事; 事務; 事務所|`ji``ken`; `de``ki``goto`; `ji``mu`; `ji``mu``sho`|incident; a happening; business/office work; office|ji:事件,事務,事務所;goto:出来事
 件|事件|`ji``ken`|incident|ken:事件
 警|警察; 警める; 警備; 警告; 警官|`kei``satsu`; `imashi`meru; `kei``bi`; `kei``koku`; `kei``kan`|police; warn; guard, defend; warn; police office|kei:警察,警備,警告,警官;imashi:警める
@@ -76,7 +76,7 @@
 破|破る; 見破る; 喝破|`yabu`ru; `mi``yabu`ru; `kap``pa`|to break, tear, defeat; see through (a plot), see (into someone's heart); arguing someone down, scolding|yabu:破る,見破る;pa:喝破
 見|見破る; 見詰める; 意見; 見解; 偏見; 見当|`mi``yabu`ru; `mi``tsu`meru; `i``ken`; `ken``kai`; `hen``ken`; `ken``tou`|see through (a plot), see (into someone's heart); to stare at, gaze at; opinion; opinion, point of view; prejudice, bias; estimate, guess|mi:見破る,見詰める;ken:意見,見解,偏見,見当
 覆|覆う; 覆る; 覆面|`oo`u; `kutsugae`ru; `fuku``men`|cover/conceal; topple, overturn; mask|oo:覆う;kutsugae:覆る;fuku:覆面
-面|覆面; 面; 真面目; 顔面; 譜面|`fuku``men`; tsura; `ma``ji``me`; `gan``men`; `fu``men`|mask; face; diligent; face; sheet music|men:覆面,顔面,譜面;tsura:面;omote:面;ji:真面目
+面|覆面; 面; 面; 真面目; 顔面; 譜面|`fuku``men`; tsura; omote; `ma``ji``me`; `gan``men`; `fu``men`|mask; face; front; diligent; face; sheet music|men:覆面,顔面,譜面;tsura:面;omote:面;ji:真面目
 褒|褒美; 褒める|`hou``bi`; `ho`meru|reward; praise|hou:褒美;ho:褒める
 美|褒美; 美麗; 美術; 謙譲の美徳; 美容; 美しい; 美術館|`hou``bi`; `bi``rei`; `bi``jutsu`; `ken``jou` no `bi``toku`; `bi``you`; `utsuku``shii`; `bi``jutsu``kan`|reward; gorgeous; art; virtue of modesty; beauty of form; beautiful; art gallery|bi:褒美,美麗,美術,謙譲の美徳,美容,美術館;utsuku:美しい;shii:美しい
 製|製造; 製品; 製菓; 製作|`sei``zou`; `sei``hin`; `sei``ka`; `sei``saku`|suru: manufacture; manufactured good; confectionary production, baking; to make (a product)|sei:製造,製品,製菓,製作
@@ -108,12 +108,12 @@
 空|空き缶; 空間; 真空|`a`ki`kan`; `kuu``kan`; `shin``kuu`|empty can; space; vacuum|a:空き缶;kuu:空間,真空
 終|終日; 終結; 終値|`shuu``jitsu`; `shuu``ketsu`; `owari``ne`|all day; end, close; closing price (e.g. stock exchange)|shuu:終日,終結;owari:終値
 日|終日; 三日月; 元日; 日本酒; 日課; 日産; 日向; 日記; 日常; 定休日; 日付|`shuu``jitsu`; `mi``ka``duki`; `gan``jitsu`; `ni``hon``shu`; `nik``ka`; `nis``san`; `hi``nata`; `nik``ki`; `nichi``jou`; `tei``kyuu``bi`; `hi``duke`|all day; crescent moon; New Year's Day; japanese sake; daily routine; daily output, Nissan; sunny place; diary; everyday, regular; fixed day off, regular holiday; date|jitsu:終日,元日;ka:三日月;ni:日本酒;nixtsu:日課,日産,日記;hi:日向,定休日,日付;nichi:日常
-紅|紅梅; 紅茶; 紅い; 紅; 口紅|`kou``bai`; `kou``cha`; `aka`i; kurenai; `kuchi``beni`|reb plum tree; black tea; deep red; crimson; lipstick|kou:紅梅,紅茶;aka:紅い;kurenai:紅;beni:紅,口紅
+紅|紅梅; 紅茶; 紅い; 紅; 口紅; 紅|`kou``bai`; `kou``cha`; `aka`i; kurenai; `kuchi``beni`; beni|reb plum tree; black tea; deep red; crimson; lipstick; lipstick/rouge|kou:紅梅,紅茶;aka:紅い;kurenai:紅;beni:口紅,紅
 梅|紅梅; 梅; 梅園; 白梅; 梅雨|`kou``bai`; ume; `bai``en`; `shira``ume` or `haku``bai`; tsuyu|reb plum tree; plum tree; plum tree orchard; white plum tree; rainy season|bai:紅梅,梅園,白梅;ume:梅,白梅;tsuyu:梅雨
 茶|紅茶; 茶の間; 緑茶; 麦茶|`kou``cha`; `cha`no`ma`; `ryoku``cha`; `mugi``cha`|black tea; living room; green tea; barley tea|cha:紅茶,茶の間,緑茶,麦茶
 園|梅園; 公園|`bai``en`; `kou``en`|plum tree orchard; park|en:梅園,公園
 白|白梅; 告白; 白刃; 白濁|`shira``ume` or `haku``bai`; `koku``haku`; `haku``jin`; `haku``daku`|white plum tree; to confess; drawn sword, naked sword; cloudiness|shira:白梅;haku:白梅,告白,白刃,白濁
-答|答; 回答; 問答|kotae; `kai``tou`; `mon``dou`|answer, response; reply, answer; questions and answers, dialogue|kotae:答;tou:回答,問答
+答|答; 回答; 問答; 回答|kotae; `kai``tou`; `mon``dou`; `kai``tou`|answer, response; reply, answer; questions and answers, dialogue; answer, solution|kotae:答;tou:回答,問答
 問|問答; 弔問; 問う; 問屋; 糾問; 疑問|`mon``dou`; `chou``mon`; `to`u; `ton``ya`; `kyuu``mon`; `gi``mon`|questions and answers, dialogue; condolence call; to ask/question; wholesale store; inquiry; doubt, question|mon:問答,弔問,糾問,疑問;to:問う;ton:問屋
 突|突当り; 突く; 突然; 突っ込む|`tsuki``ata`ri; `tsu`ku; `totsu``zen`; `tsu`k`ko`mu|end of a street; poke; sudden; to butt in|tsuki:突当り;tsu:突く,突っ込む;totsu:突然
 当|突当り; 当然; 正当; 見当|`tsuki``ata`ri; `tou``zen`; `sei``tou`; `ken``tou`|end of a street; of course, as a matter of course; just, justified; estimate, guess|ata:突当り;tou:当然,正当,見当
@@ -167,7 +167,7 @@
 標|標語; 標準; 目標; 標し|`hyou``go`; `hyou``jun`; `moku``hyou`; `shiru`shi|motto; standard, level, norm; objective; sign, mark|hyou:標語,標準,目標;shiru:標し
 目|目標; 盲目; 注目; 目蓋; 真面目; 目録; 目次|`moku``hyou`; `mou``moku`; `chuu``moku`; `ma``buta`; `ma``ji``me`; `moku``roku`; `moku``ji`|objective; blind; attention; eyelid; diligent; catalog; table of contents|moku:目標,盲目,注目,目録,目次;ma:目蓋;me:真面目
 雨|梅雨; 時雨; 雨垂れ|tsuyu; shigure; `ama``da`re|rainy season; late-autumn-early-winter showers, drizzle; raindrops (from a tree, roof, etc.)|tsuyu:梅雨;shigure:時雨;ama:雨垂れ
-栄|栄える; 繁栄|`saka`eru; `han``ei`|flourish, thrive shine; prospering, thriving|saka:栄える;ha:栄える;ei:繁栄
+栄|栄える; 栄える; 繁栄|`saka`eru; `ha`eru; `han``ei`|flourish, thrive shine; shine, be bright, glow; prospering, thriving|saka:栄える;ha:栄える;ei:繁栄
 杉|杉並木; 杉|`sugi``nami``ki`; sugi|row of cedar trees; cedar|sugi:杉並木,杉
 並|杉並木; 並ぶ; 並列|`sugi``nami``ki`; `nara`bu; `hei``retsu`|row of cedar trees; line up; running in parallel, lined up alongside (suru vb or no adj)|nami:杉並木;nara:並ぶ;hei:並列
 木|杉並木; 木; 樹木|`sugi``nami``ki`; ki; `ju``moku`|row of cedar trees; tree; trees and shrubs|ki:杉並木,木;moku:樹木
@@ -302,7 +302,7 @@
 表|表す; 表現; 代表; 公表; 時刻表; 図表; 年表; 表; 表明; 表示; 表彰; 辞表; 表紙|`arawa`su; `hyou``gen`; `dai``you`; `kou``hyou`; `ji``koku``hyou`; `zu``hyou`; `nen``pyou`; omote; `hyou``mei`; `hyou``ji`; `hyou``shou`; `ji``hyou`; `hyou``shi`|to represent, signify, stand for; expression; representative; official announcement; timetable, schedule; chart, diagram; chronological table; surface, front; declaration; suru: indicate, express; to publicly commend; letter of resignation; cover (e.g. of a book)|arawa:表す;hyou:表現,公表,時刻表,図表,年表,表明,表示,表彰,辞表,表紙;you:代表;omote:表
 実|現実; 実況; 実際; 果実; 真実; 実験; 忠実; ゴムゴムの実|`gen``jitsu`; `jik``kyou`; `jis``sai`; `ka``jitsu`; `shin``jitsu`; `jik``ken`; `chuu``jitsu`; gomugomu no `mi`|reality; actual state (of things), live/on-the-scene; in actuality, practically; fruit; reality; experiment; faithfulness, devotion, loyalty; gum gum fruit|jitsu:現実,果実,真実,忠実;jixtsu:実況,実際,実験;mi:ゴムゴムの実
 公|公表; 公園; 公式; 公費; 公認; 公爵; 公害|`kou``hyou`; `kou``en`; `kou``shiki`; `kou``hi`; `kou``nin`; `kou``shaku`; `kou``gai`|official announcement; park; formal, official; public funds; official recognition, authorization; duke, prince; pollution|kou:公表,公園,公式,公費,公認,公爵,公害
-刻|時刻表; 刻む; 深刻; 遅刻|`ji``koku``hyou`; `kiza`mu; `shin``koku`; `chi``koku`|timetable, schedule; to; series, grave; tardiness, being late|koku:時刻表,深刻,遅刻;kiza:刻む
+刻|時刻表; 刻む; 刻む; 深刻; 遅刻|`ji``koku``hyou`; `kiza`mu; `kiza`mu; `shin``koku`; `chi``koku`|timetable, schedule; to; to cut, chop up, engrave; series, grave; tardiness, being late|koku:時刻表,深刻,遅刻;kiza:刻む
 謝|謝る; 感謝; 謝罪; 陳謝|`ayama`ru; `kan``sha`; `sha``zai`; `chin``sha`|apologize; gratitude; suru: apologize; apology|ayama:謝る;sha:感謝,謝罪,陳謝
 感|感謝; 感銘を受ける; 感覚; 感冒; 感泣|`kan``sha`; `kan``mei` wo `u`keru; `kan``kaku`; `kan``bou`; `kan``kyuu`|gratitude; to be deeply impressed; sense; cold (illness); suru: being moved to tears|kan:感謝,感銘を受ける,感覚,感冒,感泣
 帽|帽子|`bou``shi`|hat|bou:帽子
@@ -338,8 +338,8 @@
 殴|殴打; 殴る|`ou``da`; `nagu`ru|hit, beat, strike; punch|ou:殴打;nagu:殴る
 打|殴打; 打つ; 不意打ち; 打撃|`ou``da`; `u`tsu; `fu``i``u`chi; `da``geki`|hit, beat, strike; hit; surprise attack; blow, shock, batting (baseball)|da:殴打,打撃;u:打つ,不意打ち
 名|名称; 氏名; 名著|`mei``shou`; `shi``mei`; `mei``cho`|name, title; full name, identity; famous book, masterpiece|mei:名称,氏名,名著
-称|名称; 自称; 通称; 愛称|`mei``shou`; `ji``shou`; `tsuu``shou`; `ai``shou`|name, title; self-proclaimed; popular/nick-name; pet name (affectionate nickname)|shou:名称,自称,通称,愛称
-通|通る; 通す; 通称; 通告; 不通; 通勤; 通路|`too`ru; `too`su; `tsuu``shou`; `tsuu``koku`; `fu``tsuu`; `tsuu``kin`; `tsuu``ro`|to pass through; to let through; popular/nick-name; notice, announcement; suspension, interruption, stoppage (ni naru: interrupted, e.g. train service); commuting to work; passage, pathway|too:通る,通す;tsuu:通称,通告,不通,通勤,通路
+称|名称; 自称; 通称; 愛称; 通称|`mei``shou`; `ji``shou`; `tsuu``shou`; `ai``shou`; `tsuu``shou`|name, title; self-proclaimed; popular/nick-name; pet name (affectionate nickname); trade, commerce|shou:名称,自称,通称,愛称
+通|通る; 通す; 通称; 通称; 通告; 不通; 通勤; 通路|`too`ru; `too`su; `tsuu``shou`; `tsuu``shou`; `tsuu``koku`; `fu``tsuu`; `tsuu``kin`; `tsuu``ro`|to pass through; to let through; popular/nick-name; trade, commerce; notice, announcement; suspension, interruption, stoppage (ni naru: interrupted, e.g. train service); commuting to work; passage, pathway|too:通る,通す;tsuu:通称,通告,不通,通勤,通路
 銭|金銭; 銭; 釣り銭|`kin``sen`; zeni; `tsu`ri`sen`|money; money; change|sen:金銭,釣り銭;zeni:銭
 授|授ける; 授受; 授業|`sazu`keru; `ju``ju`; `ju``gyou`|to grant, teach; giving and receiving, changing hands, transferring; class, lesson|sazu:授ける;ju:授受,授業
 受|受ける; 授受; 感銘を受ける; 受験; 甘受|`u`keru; `ju``ju`; `kan``mei` wo `u`keru; `ju``ken`; `kan``ju`|receive; giving and receiving, changing hands, transferring; to be deeply impressed; taking an examination; submitting to, resigning oneself to, accepting (without complaint)|u:受ける,感銘を受ける;ju:授受,受験,甘受
@@ -573,8 +573,8 @@
 陶|陶器; 陶冶; 陶磁器|`tou``ki`; `tou``ya`; `tou``ji``ki`|pottery, ceramics, porcelain, chinaware; suru: to cultivate (one's character), train, educate; chinaware, procelain, pottery, ceramics|tou:陶器,陶冶,陶磁器
 冶|冶金; 陶冶|`ya``kin`; `tou``ya`|metalurgy; suru: to cultivate (one's character), train, educate|ya:冶金,陶冶
 添|添う; 添付; 添加; 添加物|`so`u; `ten``pu`; `ten``ka`; `ten``ka``butsu`|to meet (e.g. expectations), to satisfy, to accompany, basically like 沿う; attachment (e.g. to an email); addition; additive|so:添う;ten:添付,添加,添加物
-禁|禁じる; 監禁; 禁止; 解禁|`kin`jiru; `kan``kin`; `kin``shi`; `kai``kin`|to prohibit; to confine, imprison; prohibited; lifting a ban|kin:禁じる,監禁,禁止,解禁
-監|監禁; 監査|`kan``kin`; `kan``sa`|to confine, imprison; inspection, audit|kan:監禁,監査
+禁|禁じる; 監禁; 監禁; 禁止; 解禁|`kin`jiru; `kan``kin`; `kan``kin`; `kin``shi`; `kai``kin`|to prohibit; to confine, imprison; confine, imprison; prohibited; lifting a ban|kin:禁じる,監禁,禁止,解禁
+監|監禁; 監査; 監禁|`kan``kin`; `kan``sa`; `kan``kin`|to confine, imprison; inspection, audit; confine, imprison|kan:監禁,監査
 止|止める; 禁止; 防止|`to`meru; `kin``shi`; `bou``shi`|stop; prohibited; prevention|to:止める;shi:禁止,防止
 票|票; 投票|hyou; `tou``hyou`|vote, ballot; to vote for|hyou:票,投票
 央|中央|`chuu``ou`|center, Chuo ward in Tokyo|ou:中央
@@ -681,7 +681,7 @@
 薬|薬剤|`yaku``zai`|medicine|yaku:薬剤
 剤|薬剤; 洗剤; 中性洗剤; 合成洗剤; 清涼剤|`yaku``zai`; `sen``zai`; `chuu``sei` `sen``zai`; `gou``sei` `sen``zai`; `sei``ryou``zai`|medicine; detergent; neutral detergent; synthetic detergent; refreshment, welcome relief, breath of fresh air|zai:薬剤,洗剤,中性洗剤,合成洗剤,清涼剤
 得|得る; 得意; 会得; 心得る; 所得; 自業自得; 取得|`e`ru; `toku``i`; `e``toku`; `kokoro``e`ru; `sho``toku`; `ji``gou` `ji``toku`; `shu``toku`|to acquire; good at; master, understanding, comprehension; to understand, to consent/agree; income, earnings; reaping what you sow; acquire, obtain|e:得る,心得る;toku:得意,会得,所得,自業自得,取得
-被|被る; 被せる; 被害; 被告|`kabu`ru; `kabu`seru; `hi``gai`; `hi``koku`|to put on head; to cover; damage, harm, injury; defendant, accused|kabu:被る,被せる;koumu:被る;hi:被害,被告
+被|被る; 被せる; 被る; 被害; 被告|`kabu`ru; `kabu`seru; `koumu`ru; `hi``gai`; `hi``koku`|to put on head; to cover; to suffer, to incur (damage); damage, harm, injury; defendant, accused|kabu:被る,被せる;koumu:被る;hi:被害,被告
 害|害する; 被害; 公害; 利害; 害意; 危害; 害虫; 殺害|`gai`suru; `hi``gai`; `kou``gai`; `ri``gai`; `gai``i`; `ki``gai`; `gai``chuu`; `satsu``gai`|to damage; damage, harm, injury; pollution; advantages and disadvantages, interests (of parties); malicious intent; harm; harmful insect, pest; murder|gai:害する,被害,公害,利害,害意,危害,害虫,殺害
 危|危害; 危ない|`ki``gai`; `abu`nai|harm; dangerous|ki:危害;abu:危ない
 八|八重桜|`ya``e``zakura`|double-flowered cherry tree|ya:八重桜
@@ -711,7 +711,7 @@
 舟|舟; 同舟; 舟運; 呉越同舟|fune; `dou``shuu`; `shuu``un`; `go``etsu``dou``shuu`|boat; shipmates, fellow passengers; transportation by water; bitter enemies (placed by fate) in the same boat|fune:舟;shuu:同舟,舟運,呉越同舟
 呉|呉服; 呉越同舟; 呉越|`go``fuku`; `go``etsu``dou``shuu`; `go``etsu`|cloth (for jp clothes), textile; bitter enemies (placed by fate) in the same boat; Go-Etsu, to rival states in ancient china (Wu and Yue)|go:呉服,呉越同舟,呉越
 命|命; 生命; 運命; 命じる|inochi; `sei``mei`; `un``mei`; `mei`jiru|life; life; fate, destiny; to command|inochi:命;mei:生命,運命,命じる
-弾|弾; 弾む; 弾く; 爆弾; 弾力; 弾丸; 糾弾; 散弾|tama; `hazu`mu; `haji`ku; `baku``dan`; `dan``ryoku`; `dan``gan`; `kyuu``dan`; `san``dan`|bullet; to spring, bound, rebound; to repel; bomb; elasticity; bullet; to impeach, denounce, blame; buckshot|tama:弾;hazu:弾む;haji:弾く;hi:弾く;dan:爆弾,弾力,弾丸,糾弾,散弾
+弾|弾; 弾む; 弾く; 弾く; 爆弾; 弾力; 弾丸; 糾弾; 散弾|tama; `hazu`mu; `haji`ku; `hi`ku; `baku``dan`; `dan``ryoku`; `dan``gan`; `kyuu``dan`; `san``dan`|bullet; to spring, bound, rebound; to repel; to play (stringed instrument); bomb; elasticity; bullet; to impeach, denounce, blame; buckshot|tama:弾;hazu:弾む;haji:弾く;hi:弾く;dan:爆弾,弾力,弾丸,糾弾,散弾
 糾|糾弾; 糾問; 糾明|`kyuu``dan`; `kyuu``mon`; `kyuu``mei`|to impeach, denounce, blame; inquiry; searching examination, establishing facts through examination|kyuu:糾弾,糾問,糾明
 堕|堕落; 堕天使|`da``raku`; `da``ten``shi`|corruption, depravity, suru: to become corrupted, to degenerate into; fallen angel|da:堕落,堕天使
 姉|姉妹; 姉|`shi``mai`; ane|sisters; big sis|shi:姉妹;ane:姉

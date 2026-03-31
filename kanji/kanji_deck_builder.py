@@ -122,22 +122,30 @@ class KanjiBundleManager:
       if kanji not in self.bundles:
         self.bundles[kanji] = {
           "words": [], "kana": [], "eng": [],
-          "seen": set(), "word_readings": {}
+          "seen": set(), "word_readings": []
         }
       
       bundle = self.bundles[kanji]
       
-      if word not in bundle["seen"]:
-        bundle["seen"].add(word)
+      # Use a tuple to distinguish duplicate words that have different definitions/kana
+      entry_tuple = (word, kana, eng)
+      
+      if entry_tuple not in bundle["seen"]:
+        bundle["seen"].add(entry_tuple)
         bundle["words"].append(word) # Maintains chronological order
         bundle["kana"].append(kana)
         bundle["eng"].append(eng)
-        bundle["word_readings"][word] = []
+        bundle["word_readings"].append([])
+        idx = len(bundle["words"]) - 1
+      else:
+        # Find the index of this exact occurrence if we somehow process it multiple times
+        idx = next(i for i, w in enumerate(bundle["words"]) 
+                   if w == word and bundle["kana"][i] == kana and bundle["eng"][i] == eng)
       
       # Map reading assignment, maintaining the order they were assigned
       for r in assigned_readings[kanji]:
-        if r not in bundle["word_readings"][word]:
-          bundle["word_readings"][word].append(r)
+        if r not in bundle["word_readings"][idx]:
+          bundle["word_readings"][idx].append(r)
 
   def export_to_txt(self) -> str:
     lines = []
@@ -150,8 +158,8 @@ class KanjiBundleManager:
       # 1. Gather all unique readings in first-appearance order
       ordered_all_readings = []
       seen_readings = set()
-      for word in data["words"]:
-        for r in data["word_readings"][word]:
+      for idx, word in enumerate(data["words"]):
+        for r in data["word_readings"][idx]:
           if r not in seen_readings:
             seen_readings.add(r)
             ordered_all_readings.append(r)
@@ -174,8 +182,8 @@ class KanjiBundleManager:
       label_to_words = {}
       ordered_labels = []
       
-      for word in data["words"]:
-        for r in data["word_readings"][word]:
+      for idx, word in enumerate(data["words"]):
+        for r in data["word_readings"][idx]:
           label = reading_to_label[r]
           if label not in label_to_words:
             label_to_words[label] = []
