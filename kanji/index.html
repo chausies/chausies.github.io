@@ -1085,10 +1085,12 @@
     }
 
     // Simultaneously attempt to load anki_notes.txt and easy_to_mixup
+    // Adding a cache-buster query parameter to bypass aggressive mobile browser caching
+    const cacheBuster = '?t=' + Date.now();
     Promise.allSettled([
-      fetch(CONSTANTS.NOTES_FILENAME).then(r => { if (!r.ok) throw new Error(); return r.text(); }),
-      fetch('easy_to_mixup').then(r => { if (!r.ok) throw new Error(); return r.text(); }),
-      fetch('easy_to_mixup.txt').then(r => { if (!r.ok) throw new Error(); return r.text(); }) // Optional fallback for txt extension
+      fetch(CONSTANTS.NOTES_FILENAME + cacheBuster, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error(); return r.text(); }),
+      fetch('easy_to_mixup' + cacheBuster, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error(); return r.text(); }),
+      fetch('easy_to_mixup.txt' + cacheBuster, { cache: 'no-store' }).then(r => { if (!r.ok) throw new Error(); return r.text(); }) // Optional fallback for txt extension
     ]).then(results => {
       const [notesRes, mixupsRes, mixupsTxtRes] = results;
 
