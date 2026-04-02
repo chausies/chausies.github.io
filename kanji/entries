@@ -324,6 +324,7 @@
 劇しい|`hage`shii|violent, fierce
 前進|`zen``shin`|proceeding forwards
 進む|`susu`mu|proceed, go ahead
+納税|`nou``zei`|paying taxes
 出納|`sui``tou`|receipts and disbursements
 納める|`osa`meru|to settle (e.g. a payment)
 出来事|`de``ki``goto`|a happening
@@ -464,6 +465,7 @@
 自称|`ji``shou`|self-proclaimed
 通る|`too`ru|to pass through
 通す|`too`su|to let through
+通う|`kayo`u|to go to (school, work)
 通称|`tsuu``shou`|popular/nick-name
 愛称|`ai``shou`|pet name (affectionate nickname)
 金銭|`kin``sen`|money
@@ -1783,6 +1785,7 @@
 軽音楽|`kei``on``gaku`|light music, popular music
 軽快|`kei``kai`|casual (e.g. dress), light, numble, jaunty (melody)
 井|i|well
+井戸|`i``do`|well
 天井|`ten``jou`|ceiling
 沢|sawa|marsh
 軽井沢|`karu``i``zawa`|Karuizawa (summer resort area nw of tokyo)
@@ -1889,6 +1892,7 @@
 便所|`ben``jo`|toilet
 便利|`ben``ri`|convenient
 便箋|`bin``sen`|stationary, writing paper
+制作|`sei``saku`|to create (usually for art/games), as opposed to 製作 (manufacture)
 制度|`sei``do`|system, institution
 体制|`tai``sei`|order, system, structure, set-up
 強制|`kyou``sei`|forced, compelled, coerced
@@ -1938,8 +1942,8 @@
 加減|`ka``gen`|suru: adjust, regulate
 手加減|`te``ka``gen`|holding back
 展開|`ten``kai`|development, evolution, unfloding
-発展|`ha``ten`|development, advancement, growth
-発展場|`ha``ten``ba`|slang: gay joint/bar
+発展|`hat``ten`|development, advancement, growth
+発展場|`hat``ten``ba`|slang: gay joint/bar
 展望|`ten``bou`|outlook, perspective, suru: to have a view of, look over
 展示|`ten``ji`|exhibition, display
 餌|esa|bait, food
@@ -1966,3 +1970,62 @@
 分野|`bun``ya`|field (e.g. of study)
 国歌|`kok``ka`|national anthem
 好況|`kou``kyou`|brisk market, prosperity (反: 不況)
+掘る|`ho`ru|to dig
+発掘|`hak``kutsu`|excavation
+採掘|`sai``kutsu`|mining
+堀|hori|moat, canal, ditch
+堀川|`hori``kawa`|canal
+外堀|`soto``bori`|outer moat (castle)
+挑む|`ido`mu|to challenge
+挑戦|`chou``sen`|to challenge
+挑発|`chou``hatsu`|provocation
+賞|shou|prize, award
+鑑賞|`kan``shou`|appreciation (e.g. of art)
+賞金|`shou``kin`|(monetary) prize/award
+入賞|`nyuu``shou`|winning a prize or place (in a contest)
+賞品|`shou``hin`|prize, trophy
+寿|kotobuki|longevity, long life, "best wishes" (written on envelopes with gifts)
+寿司|`su``shi`|sushi
+寿命|`ju``myou`|life span
+長寿|`chou``ju`|longevity
+火口|`ka``kou`|(volcanic) crater
+実用|`jitsu``you`|practiacl use
+実用的|`jitsu``you``teki`|practical
+発酵|`hak``kou`|fermentation
+酵素|`kou``so`|enzyme (e.g. for fermentation)
+酵母|`kou``bo`|yeast, leaven
+不足|`fu``soku`|insufficient, lacking
+足りる|`ta`riru|to be enough
+足す|`ta`su|to add
+発足|`has``soku`|starting, inaguration, founding
+補足|`ho``soku`|suru: supplement
+因る|`yo`ru|to be caused by, to be due to
+要因|`you``in`|main cause, primary factor
+死因|`shi``in`|cause of death
+敗因|`hai``in`|cause of defeat
+一因|`ichi``in`|cause
+因子|`in``shi`|factor, divisor, element
+底|soko|depths
+徹底|`tet``tei`|thoroughness, completeness
+海底|`kai``tei`|bottom of the sea
+慎む|`tsutsushi`mu|to be careful, descreet, moderate
+謹んで|`tsutsushi`nde|respectfully...
+慎重|`shin``chou`|careful, discreet
+謹慎|`kin``shin`|self-restraint, pestilance, suru: house arrest
+不謹慎|`fu``kin``shin`|indescretion, imprudence
+誇る|`hoko`ru|to be proud of, to boast
+誇張|`ko``chou`|exaggeration
+誇示|`ko``ji`|ostentation, display
+煮る|`ni`ru|to boil, simmer
+沸かす|`wa`kasu|to bring to a boil
+生煮え|`nama``ni`e|half-cooked, rare
+煮物|`ni``mono`|food made from boiling/stewing
+業を煮やす|`gou`wo`ni`yasu|to lose one's temper
+煮沸|`sha``futsu`|to boil something up
+憩い|`iko`i|rest, relaxation
+休憩|`kyuu``kei`|rest, break
+岳|take|peak
+山岳|`san``gaku`|mountains
+北岳|`kita``dake`|mt Kita (2nd tallest after Fuji)
+鍵|kagi|key (for doors)
+鍵|ken|key (of a piano, computer, etc)
