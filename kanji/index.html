@@ -632,6 +632,47 @@
       let r = Math.random();
       let selectedPool = 'N';
 
+      if (r < pA) {
+        selectedPool = 'A';
+      } else if (r < pA + pH) {
+        selectedPool = 'H';
+      } else if (r < sumP) {
+        selectedPool = 'E';
+        r = r * sumP;
+      }
+
+      if (poolLists[selectedPool].length === 0) {
+        const fallbacks = ['N', 'A', 'H', 'E'];
+        for (let fb of fallbacks) {
+          if (poolLists[fb].length > 0) {
+            selectedPool = fb;
+            break;
+          }
+        }
+      }
+
+      const list = poolLists[selectedPool];
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function chooseNextCardOld() {
+      const availableKanjis = Object.keys(rawNotes);
+      if (availableKanjis.length === 0) return null;
+
+      const poolLists = { A: [], H: [], N: [], E: [] };
+      availableKanjis.forEach(k => {
+        const pool = state.pools[k] || 'A';
+        poolLists[pool].push(k);
+      });
+
+      const pA = poolLists.A.length / state.rates.A;
+      const pH = poolLists.H.length / state.rates.H;
+      const pE = poolLists.E.length / state.rates.E;
+      const sumP = pA + pH + pE;
+
+      let r = Math.random();
+      let selectedPool = 'N';
+
       if (pA >= 1) {
         selectedPool = 'A';
       } else if (pA + pH >= 1) {
