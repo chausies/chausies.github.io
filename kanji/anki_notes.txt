@@ -1,13 +1,13 @@
 鳥|鳥の巣; 野鳥|`tori` no `su`; `ya``chou`|bird's nest; wild bird|tori:鳥の巣;chou:野鳥
 巣|鳥の巣; 卵巣|`tori` no `su`; `ran``sou`|bird's nest; ovary|su:鳥の巣;sou:卵巣
 駐|駐車場; 駐まる|`chuu``sha``jou`; `to`maru|parking lot; stop|chuu:駐車場;to:駐まる
-車|駐車場; 乳母車; 列車; 発車; 歯車; 車輪; 三輪車; 観覧車|`chuu``sha``jou`; `u``ba``guruma`; `res``sha`; `has``sha`; `ha``guruma`; `sha``rin`; `san``rin``sha`; `kan``ran``sha`|parking lot; baby carriage; train; to depart (e.g. a vehicle); gear, cog; car wheel; tricycle; ferris wheel|sha:駐車場,列車,発車,車輪,三輪車,観覧車;guruma:乳母車,歯車
+車|駐車場; 乳母車; 列車; 発車; 歯車; 車輪; 三輪車; 観覧車; 車庫|`chuu``sha``jou`; `u``ba``guruma`; `res``sha`; `has``sha`; `ha``guruma`; `sha``rin`; `san``rin``sha`; `kan``ran``sha`; `sha``ko`|parking lot; baby carriage; train; to depart (e.g. a vehicle); gear, cog; car wheel; tricycle; ferris wheel; garage|sha:駐車場,列車,発車,車輪,三輪車,観覧車,車庫;guruma:乳母車,歯車
 場|駐車場; 場所; 劇場; 現場; 工場; 職場; 登場; 市場; 市場; 寡占市場; 発展場|`chuu``sha``jou`; `ba``sho`; `geki``jou`; `gen``ba`; `kou``jou`; `shoku``ba`; `tou``jou`; `shi``jou`; `ichi``ba`; `ka``sen``shi``jou`; `hat``ten``ba`|parking lot; place; theatre; actual spot; factory, plant, workshop; workplace; appearance/entry on stage; market (financial, stock, domestic, etc.); town/street market; oligopolistic market; slang: gay joint/bar|jou:駐車場,劇場,工場,登場,市場,寡占市場;ba:場所,現場,職場,市場,発展場
 所|所; 場所; 近所; 事務所; 所得; 所帯; 所持; 便所|tokoro; `ba``sho`; `kin``jo`; `ji``mu``sho`; `sho``toku`; `sho``tai`; `sho``ji`; `ben``jo`|place; place; neighborhood; office; income, earnings; household, home, more informal than 世帯; possession, owning; toilet|tokoro:所;sho:場所,近所,事務所,所得,所帯,所持,便所
 近|近所; 近隣; 近隣諸国; 最近|`kin``jo`; `kin``rin`; `kin``rin``sho``koku`; `sai``kin`|neighborhood; neighborhood, vicinity; neighoring countries; most recent|kin:近所,近隣,近隣諸国,最近
 食|食費; 朝食; 蚕食; 食洗機; 洋食; 食料; 飲食; 餌食|`shoku``hi`; `chou``shoku`; `san``shoku`; `shoku``sen``ki`; `you``shoku`; `shoku``ryou`; `in``shoku`; ejiki|food expenses; breakfast; encroachment, invasion; dishwashing machine; western food; food; food and drink; prey, victim|shoku:食費,朝食,蚕食,食洗機,洋食,食料,飲食;ejiki:餌食
 費|食費; 費やす; 費用; 公費; 工費; 宿泊費|`shoku``hi`; `tsui`yasu; `hi``you`; `kou``hi`; `kou``hi`; `shuku``haku``hi`|food expenses; to spend, or waste/squander; cost(s)/expense(s); public funds; construction costs; hotel charge, lodging expense|hi:食費,費用,公費,工費,宿泊費;tsui:費やす
-用|費用; 用意; 採用; 雇用; 雇用主; 用箋; 用紙; 登用; 実用; 実用的|`hi``you`; `you``i`; `sai``you`; `ko``you`; `ko``you``nushi`; `you``sen`; `you``shi`; `tou``you`; `jitsu``you`; `jitsu``you``teki`|cost(s)/expense(s); preparations, arrangements; suru: to use, adopt, employ (e.g. someone's idea), recruit; employment; employer; stationary, writing pad; sheets of paper, blank form; suru: to promote, to appoint; practiacl use; practical|you:費用,用意,採用,雇用,雇用主,用箋,用紙,登用,実用,実用的
+用|費用; 用意; 採用; 雇用; 雇用主; 用箋; 用紙; 登用; 実用; 実用的; 副作用|`hi``you`; `you``i`; `sai``you`; `ko``you`; `ko``you``nushi`; `you``sen`; `you``shi`; `tou``you`; `jitsu``you`; `jitsu``you``teki`; `fuku``sa``you`|cost(s)/expense(s); preparations, arrangements; suru: to use, adopt, employ (e.g. someone's idea), recruit; employment; employer; stationary, writing pad; sheets of paper, blank form; suru: to promote, to appoint; practiacl use; practical; side effect, adverse reaction|you:費用,用意,採用,雇用,雇用主,用箋,用紙,登用,実用,実用的,副作用
 頒|頒布|`han``pu`|distribute|han:頒布
 布|頒布; 布; 布団; 座布団; 分布; 財布; 毛布; 布巾; 布告|`han``pu`; nuno; `fu``ton`; `za``bu``ton`; `bun``pu`; `sai``fu`; `mou``fu`; `fu``kin`; `fu``koku`|distribute; cloth; futon; cushion chair; distribution; wallet; blanket; tea towl, dishcloth; edict, ordinance, proclamation|fu:頒布,布団,座布団,分布,財布,毛布,布巾,布告;nuno:布
 団|布団; 座布団; 団体; 団地; 団結; 団扇|`fu``ton`; `za``bu``ton`; `dan``tai`; `dan``chi`; `dan``ketsu`; uchiwa|futon; cushion chair; organization; apartment complex; suru: to unite, combine; traditional japanese handheld fan (looks like a racket)|ton:布団,座布団;dan:団体,団地,団結;uchiwa:団扇
@@ -29,7 +29,7 @@
 間|間違える; 間; 空間; 茶の間; 民間; 期間|`ma``chiga`eru; aida; `kuu``kan`; `cha`no`ma`; `min``kan`; `ki``kan`|to get wrong; between; space; living room; private (as opposed to government); period, interval, term|ma:間違える,茶の間;aida:間;kan:空間,民間,期間
 違|間違える; 違憲; 違反|`ma``chiga`eru; `i``ken`; `i``han`|to get wrong; unconstitutionality; violation, breach|chiga:間違える;i:違憲,違反
 閉|閉じる; 閉店|`to`jiru; `hei``ten`|close; close shop|to:閉じる;hei:閉店
-長|長い; 生長; 課長; 長期; 長期的; 長考; 長方形; 延長; 長寿|`naga`i; `sei``chou`; `ka``chou`; `chou``ki`; `chou``ki``teki`; `chou``kou`; `chou``hou``kei`; `en``chou`; `chou``ju`|long; growth (of a plant); section chief/manager; long-term; long-term; thinking for a long time, lengthy consideration, pondering; rectangle; extension, prolongation; longevity|naga:長い;chou:生長,課長,長期,長期的,長考,長方形,延長,長寿
+長|長い; 生長; 課長; 長期; 長期的; 長考; 長方形; 延長; 長寿; 副社長|`naga`i; `sei``chou`; `ka``chou`; `chou``ki`; `chou``ki``teki`; `chou``kou`; `chou``hou``kei`; `en``chou`; `chou``ju`; `fuku``sha``chou`|long; growth (of a plant); section chief/manager; long-term; long-term; thinking for a long time, lengthy consideration, pondering; rectangle; extension, prolongation; longevity; vice president|naga:長い;chou:生長,課長,長期,長期的,長考,長方形,延長,長寿,副社長
 鎮|鎮まる; 重鎮; 鎮静|`shizu`maru; `juu``chin`; `chin``sei`|to subside; authority [in a particular field]; tranquility|shizu:鎮まる;chin:重鎮,鎮静
 重|重鎮; 重点; 重傷; 重ねる; 重い; 重複; 貴重; 八重桜; 重要; 慎重|`juu``chin`; `juu``ten`; `juu``shou`; `kasa`neru; `omo`i; `chou``fuku` or `juu``fuku`; `ki``chou`; `ya``e``zakura`; `juu``you`; `shin``chou`|authority [in a particular field]; important point, priority; serious wound; to pile up, repeat; heavy; to be repeating, redundant; precious, valuable; double-flowered cherry tree; important; careful, discreet|juu:重鎮,重点,重傷,重複,重要;kasa:重ねる;omo:重い;chou:重複,貴重,慎重;e:八重桜
 鈍|鈍る; 愚鈍|`nibu`ru; `gu``don`|to become dull; stupid, foolish|nibu:鈍る;don:愚鈍
@@ -45,12 +45,12 @@
 転|転ぶ; 転々とする; 転がす; 転嫁|`koro`bu; `ten`ten to suru; `koro`gasu; `ten``ka`|fall; go rolling, wander [e.g. from place-to-place/one-job-to-another]; to send rolling; pass the buck (blame)|koro:転ぶ,転がす;ten:転々とする,転嫁
 旨|旨; 趣旨|mune; `shu``shi`|purpose, main point, gist; purport, aim, meaning|mune:旨;shi:趣旨
 趣|趣; 趣旨; 趣味|omomuki; `shu``shi`; `shu``mi`|meaning, effect, taste; purport, aim, meaning; hobby|omomuki:趣;shu:趣旨,趣味
-味|趣味; 意味; 涼味; 甘味; 甘味料|`shu``mi`; `i``mi`; `ryou``mi`; `ama``mi`; `kan``mi``ryou`|hobby; meaning; coolness; sweetness; sweetener|mi:趣味,意味,涼味,甘味,甘味料
+味|趣味; 意味; 涼味; 甘味; 甘味料; 味方|`shu``mi`; `i``mi`; `ryou``mi`; `ama``mi`; `kan``mi``ryou`; `mi``kata`|hobby; meaning; coolness; sweetness; sweetener; ally|mi:趣味,意味,涼味,甘味,甘味料,味方
 贈|贈収賄; 贈る; 寄贈|`zou``shuu``wai`; `oku`ru; `ki``zou`|bribery; bestow (a gift), present; donation, gift|zou:贈収賄,寄贈;oku:贈る
 収|贈収賄; 収める; 収入; 収集; 回収; 収容; 撤収; 収支; 収支決算|`zou``shuu``wai`; `osa`meru; `shuu``nyuu`; `shuu``shuu`; `kai``shuu`; `shuu``you`; `tes``shuu`; `shuu``shi`; `shuu``shi``kes``san`|bribery; to include (in a catalogue), to contain, to capture (on film); income; gathering up, collecting; collection, recovery; accomodation, housing, seating; withrawal (of troops), removal (e.g. of a building, stage set); income and expenditure; settlement of accounts/balance|shuu:贈収賄,収入,収集,回収,収容,撤収,収支,収支決算;osa:収める
 賄|贈収賄|`zou``shuu``wai`|bribery|wai:贈収賄
 寄|寄贈; 片寄る; 最寄り; 寄越す|`ki``zou`; `kata``yo`ru; `mo``yori`; `yo``ko`su|donation, gift; to lean on, incline toward; nearest; to hand over (usu. kana only)|ki:寄贈;yo:片寄る,寄越す;yori:最寄り
-入|収入; 四捨五入; 入試; 入賞|`shuu``nyuu`; `shi``sha``go``nyuu`; `nyuu``shi`; `nyuu``shou`|income; round a number; entrance exam; winning a prize or place (in a contest)|nyuu:収入,四捨五入,入試,入賞
+入|収入; 四捨五入; 入試; 入賞; 導入|`shuu``nyuu`; `shi``sha``go``nyuu`; `nyuu``shi`; `nyuu``shou`; `dou``nyuu`|income; round a number; entrance exam; winning a prize or place (in a contest); inroduction, bringing in, leading in|nyuu:収入,四捨五入,入試,入賞,導入
 集|収集; 集める; 召集|`shuu``shuu`; `atsu`meru; `shou``shuu`|gathering up, collecting; to gather; convening, calling together (e.g. parliment, strategy meeting, etc.)|shuu:収集,召集;atsu:集める
 回|回収; 回る; 回答; 回復; 回答; 撤回; 回路|`kai``shuu`; `mawa`ru; `kai``tou`; `kai``fuku`; `kai``tou`; `tek``kai`; `kai``ro`|collection, recovery; to go around; reply, answer; recover; answer, solution; to take back, retraction; circuit|kai:回収,回答,回復,撤回,回路;mawa:回る
 事|事件; 出来事; 事務; 事務所; 不祥事|`ji``ken`; `de``ki``goto`; `ji``mu`; `ji``mu``sho`; `fu``shou``ji`|incident; a happening; business/office work; office; scandal, deplorable event|ji:事件,事務,事務所,不祥事;goto:出来事
@@ -66,7 +66,7 @@
 設|設置; 設ける; 建設; 建設的; 開設; 設計|`sec``chi`; `mou`keru; `ken``setsu`; `ken``setsu``teki`; `kai``setsu`; `sek``kei`|install, set up; establish, create, prepare ahead of time; construction (e.g. buildings); constructive; establishment, opening; plan, design, layout|sextsu:設置,設計;mou:設ける;setsu:建設,建設的,開設
 置|設置; 置く; 据え置く; 処置; 装置; 措置; 位置|`sec``chi`; `o`ku; `su`e`o`ku; `sho``chi`; `sou``chi`; `so``chi`; `i``chi`|install, set up; place; to leave as is untouched; deal with, give medical treatment; equipment, installation; measures (e.g. measures taken to combat a problem); place, position|chi:設置,処置,装置,措置,位置;o:置く,据え置く
 建|建設; 建設的; 建物; 建築; 建坪|`ken``setsu`; `ken``setsu``teki`; `tate``mono`; `ken``chiku`; `tate``tsubo`|construction (e.g. buildings); constructive; building; construction, architecture (suru verb); floor space|ken:建設,建設的,建築;tate:建物,建坪
-不|不健康な; 不妊; 不景気な; 不屈の; 不意; 不況; 不意打ち; 不可能な; 不能; 不可分; 不思議; 不動産; 不可避; 不通; 不断; 不遜; 不祥事; 不足; 不謹慎|`fu``ken``kou`; `fu``nin`; `fu``kei``ki` na; `fu``kutsu`no; `fu``i`; `fu``kyou`; `fu``i``u`chi; `fu``ka``nou` na; `fu``nou`; `fu``ka``bun`; `fu``shi``gi`; `fu``dou``san`; `fu``ka``hi`; `fu``tsuu`; `fu``dan`; `fu``son`; `fu``shou``ji`; `fu``soku`; `fu``kin``shin`|unhealthy; infertile; gloomy, cheerless; unyielding, indomitable; sudden, unexpected (like fuiuchi); depression, recession, slump; surprise attack; impossible; incompetent; indivisible, inseparable; wonder, strange; real estate; unavoidable, inevitable; suspension, interruption, stoppage (ni naru: interrupted, e.g. train service); constant, persistent, usual, normal; disrespectful, insolent, haughty, arrogant; scandal, deplorable event; insufficient, lacking; indescretion, imprudence|fu:不健康な,不妊,不景気な,不屈の,不意,不況,不意打ち,不可能な,不能,不可分,不思議,不動産,不可避,不通,不断,不遜,不祥事,不足,不謹慎
+不|不健康な; 不妊; 不景気な; 不屈の; 不意; 不況; 不意打ち; 不可能な; 不能; 不可分; 不思議; 不動産; 不可避; 不通; 不断; 不遜; 不祥事; 不足; 不謹慎; 不審; 不和|`fu``ken``kou`; `fu``nin`; `fu``kei``ki` na; `fu``kutsu`no; `fu``i`; `fu``kyou`; `fu``i``u`chi; `fu``ka``nou` na; `fu``nou`; `fu``ka``bun`; `fu``shi``gi`; `fu``dou``san`; `fu``ka``hi`; `fu``tsuu`; `fu``dan`; `fu``son`; `fu``shou``ji`; `fu``soku`; `fu``kin``shin`; `fu``shin`; `fu``wa`|unhealthy; infertile; gloomy, cheerless; unyielding, indomitable; sudden, unexpected (like fuiuchi); depression, recession, slump; surprise attack; impossible; incompetent; indivisible, inseparable; wonder, strange; real estate; unavoidable, inevitable; suspension, interruption, stoppage (ni naru: interrupted, e.g. train service); constant, persistent, usual, normal; disrespectful, insolent, haughty, arrogant; scandal, deplorable event; insufficient, lacking; indescretion, imprudence; doubt, suspicion, question; disharmony, discord|fu:不健康な,不妊,不景気な,不屈の,不意,不況,不意打ち,不可能な,不能,不可分,不思議,不動産,不可避,不通,不断,不遜,不祥事,不足,不謹慎,不審,不和
 健|不健康な; 健やか; 健全|`fu``ken``kou`; `suko`yaka; `ken``zen`|unhealthy; healthy; health, soundness|ken:不健康な,健全;suko:健やか
 康|不健康な|`fu``ken``kou`|unhealthy|kou:不健康な
 開|開設; 開拓; 開放; 展開|`kai``setsu`; `kai``taku`; `kai``hou`; `ten``kai`|establishment, opening; reclamation, culivation, pioneering; release; development, evolution, unfloding|kai:開設,開拓,開放,展開
@@ -86,7 +86,7 @@
 血|血液; 純血; 混血|`ketsu``eki`; `jun``ketsu`; `kon``ketsu`|blood; pure blood; mixed race|ketsu:血液,純血,混血
 液|血液; 液体; 液; 液化|`ketsu``eki`; `eki``tai`; eki; `eki``ka`|blood; fluid (e.g. goop); fluid; suru: liquify|eki:血液,液体,液,液化
 落|落ち葉; 落雷; 落書き; 落ち着く; 堕落; 落第|`o`chi`ba`; `raku``rai`; `raku``ga`ki; `o`chi`tsu`ku; `da``raku`; `raku``dai`|fallen leaves; lightning strike; doodle, graffiti; to calm down; corruption, depravity, suru: to become corrupted, to degenerate into; failure, dropping out|o:落ち葉,落ち着く;raku:落雷,落書き,堕落,落第
-体|液体; 体育; 全体主義; 団体; 体調; 解体; 体験; 体裁; 体操; 体制|`eki``tai`; `tai``iku`; `zen``tai``shu``gi`; `dan``tai`; `tai``chou`; `kai``tai`; `tai``ken`; `tei``sai`; `tai``sou`; `tai``sei`|fluid (e.g. goop); physical education, athletics; totalitarianism; organization; physical condition; demolition, dismantling; personal experience; outward appearance; physical exercises, gynmastics; order, system, structure, set-up|tai:液体,体育,全体主義,団体,体調,解体,体験,体操,体制;tei:体裁
+体|液体; 体育; 全体主義; 団体; 体調; 解体; 体験; 体裁; 体操; 体制; 導体|`eki``tai`; `tai``iku`; `zen``tai``shu``gi`; `dan``tai`; `tai``chou`; `kai``tai`; `tai``ken`; `tei``sai`; `tai``sou`; `tai``sei`; `dou``tai`|fluid (e.g. goop); physical education, athletics; totalitarianism; organization; physical condition; demolition, dismantling; personal experience; outward appearance; physical exercises, gynmastics; order, system, structure, set-up; conductor (e.g. electricity)|tai:液体,体育,全体主義,団体,体調,解体,体験,体操,体制,導体;tei:体裁
 苦|苦渋; 苦しい; 苦い; 苦労; 苦手; 苦痛|`ku``juu`; `kuru`shii; `niga`i; `ku``rou`; `niga``te`; `ku``tsuu`|bitter experience, anguish; painful; bitter; suffering, struggle; bad at; pain, agony|ku:苦渋,苦労,苦痛;kuru:苦しい;niga:苦い,苦手
 渋|苦渋; 渋い|`ku``juu`; `shibu`i|bitter experience, anguish; bitter, sober, somber [e.g. one's expression]|juu:苦渋;shibu:渋い
 労|苦労; 労働者; 過労死; 勤労; 疲労|`ku``rou`; `rou``dou``sha`; `ka``rou``shi`; `kin``rou`; `hi``rou`|suffering, struggle; manual laborer; death by overwork; labour, exertion; fatigue, tiredness, weariness|rou:苦労,労働者,過労死,勤労,疲労
@@ -94,7 +94,7 @@
 頭|頭脳; 頭巾; 冒頭; 頭痛; 先頭|`zu``nou`; `zu``kin`; `bou``tou`; `zu``tsuu`; `sen``tou`|brains, intellect; hood, kerchief; the beginning, the opening; headache; head, lead, vanguard|zu:頭脳,頭巾,頭痛;tou:冒頭,先頭
 内|脳内; 宮内庁; 内容|`nou``nai`; `ku``nai``chou`; `nai``you`|inside the head; Imperial Household Agency; contents|nai:脳内,宮内庁,内容
 首|首脳; 乳首; 首; 元首; 首席|`shu``nou`; `chi``kubi`; kubi; `gen``shu`; `shu``seki`|head, leader; nipple; neck; ruler, sovereign; top [first] in the class|shu:首脳,元首,首席;kubi:乳首,首
-主|主脳; 全体主義; 主人; 主; 主に; 地主; 快楽主義; 主観的; 主任; 放任主義; 雇用主; 株主; 民主; 自由民主党; 主要; 主席|`shu``nou`; `zen``tai``shu``gi`; `shu``jin`; nushi; `omo`ni; `ji``nushi`; `kai``raku``shu``gi`; `shu``kan``teki`; `shu``nin`; `hou``nin``shu``gi`; `ko``you``nushi`; `kabu``nushi`; `min``shu`; `ji``yuu` `min``shu` `tou`; `shu``you`; `shu``seki`|important part; totalitarianism; head, proprietor, landlord, one's husband; master; mainly, primarily; landlord, landowner; hedonism; subjective; person in charge; principle of laissez-faire; employer; shareholder; democracy; Liberal Democratic Party; chief, main, principal, major; head, chief chairman|shu:主脳,全体主義,主人,快楽主義,主観的,主任,放任主義,民主,自由民主党,主要,主席;nushi:主,地主,雇用主,株主;omo:主に
+主|主脳; 全体主義; 主人; 主; 主に; 地主; 快楽主義; 主観的; 主任; 放任主義; 雇用主; 株主; 民主; 自由民主党; 主要; 主席; 主導|`shu``nou`; `zen``tai``shu``gi`; `shu``jin`; nushi; `omo`ni; `ji``nushi`; `kai``raku``shu``gi`; `shu``kan``teki`; `shu``nin`; `hou``nin``shu``gi`; `ko``you``nushi`; `kabu``nushi`; `min``shu`; `ji``yuu` `min``shu` `tou`; `shu``you`; `shu``seki`; `shu``dou`|important part; totalitarianism; head, proprietor, landlord, one's husband; master; mainly, primarily; landlord, landowner; hedonism; subjective; person in charge; principle of laissez-faire; employer; shareholder; democracy; Liberal Democratic Party; chief, main, principal, major; head, chief chairman; leadership, initiative|shu:主脳,全体主義,主人,快楽主義,主観的,主任,放任主義,民主,自由民主党,主要,主席,主導;nushi:主,地主,雇用主,株主;omo:主に
 聖|聖母; 聖堂; 神聖; 聖書|`sei``bo`; `sei``dou`; `shin``sei`; `sei``sho`|holy mother (like Mary); temple, church; holiness; Bible, scriptures|sei:聖母,聖堂,神聖,聖書
 母|聖母; 乳母車; 酵母|`sei``bo`; `u``ba``guruma`; `kou``bo`|holy mother (like Mary); baby carriage; yeast, leaven|bo:聖母,酵母;ba:乳母車
 神|神聖; 心神; 心神耗弱; 神経|`shin``sei`; `shin``shin`; `shin``shin``kou``jaku`; `shin``kei`|holiness; mind; feeble-mindedness, diminished capacity; nerve|shin:神聖,心神,心神耗弱,神経
@@ -113,10 +113,10 @@
 茶|紅茶; 茶の間; 緑茶; 麦茶|`kou``cha`; `cha`no`ma`; `ryoku``cha`; `mugi``cha`|black tea; living room; green tea; barley tea|cha:紅茶,茶の間,緑茶,麦茶
 園|梅園; 公園|`bai``en`; `kou``en`|plum tree orchard; park|en:梅園,公園
 白|白梅; 告白; 白刃; 白濁; 漂白|`shira``ume` or `haku``bai`; `koku``haku`; `haku``jin`; `haku``daku`; `hyou``haku`|white plum tree; to confess; drawn sword, naked sword; cloudiness; to bleach|shira:白梅;haku:白梅,告白,白刃,白濁,漂白
-答|答; 回答; 問答; 回答|kotae; `kai``tou`; `mon``dou`; `kai``tou`|answer, response; reply, answer; questions and answers, dialogue; answer, solution|kotae:答;tou:回答,問答
+答|答; 回答; 問答; 回答; 答弁|kotae; `kai``tou`; `mon``dou`; `kai``tou`; `tou``ben`|answer, response; reply, answer; questions and answers, dialogue; answer, solution; response, reply, defense|kotae:答;tou:回答,問答,答弁
 問|問答; 弔問; 問う; 問屋; 糾問; 疑問|`mon``dou`; `chou``mon`; `to`u; `ton``ya`; `kyuu``mon`; `gi``mon`|questions and answers, dialogue; condolence call; to ask/question; wholesale store; inquiry; doubt, question|mon:問答,弔問,糾問,疑問;to:問う;ton:問屋
 突|突当り; 突く; 突然; 突っ込む|`tsuki``ata`ri; `tsu`ku; `totsu``zen`; `tsu`k`ko`mu|end of a street; poke; sudden; to butt in|tsuki:突当り;tsu:突く,突っ込む;totsu:突然
-当|突当り; 当然; 正当; 見当|`tsuki``ata`ri; `tou``zen`; `sei``tou`; `ken``tou`|end of a street; of course, as a matter of course; just, justified; estimate, guess|ata:突当り;tou:当然,正当,見当
+当|突当り; 当然; 正当; 見当; 弁当|`tsuki``ata`ri; `tou``zen`; `sei``tou`; `ken``tou`; `ben``tou`|end of a street; of course, as a matter of course; just, justified; estimate, guess; box lunch|ata:突当り;tou:当然,正当,見当,弁当
 然|突然; 偶然; 全然; 自然; 天然; 当然|`totsu``zen`; `guu``zen`; `zen``zen`; `shi``zen`; `ten``nen`; `tou``zen`|sudden; coicidence; not at all; nature; natural, spontaneous, natural airhead (op. of 人工); of course, as a matter of course|zen:突然,偶然,全然,自然,当然;nen:天然
 込|突っ込む|`tsu`k`ko`mu|to butt in|ko:突っ込む
 祝|祝杯; 祝う|`shuku``hai`; `iwa`u|toast; celebrate|shuku:祝杯;iwa:祝う
@@ -143,7 +143,7 @@
 片|片寄る; 片手; 片道; 片付ける; 片方; 断片的; 断片|`kata``yo`ru; `kata``te`; `kata``michi`; `kata``duke`ru; `kata``hou`; `dan``pen``teki`; `dan``pen`|to lean on, incline toward; singlehanded; one-way (trip); tidy up; one side, one party; fragmentary; fragment, scrap|kata:片寄る,片手,片道,片付ける,片方;pen:断片的,断片
 手|片手; 手綱; 手術; 助手; 手配; 苦手; 手軽; 手加減|`kata``te`; `ta``duna`; `shu``jutsu`; `jo``shu`; `te``hai`; `niga``te`; `te``garu`; `te``ka``gen`|singlehanded; bridle, reins; surgery; assistant, helper; arrangements, preparations; bad at; easy, simple, straightforward; holding back|te:片手,手配,苦手,手軽,手加減;ta:手綱;shu:手術,助手
 付|片付ける; 添付; 日付; 付箋; 付録|`kata``duke`ru; `ten``pu`; `hi``duke`; `fu``sen`; `fu``roku`|tidy up; attachment (e.g. to an email); date; sticky note; appendix, supplement|duke:片付ける,日付;fu:添付,付箋,付録
-方|片方; 方向; 地方; 山陰地方; 正方形; 長方形; 処方箋|`kata``hou`; `hou``kou`; `chi``hou`; `san``in` `chi``hou`; `sei``hou``kei`; `chou``hou``kei`; `sho``hou``sen`|one side, one party; direction; region; sanin region; square; rectangle; (medical) prescription|hou:片方,方向,地方,山陰地方,正方形,長方形,処方箋
+方|片方; 方向; 地方; 山陰地方; 正方形; 長方形; 処方箋; 味方|`kata``hou`; `hou``kou`; `chi``hou`; `san``in` `chi``hou`; `sei``hou``kei`; `chou``hou``kei`; `sho``hou``sen`; `mi``kata`|one side, one party; direction; region; sanin region; square; rectangle; (medical) prescription; ally|hou:片方,方向,地方,山陰地方,正方形,長方形,処方箋;kata:味方
 熟|熟練; 熟れる; 未熟|`juku``ren`; `u`reru; `mi``juku`|skilled person, expert; ripen; inexperienced, unskilled|juku:熟練,未熟;u:熟れる
 練|熟練; 練習; 練る; 未練|`juku``ren`; `ren``shuu`; `ne`ru; `mi``ren`|skilled person, expert; practice; polish; regret, lingering attachment|ren:熟練,練習,未練;ne:練る
 働|労働者; 働く|`rou``dou``sha`; `hatara`ku|manual laborer; to work|dou:労働者;hatara:働く
@@ -158,7 +158,7 @@
 声|泣き声; 声を忍ばせる; 歓声|`na`ki`goe`; `koe` wo `shino`baseru; `kan``sei`|cry (tearful voice); to lower one's voice; cheers, shouts of joy|koe:泣き声,声を忍ばせる;sei:歓声
 沿|沿線; 沿う; 沿岸|`en``sen`; `so`u; `en``gan`|along a train line; to run along/against (e.g. 川を沿い歩いた); coast, shore|en:沿線,沿岸;so:沿う
 線|沿線; 線; 曲線; 線路|`en``sen`; sen; `kyoku``sen`; `sen``ro`|along a train line; line; curve; railway track/line|sen:沿線,線,曲線,線路
-水|水準; 水素; 水産; 水深; 水浸し; 水銀; 水洗; 薪水; 清涼飲料水|`sui``jun`; `sui``so`; `sui``san`; `sui``shin`; `mizu``bita`shi; `sui``gin`; `sui``sen`; `shin``sui`; `sei``ryou``in``ryou``sui`|a level, standard; hydrogen; aquatic products, fisheries; water depth; soaked in water; Mercury (Hg); rincing with water; firewood and water; soft drink|sui:水準,水素,水産,水深,水銀,水洗,薪水,清涼飲料水;mizu:水浸し
+水|水準; 水素; 水産; 水深; 水浸し; 水銀; 水洗; 薪水; 清涼飲料水; 潜水|`sui``jun`; `sui``so`; `sui``san`; `sui``shin`; `mizu``bita`shi; `sui``gin`; `sui``sen`; `shin``sui`; `sei``ryou``in``ryou``sui`; `sen``sui`|a level, standard; hydrogen; aquatic products, fisheries; water depth; soaked in water; Mercury (Hg); rincing with water; firewood and water; soft drink; diving|sui:水準,水素,水産,水深,水銀,水洗,薪水,清涼飲料水,潜水;mizu:水浸し
 殺|殺人; 殺す; 殺める; 殺害; 斬殺|`satsu``jin`; `koro`su; `aya`meru; `satsu``gai`; `zan``satsu`|murderer; murder; to kill; murder; killing by sword|satsu:殺人,殺害,斬殺;koro:殺す;aya:殺める
 残|残念な; 残る; 残金; 残酷|`zan``nen` na; `noko`ru; `zan``kin`; `zan``koku`|unfortunate, bummer; to leave over; remaining money, balance; cruel|zan:残念な,残金,残酷;noko:残る
 念|残念な; 畏敬の念; 念願|`zan``nen` na; `i``kei` no `nen`; `nen``gan`|unfortunate, bummer; feelings of reverence/awe; one's heart's desire|nen:残念な,畏敬の念,念願
@@ -172,12 +172,12 @@
 並|杉並木; 並ぶ; 並列|`sugi``nami``ki`; `nara`bu; `hei``retsu`|row of cedar trees; line up; running in parallel, lined up alongside (suru vb or no adj)|nami:杉並木;nara:並ぶ;hei:並列
 木|杉並木; 木; 樹木|`sugi``nami``ki`; ki; `ju``moku`|row of cedar trees; tree; trees and shrubs|ki:杉並木,木;moku:樹木
 時|時雨; 時代; 時刻表; 時計; 時期|shigure; `ji``dai`; `ji``koku``hyou`; `to``kei`; `ji``ki`|late-autumn-early-winter showers, drizzle; era, period; timetable, schedule; clock; time, season, period, soon, shortly|shigure:時雨;ji:時代,時刻表,時期;to:時計
-代|時代; 現代; 代表; 古代; 代理; 代わる|`ji``dai`; `gen``dai`; `dai``you`; `ko``dai`; `dai``ri`; `ka`waru|era, period; present-day; representative; ancient, classic; proxy, representative, suru: represent; to succeed, to take the place of|dai:時代,現代,代表,古代,代理;ka:代わる
+代|時代; 現代; 代表; 古代; 代理; 代わる; 代弁|`ji``dai`; `gen``dai`; `dai``you`; `ko``dai`; `dai``ri`; `ka`waru; `dai``ben`|era, period; present-day; representative; ancient, classic; proxy, representative, suru: represent; to succeed, to take the place of; speaking by proxy, speaking for someone else, payment by proxy|dai:時代,現代,代表,古代,代理,代弁;ka:代わる
 旅|旅券; 旅先; 旅客; 旅路; 旅館|`ryo``ken`; `tabi``saki`; `ryo``kaku`; `tabi``ji`; `ryo``kan`|passport; destination of a journey; passenger; route of a journey; inn|ryo:旅券,旅客,旅館;tabi:旅先,旅路
 券|旅券|`ryo``ken`|passport|ken:旅券
 新|新卒; 新築; 新任; 新党; 新婚; 新緑; 斬新|`shin``sotsu`; `shin``chiku`; `shin``nin`; `shin``tou`; `shin``kon`; `shin``ryoku`; `zan``shin`|new grad; new building, new construction (suru verb); trust, confidence; new political party; newly-wed; new green leaves, fresh verdure; novel, original|shin:新卒,新築,新任,新党,新婚,新緑,斬新
 卒|新卒; 卒業|`shin``sotsu`; `sotsu``gyou`|new grad; graduation|sotsu:新卒,卒業
-文|文部科学省; 論文; 散文; 注文; 文学; 文化|`mon``bu``ka``gaku``shou`; `ron``bun`; `san``bun`; `chuu``mon`; `bun``gaku`; `bun``ka`|MEXT Ministry of Ed, Cult, Sprt, Sci, Tech; thesis, paper, essay; prose; order, request; literature; culture|mon:文部科学省,注文;bun:論文,散文,文学,文化
+文|文部科学省; 論文; 散文; 注文; 文学; 文化; 文; 文|`mon``bu``ka``gaku``shou`; `ron``bun`; `san``bun`; `chuu``mon`; `bun``gaku`; `bun``ka`; bun; fumi|MEXT Ministry of Ed, Cult, Sprt, Sci, Tech; thesis, paper, essay; prose; order, request; literature; culture; sentence, passage; letter (to someone)|mon:文部科学省,注文;bun:論文,散文,文学,文化,文;fumi:文
 部|文部科学省; 部族; 全部; 部隊; 腰部; 部活; 部屋; 部下|`mon``bu``ka``gaku``shou`; `bu``zoku`; `zen``bu`; `bu``tai`; `you``bu`; `bu``katsu`; `he``ya`; `bu``ka`|MEXT Ministry of Ed, Cult, Sprt, Sci, Tech; tribe; everything; force, unit, squad; pelvic area; club activities; room; subordinate|bu:文部科学省,部族,全部,部隊,腰部,部活,部下;he:部屋
 科|文部科学省; 教科書; 学科; 外科; 歯科|`mon``bu``ka``gaku``shou`; `kyou``ka``sho`; `gak``ka`; `ge``ka`; `shi``ka`|MEXT Ministry of Ed, Cult, Sprt, Sci, Tech; textbook; study subject, course of study, department (university, etc.); surgery department; dentistry|ka:文部科学省,教科書,学科,外科,歯科
 学|文部科学省; 学研; 学究; 文学; 退学; 学科; 医学; 儒学; 博学|`mon``bu``ka``gaku``shou`; `gak``ken`; `gak``kyuu`; `bun``gaku`; `tai``gaku`; `gak``ka`; `i``gaku`; `ju``gaku`; `haku``gaku`|MEXT Ministry of Ed, Cult, Sprt, Sci, Tech; study and research; scholar, student; literature; dropping out of school; study subject, course of study, department (university, etc.); medical science; confucianism; extensive learning, erudition|gaku:文部科学省,文学,退学,医学,儒学,博学;gaxtsu:学研,学究,学科
@@ -185,7 +185,7 @@
 敷|敷く; 敷地|`shi`ku; `shiki``chi`|to lay out (e.g. bricks on a road); construction site|shi:敷く;shiki:敷地
 地|敷地; 地下鉄; 地下; 地図; 意地悪; 意地; 地主; 地元; 団地; 窮地; 領地; 地位; 地帯; 地方; 山陰地方; 基地; 扇状地|`shiki``chi`; `chi``ka``tetsu`; `chi``ka`; `chi``zu`; `i``ji``waru`; `i``ji`; `ji``nushi`; `ji``moto`; `dan``chi`; `kyuu``chi`; `ryou``chi`; `chi``i`; `chi``tai`; `chi``hou`; `san``in` `chi``hou`; `ki``chi`; `sen``jou``chi`|construction site; underground subway; underground; map; malicious, unkind, bully; stubborness; landlord, landowner; home area/town; apartment complex; dilemma, predicament; feudal estate; social position, status; area, zone, belt (of land); region; sanin region; base (like a military one); alluvial fan, delta|chi:敷地,地下鉄,地下,地図,団地,窮地,領地,地位,地帯,地方,山陰地方,基地,扇状地;ji:意地悪,意地,地主,地元
 据|据え置く; 据える|`su`e`o`ku; `su`eru|to leave as is untouched; to place/set/fix something (in position)|su:据え置く,据える
-指|指; 指す; 指示; 指定; 小指; 指輪; 指揮|yubi; `sa`su; `shi``ji`; `shi``tei`; `ko``yubi`; `yubi``wa`; `shi``ki`|finger, toe; to point; instruction; designation; little finger, little toe; ring; suru: to conduct, command|yubi:指,小指,指輪;sa:指す;shi:指示,指定,指揮
+指|指; 指す; 指示; 指定; 小指; 指輪; 指揮; 指導|yubi; `sa`su; `shi``ji`; `shi``tei`; `ko``yubi`; `yubi``wa`; `shi``ki`; `shi``dou`|finger, toe; to point; instruction; designation; little finger, little toe; ring; suru: to conduct, command; to lead, guide, instruct|yubi:指,小指,指輪;sa:指す;shi:指示,指定,指揮,指導
 争|争う; 戦争; 論争|`araso`u; `sen``sou`; `ron``sou`|conflict; war; dispute, controversy|araso:争う;sou:戦争,論争
 情|情; 愛情; 情報; 友情; 純情; 情勢; 情緒; 陳情|nasake; `ai``jou`; `jou``hou`; `yuu``jou`; `jun``jou`; `jou``sei`; `jou``cho`; `chin``jou`|pity, mercy; love, affection; info; friendship; pure heart, naivete; state of affairs; atmosphere, feeling, mood, emotion; petition, appeal|nasake:情;jou:愛情,情報,友情,純情,情勢,情緒,陳情
 愛|愛情; 純愛; 愛称; 愛想; 愛憎|`ai``jou`; `jun``ai`; `ai``shou`; `ai``so`; `ai``zou`|love, affection; pure love; pet name (affectionate nickname); amiability, affability; love and hate|ai:愛情,純愛,愛称,愛想,愛憎
@@ -204,7 +204,7 @@
 将|将棋; 将軍; 将来|`shou``gi`; `shou``gun`; `shou``rai`|jp chess; general; (in the) future|shou:将棋,将軍,将来
 棋|将棋; 棋士|`shou``gi`; `ki``shi`|jp chess; chess/go player|ki:将棋,棋士
 士|棋士; 富士山; 同士; 税理士; 武士; 博士号; 博士|`ki``shi`; `fu``ji``san`; `dou``shi`; `zei``ri``shi`; `bu``shi`; `haku``shi``gou`; hakase|chess/go player; mt. fuji; fellow (person); tax counsellor; warrior; doctorate, doctor's degree; dr, expert, phd|shi:棋士,富士山,同士,税理士,武士,博士号;hakase:博士
-対|対策; 反対; 対話; 対岸|`tai``saku`; `han``tai`; `tai``wa`; `tai``gan`|countermeasure; opposite, oppose; dialogue; opposite shore|tai:対策,反対,対話,対岸
+対|対策; 反対; 対話; 対岸; 対象|`tai``saku`; `han``tai`; `tai``wa`; `tai``gan`; `tai``shou`|countermeasure; opposite, oppose; dialogue; opposite shore; target, object (e.g. of worship, study, etc.)|tai:対策,反対,対話,対岸,対象
 寝|寝巻き; 寝る; 寝坊|`ne``ma`ki; `ne`ru; `ne``bou`|jp night clothes; sleep; oversleep|ne:寝巻き,寝る,寝坊
 巻|寝巻き; 巻く|`ne``ma`ki; `ma`ku|jp night clothes; wrap up|ma:寝巻き,巻く
 富|富士山; 富|`fu``ji``san`; tomi|mt. fuji; riches|fu:富士山;tomi:富
@@ -248,9 +248,9 @@
 図|図鑑; 地図; 図書館; 図る; 合図; 図表; 意図; 図形|`zu``kan`; `chi``zu`; `to``sho``kan`; `haka`ru; `ai``zu`; `zu``hyou`; `i``to`; `zu``kei`|illustrated reference book; map; library; to plan, design, devise, attempt; sign, signal; chart, diagram; intention, aim; figure, shape, graphic|zu:図鑑,地図,合図,図表,図形;to:図書館,意図;haka:図る
 鑑|図鑑; 年鑑; 印鑑; 鑑賞|`zu``kan`; `nen``kan`; `in``kan`; `kan``shou`|illustrated reference book; yearbook; stamp; appreciation (e.g. of art)|kan:図鑑,年鑑,印鑑,鑑賞
 館|図書館; 館; 旅館; 美術館; 博物館|`to``sho``kan`; yakata; `ryo``kan`; `bi``jutsu``kan`; `haku``butsu``kan`|library; mansion; inn; art gallery; mueseum|kan:図書館,旅館,美術館,博物館;yakata:館
-合|合図; 都合; 合う; 合計; 混合; 試合; 合唱; 総合; 合成; 合成洗剤|`ai``zu`; `tsu``gou`; `a`u; `gou``kei`; `kon``gou`; `shi``ai`; `gas``shou`; `sou``gou`; `gou``sei`; `gou``sei` `sen``zai`|sign, signal; circumstances; come together; sum total, total amount; mixture; match, bout; sing in a chorus; synthesis, putting together; synthetic, composite; synthetic detergent|ai:合図,試合;gou:都合,合計,混合,総合,合成,合成洗剤;a:合う;gaxtsu:合唱
+合|合図; 都合; 合う; 合計; 混合; 試合; 合唱; 総合; 合成; 合成洗剤; 合弁|`ai``zu`; `tsu``gou`; `a`u; `gou``kei`; `kon``gou`; `shi``ai`; `gas``shou`; `sou``gou`; `gou``sei`; `gou``sei` `sen``zai`; `gou``ben`|sign, signal; circumstances; come together; sum total, total amount; mixture; match, bout; sing in a chorus; synthesis, putting together; synthetic, composite; synthetic detergent; joint management, pool|ai:合図,試合;gou:都合,合計,混合,総合,合成,合成洗剤,合弁;a:合う;gaxtsu:合唱
 年|年鑑; 年表; 元年; 年配; 再来年; 青年|`nen``kan`; `nen``pyou`; `gan``nen`; `nen``pai`; `sa``rai``nen`; `sei``nen`|yearbook; chronological table; first year (of a reign); elderly; year after next; young man|nen:年鑑,年表,元年,年配,再来年,青年
-印|印鑑; 印|`in``kan`; shirushi|stamp; sign, mark, symbol|in:印鑑;shirushi:印
+印|印鑑; 印; 印象|`in``kan`; shirushi; `in``shou`|stamp; sign, mark, symbol; impression|in:印鑑,印象;shirushi:印
 四|四捨五入; 四国; 四川|`shi``sha``go``nyuu`; `shi``koku`; `shi``sen`|round a number; Shikoku (smallest of JP's 4 main islands); Sichuan, Szechuan|shi:四捨五入,四国,四川
 捨|四捨五入; 捨てる|`shi``sha``go``nyuu`; `su`teru|round a number; throw away|sha:四捨五入;su:捨てる
 五|四捨五入|`shi``sha``go``nyuu`|round a number|go:四捨五入
@@ -266,7 +266,7 @@
 進|前進; 進む; 進歩; 累進; 先進国; 進路; 漸進|`zen``shin`; `susu`mu; `shin``po`; `rui``shin`; `sen``shin``koku`; `shin``ro`; `sen``shin`|proceeding forwards; proceed, go ahead; progress; gradual progression, rising step by step; advanced country, developed nation; route, course, career, university choice, course (of one's life); gradual progress|shin:前進,進歩,累進,先進国,進路,漸進;susu:進む
 納|納税; 出納; 納める; 納涼|`nou``zei`; `sui``tou`; `osa`meru; `nou``ryou`|paying taxes; receipts and disbursements; to settle (e.g. a payment); (enjoyable) cool of the evening|nou:納税,納涼;tou:出納;osa:納める
 税|納税; 課税; 税金; 税理士; 減税|`nou``zei`; `ka``zei`; `zei``kin`; `zei``ri``shi`; `gen``zei`|paying taxes; taxation; tax; tax counsellor; tax reduction|zei:納税,課税,税金,税理士,減税
-出|出納; 出来事; 出張; 出生; 出願; 脱出; 出産; 出資; 出帆; 出馬; 出迎える; 出勤; 出世; 出世街道|`sui``tou`; `de``ki``goto`; `shuc``chou`; `shus``shou`; `shutsu``gan`; `das``shutsu`; `shus``san`; `shus``shi`; `shup``pan`; `shutsu``ba`; `de``muka`eru; `shuk``kin`; `shus``se`; `shus``se` `kai``dou`|receipts and disbursements; a happening; business trip, official tour; birth (noun); application (for a service/subscription); escape, break-out; to give birth, to produce (goods); investment, contribution; suru: depart (for a ship); suru: to stand or run as a candidate; to go and greet someone; attendance (at work), being at work, reporting for work; success in life; highway to success|sui:出納;de:出来事,出迎える;shuxtsu:出張,出生,出産,出資,出帆,出勤,出世,出世街道;shutsu:出願,脱出,出馬
+出|出納; 出来事; 出張; 出生; 出願; 脱出; 出産; 出資; 出帆; 出馬; 出迎える; 出勤; 出世; 出世街道; 露出|`sui``tou`; `de``ki``goto`; `shuc``chou`; `shus``shou`; `shutsu``gan`; `das``shutsu`; `shus``san`; `shus``shi`; `shup``pan`; `shutsu``ba`; `de``muka`eru; `shuk``kin`; `shus``se`; `shus``se` `kai``dou`; `ro``shutsu`|receipts and disbursements; a happening; business trip, official tour; birth (noun); application (for a service/subscription); escape, break-out; to give birth, to produce (goods); investment, contribution; suru: depart (for a ship); suru: to stand or run as a candidate; to go and greet someone; attendance (at work), being at work, reporting for work; success in life; highway to success; exposure|sui:出納;de:出来事,出迎える;shuxtsu:出張,出生,出産,出資,出帆,出勤,出世,出世街道;shutsu:出願,脱出,出馬,露出
 凶|凶器; 凶悪; 凶刃|`kyou``ki`; `kyou``aku`; `kyou``jin`|deadly weapon; evil; assassin's dagger|kyou:凶器,凶悪,凶刃
 器|凶器; 器; 楽器; 器具; 武器; 陶器; 磁器; 陶磁器|`kyou``ki`; utsuwa; `gak``ki`; `ki``gu`; `bu``ki`; `tou``ki`; `ji``ki`; `tou``ji``ki`|deadly weapon; vessel; musical instrument; utensil; weapon; pottery, ceramics, porcelain, chinaware; porcelain; chinaware, procelain, pottery, ceramics|ki:凶器,楽器,器具,武器,陶器,磁器,陶磁器;utsuwa:器
 悪|凶悪; 悪い; 意地悪; 悪霊; 悪魔; 悪化; 悪臭; 悪疫; 憎悪|`kyou``aku`; `waru`i; `i``ji``waru`; `aku``ryou`; `aku``ma`; `ak``ka`; `aku``shuu`; `aku``eki`; `zou``o`|evil; bad; malicious, unkind, bully; evil spirit; demon; to worsen; bad smell, offensive odour; epidemic; hatred|aku:凶悪,悪霊,悪魔,悪臭,悪疫;waru:悪い,意地悪;axtsu:悪化;o:憎悪
@@ -276,11 +276,11 @@
 理|処理; 理屈; 理由; 真理; 税理士; 理解; 料理; 理想; 代理|`sho``ri`; `ri``kutsu`; `ri``yuu`; `shin``ri`; `zei``ri``shi`; `ri``kai`; `ryou``ri`; `ri``sou`; `dai``ri`|deal with shit; logic; reason; truth; tax counsellor; understanding; cooking; ideal; proxy, representative, suru: represent|ri:処理,理屈,理由,真理,税理士,理解,料理,理想,代理
 円|円滑な; 円形|`en``katsu` na; `en``kei`|smooth; round shape|en:円滑な,円形
 滑|円滑な; 滑る; 滑らか; 滑走; 滑走路|`en``katsu` na; `sube`ru; `name`raka; `kas``sou`; `kas``sou``ro`|smooth; slide; smooth; gliding, sliding, skating, taxiing (aircraft); runway|katsu:円滑な;sube:滑る;name:滑らか;kaxtsu:滑走,滑走路
-光|光沢; 観光; 光景|`kou``taku`; `kan``kou`; `kou``kei`|luster, polish, glossy finish; sightseeing; scene, spectacle, sight, view|kou:光沢,観光,光景
+光|光沢; 観光; 光景; 露光|`kou``taku`; `kan``kou`; `kou``kei`; `ro``kou`|luster, polish, glossy finish; sightseeing; scene, spectacle, sight, view; (photographic) exposure|kou:光沢,観光,光景,露光
 沢|光沢; 沢; 軽井沢|`kou``taku`; sawa; `karu``i``zawa`|luster, polish, glossy finish; marsh; Karuizawa (summer resort area nw of tokyo)|taku:光沢;sawa:沢,軽井沢
 仲|仲がいい|`naka`gaii|get along well|naka:仲がいい
 今|今夜|`kon``ya`|tonight|kon:今夜
-夜|今夜; 深夜|`kon``ya`; `shin``ya`|tonight; late at night|ya:今夜,深夜
+夜|今夜; 深夜; 徹夜|`kon``ya`; `shin``ya`; `tetsu``ya`|tonight; late at night; all night|ya:今夜,深夜,徹夜
 権|人権; 権利; 権威; 権化; 権現; 政権; 暫定政権; 覇権|`jin``ken`; `ken``ri`; `ken``i`; `gon``ge`; `gon``gen`; `sei``ken`; `zan``tei``sei``ken`; `ha``ken`|human rights; rights; authority, power, influence; incarnation, avatar; manifestation of Buddha/boddhisattva; (political) administration, political power; provisional government; hegemony, dominance|ken:人権,権利,権威,政権,暫定政権,覇権;gon:権化,権現
 利|権利; 砂利; 利害; 便利|`ken``ri`; `ja``ri`; `ri``gai`; `ben``ri`|rights; gravel; advantages and disadvantages, interests (of parties); convenient|ri:権利,砂利,利害,便利
 京|京都; 上京|`kyou``to`; `jou``kyou`|Kyoto; go to tokyo|kyou:京都,上京
@@ -298,8 +298,8 @@
 月|三日月; 毎月|`mi``ka``duki`; `mai``tsuki`|crescent moon; every month|tsuki:三日月,毎月
 般|一般の; 諸般|`ip``pan`no; `sho``han`|generic, ordinary; various, several|han:一般の,諸般
 塁|一塁|`ichi``rui`|first base|rui:一塁
-現|現金; 現代; 現れる; 現す; 現場; 現実; 表現; 再現; 権現; 現状|`gen``kin`; `gen``dai`; `arawa`reru; `arawa`su; `gen``ba`; `gen``jitsu`; `hyou``gen`; `sai``gen`; `gon``gen`; `gen``jou`|cash; present-day; appear, materialize; to reveal, show; actual spot; reality; expression; reproduce, make reappear; manifestation of Buddha/boddhisattva; present state/condition|gen:現金,現代,現場,現実,表現,再現,権現,現状;arawa:現れる,現す
-金|現金; 金銭; 税金; 資金; 冶金; 金の亡者; 残金; 賞金|`gen``kin`; `kin``sen`; `zei``kin`; `shi``kin`; `ya``kin`; `kane` no `mou``ja`; `zan``kin`; `shou``kin`|cash; money; tax; funds; metalurgy; person who desires only money; remaining money, balance; (monetary) prize/award|kin:現金,金銭,税金,資金,冶金,残金,賞金;kane:金の亡者
+現|現金; 現代; 現れる; 現す; 現場; 現実; 表現; 再現; 権現; 現状; 現象|`gen``kin`; `gen``dai`; `arawa`reru; `arawa`su; `gen``ba`; `gen``jitsu`; `hyou``gen`; `sai``gen`; `gon``gen`; `gen``jou`; `gen``shou`|cash; present-day; appear, materialize; to reveal, show; actual spot; reality; expression; reproduce, make reappear; manifestation of Buddha/boddhisattva; present state/condition; phenomenon|gen:現金,現代,現場,現実,表現,再現,権現,現状,現象;arawa:現れる,現す
+金|現金; 金銭; 税金; 資金; 冶金; 金の亡者; 残金; 賞金; 金庫|`gen``kin`; `kin``sen`; `zei``kin`; `shi``kin`; `ya``kin`; `kane` no `mou``ja`; `zan``kin`; `shou``kin`; `kin``ko`|cash; money; tax; funds; metalurgy; person who desires only money; remaining money, balance; (monetary) prize/award; safe (for storing money)|kin:現金,金銭,税金,資金,冶金,残金,賞金,金庫;kane:金の亡者
 表|表す; 表現; 代表; 公表; 時刻表; 図表; 年表; 表; 表明; 表示; 表彰; 辞表; 表紙|`arawa`su; `hyou``gen`; `dai``you`; `kou``hyou`; `ji``koku``hyou`; `zu``hyou`; `nen``pyou`; omote; `hyou``mei`; `hyou``ji`; `hyou``shou`; `ji``hyou`; `hyou``shi`|to represent, signify, stand for; expression; representative; official announcement; timetable, schedule; chart, diagram; chronological table; surface, front; declaration; suru: indicate, express; to publicly commend; letter of resignation; cover (e.g. of a book)|arawa:表す;hyou:表現,公表,時刻表,図表,年表,表明,表示,表彰,辞表,表紙;you:代表;omote:表
 実|現実; 実況; 実際; 果実; 真実; 実験; 忠実; ゴムゴムの実; 実用; 実用的|`gen``jitsu`; `jik``kyou`; `jis``sai`; `ka``jitsu`; `shin``jitsu`; `jik``ken`; `chuu``jitsu`; gomugomu no `mi`; `jitsu``you`; `jitsu``you``teki`|reality; actual state (of things), live/on-the-scene; in actuality, practically; fruit; reality; experiment; faithfulness, devotion, loyalty; gum gum fruit; practiacl use; practical|jitsu:現実,果実,真実,忠実,実用,実用的;jixtsu:実況,実際,実験;mi:ゴムゴムの実
 公|公表; 公園; 公式; 公費; 公認; 公爵; 公害|`kou``hyou`; `kou``en`; `kou``shiki`; `kou``hi`; `kou``nin`; `kou``shaku`; `kou``gai`|official announcement; park; formal, official; public funds; official recognition, authorization; duke, prince; pollution|kou:公表,公園,公式,公費,公認,公爵,公害
@@ -310,7 +310,7 @@
 子|帽子; 卵子; 精子; お菓子; 扇子; 因子|`bou``shi`; `ran``shi`; `sei``shi`; o`ka``shi`; `sen``su`; `in``shi`|hat; egg (ovum); sperm; sweets (candy); folding hand fan; factor, divisor, element|shi:帽子,卵子,精子,お菓子,因子;su:扇子
 領|綱領; 占領; 領地|`kou``ryou`; `sen``ryou`; `ryou``chi`|main points, general principles, party platform; occupation, capture; feudal estate|ryou:綱領,占領,領地
 意|同意; 意味; 意見; 用意; 意外; 意図; 意思; 意志; 好意; 意地悪; 意地; 不意; 生意気; 不意打ち; 注意; 敬意; 意向; 決意; 得意; 害意; 意気揚々と|`dou``i`; `i``mi`; `i``ken`; `you``i`; `i``gai`; `i``to`; `i``shi`; `i``shi`; `kou``i`; `i``ji``waru`; `i``ji`; `fu``i`; `nama``i``ki`; `fu``i``u`chi; `chuu``i`; `kei``i`; `i``kou`; `ketsu``i`; `toku``i`; `gai``i`; `i``ki` `you`you to|agreement, suru: agree; meaning; opinion; preparations, arrangements; unexpected, surprising; intention, aim; intention, purpose; will, intention; good will, favor; malicious, unkind, bully; stubborness; sudden, unexpected (like fuiuchi); impertinent; surprise attack; caution; respect, honor; trend, tendency, inclination; resolve; good at; malicious intent; triumphantly, elatedly|i:同意,意味,意見,用意,意外,意図,意思,意志,好意,意地悪,意地,不意,生意気,不意打ち,注意,敬意,意向,決意,得意,害意,意気揚々と
-外|意外; 外; 外交; 海外; 外野; 外国; 外科; 外堀|`i``gai`; soto; `gai``kou`; `kai``gai`; `gai``ya`; `gai``koku`; `ge``ka`; `soto``bori`|unexpected, surprising; outside; diplomacy; foreign, abroad, overseas; outfield; foreign; surgery department; outer moat (castle)|gai:意外,外交,海外,外野,外国;soto:外,外堀;ge:外科
+外|外; 外す; 外れる; 意外; 外交; 海外; 外野; 外国; 外科; 外堀|soto; `hazu`su; `hazu`reru; `i``gai`; `gai``kou`; `kai``gai`; `gai``ya`; `gai``koku`; `ge``ka`; `soto``bori`|outside; to unfasten, to miss; to miss, to go astray; unexpected, surprising; diplomacy; foreign, abroad, overseas; outfield; foreign; surgery department; outer moat (castle)|soto:外,外堀;hazu:外す,外れる;gai:意外,外交,海外,外野,外国;ge:外科
 思|意思; 不思議; 思想; 思考|`i``shi`; `fu``shi``gi`; `shi``sou`; `shi``kou`|intention, purpose; wonder, strange; thought, idea; thought, consideration|shi:意思,不思議,思想,思考
 氾|氾濫|`han``ran`|to overflow/flood|han:氾濫
 濫|氾濫|`han``ran`|to overflow/flood|ran:氾濫
@@ -326,7 +326,7 @@
 幽|幽霊|`yuu``rei`|ghost|yuu:幽霊
 霊|幽霊; 悪霊|`yuu``rei`; `aku``ryou`|ghost; evil spirit|rei:幽霊;ryou:悪霊
 臆|臆する; 臆病|`oku`suru; `oku``byou`|to be timid, nervous, afraid; cowardly|oku:臆する,臆病
-遠|遠心力; 遠い; 遠慮; 遠洋|`en``shin``ryoku`; `too`i; `en``ryo`; `en``you`|centrifugal force; far; reserve, constraint, holding back, modesty; ocean, deep sea|en:遠心力,遠慮,遠洋;too:遠い
+遠|遠心力; 遠い; 遠慮; 遠洋; 永遠|`en``shin``ryoku`; `too`i; `en``ryo`; `en``you`; `ei``en`|centrifugal force; far; reserve, constraint, holding back, modesty; ocean, deep sea; eternal|en:遠心力,遠慮,遠洋,永遠;too:遠い
 力|遠心力; 力; 能力; 勢力; 威力; 効力; 魅力的; 暴力; 弾力; 磁力|`en``shin``ryoku`; chikara; `nou``ryoku`; `sei``ryoku`; `i``ryoku`; `kou``ryoku`; `mi``ryoku``teki`; `bou``ryoku`; `dan``ryoku`; `ji``ryoku`|centrifugal force; power; ability; power/influence; power, might, authority; efficacy; charming, attractive; violence; elasticity; magnetism, magnetic force|ryoku:遠心力,能力,勢力,威力,効力,魅力的,暴力,弾力,磁力;chikara:力
 工|大工; 工場; 人工; 着工; 工費|`dai``ku`; `kou``jou`; `jin``kou`; `chak``kou`; `kou``hi`|carpenter; factory, plant, workshop; artificial, man-made (op. of 天然); start (construction) work; construction costs|ku:大工;kou:工場,人工,着工,工費
 交|交際; 交す; 交番; 交流; 外交|`kou``sai`; `kawa`su; `kou``ban`; `kou``ryuu`; `gai``kou`|to keep company with, associate with; to exchange (words, messages, etc); police box; (cultural) exchange, (inter-)mingling, (social) networking; diplomacy|kou:交際,交番,交流,外交;kawa:交す
@@ -354,7 +354,7 @@
 計|余計; 計る; 時計; 合計; 設計; 家計; 生計; 会計; 累計; 計算; 計画|`yo``kei`; `haka`ru; `to``kei`; `gou``kei`; `sek``kei`; `ka``kei`; `sei``kei`; `kai``kei`; `rui``kei`; `kei``san`; `kei``kaku`|unnecessary; to measure; clock; sum total, total amount; plan, design, layout; household budget, family finances; livlihood, living; accounting, bill (at a restraunt); cumulative/accumulated total; calculation; plan|kei:余計,時計,合計,設計,家計,生計,会計,累計,計算,計画;haka:計る
 会|会計; 会社員; 会員; 会議; 議会; 再会; 機会; 会得; 司会; 博覧会|`kai``kei`; `kai``sha``in`; `kai``in`; `kai``gi`; `gi``kai`; `sai``kai`; `ki``kai`; `e``toku`; `shi``kai`; `haku``ran``kai`|accounting, bill (at a restraunt); company worker; member; meeting; congress, parliament, diet; to meet again; chance, oppurtunity; master, understanding, comprehension; chairmanship, leading a meeting, host, moderator; exhibition, expo, fair|kai:会計,会社員,会員,会議,議会,再会,機会,司会,博覧会;e:会得
 尉|大尉; 中尉|`tai``i`; `chuu``i`|captain; lieutenant|i:大尉,中尉
-中|中尉; 中型; 真ん中; 中古; 中央; 一晩中; 中性; 中性洗剤; 中華; 中華街; 中陰; 中継; 生中継; 中東|`chuu``i`; `chuu``gata`; `ma`n`naka`; `chuu``ko`; `chuu``ou`; `hito``ban``juu`; `chuu``sei`; `chuu``sei` `sen``zai`; `chuu``ka`; `chuu``ka``machi`; `chuu``in`; `chuu``kei`; `nama``chuu``kei`; `chuu``tou`|lieutenant; medium size (model/machine); right in the middle; used, second-hand; center, Chuo ward in Tokyo; all night long; neutral (incl chemically/electrically), indifferent; neutral detergent; Chinese food; chinatown; buddhist state between death and rebirth; relay; live broadcast; Middle East|chuu:中尉,中型,中古,中央,中性,中性洗剤,中華,中華街,中陰,中継,生中継,中東;naka:真ん中;juu:一晩中
+中|中尉; 中型; 真ん中; 中古; 中央; 一晩中; 中性; 中性洗剤; 中華; 中華街; 中陰; 中継; 生中継; 中東; 中核|`chuu``i`; `chuu``gata`; `ma`n`naka`; `chuu``ko`; `chuu``ou`; `hito``ban``juu`; `chuu``sei`; `chuu``sei` `sen``zai`; `chuu``ka`; `chuu``ka``machi`; `chuu``in`; `chuu``kei`; `nama``chuu``kei`; `chuu``tou`; `chuu``kaku`|lieutenant; medium size (model/machine); right in the middle; used, second-hand; center, Chuo ward in Tokyo; all night long; neutral (incl chemically/electrically), indifferent; neutral detergent; Chinese food; chinatown; buddhist state between death and rebirth; relay; live broadcast; Middle East; core, nucleus, center|chuu:中尉,中型,中古,中央,中性,中性洗剤,中華,中華街,中陰,中継,生中継,中東,中核;naka:真ん中;juu:一晩中
 猟|猟犬|`ryou``ken`|hunting dog|ryou:猟犬
 犬|猟犬; 狂犬|`ryou``ken`; `kyou``ken`|hunting dog; mad dog|ken:猟犬,狂犬
 型|中型; 模型; 造型; 典型; 典型的|`chuu``gata`; `mo``kei`; `zou``kei`; `ten``kei`; `ten``kei``teki`|medium size (model/machine); model, dummy; suru:to mold, shape, model (i.e. plastic arts); type, pattern, exemplary; typical, stereotypical, representative|gata:中型;kei:模型,造型,典型,典型的
@@ -383,7 +383,7 @@
 譲|謙譲の美徳; 譲る; 譲歩|`ken``jou` no `bi``toku`; `yuzu`ru; `jou``ho`|virtue of modesty; to yield, concede; concession, conciliation, compromise|jou:謙譲の美徳,譲歩;yuzu:譲る
 徳|謙譲の美徳; 道徳|`ken``jou` no `bi``toku`; `dou``toku`|virtue of modesty; morals|toku:謙譲の美徳,道徳
 歩|譲歩; 歩行者; 歩く; 歩道; 徒歩; 進歩; 歩む; 散歩|`jou``ho`; `ho``kou``sha`; `aru`ku; `ho``dou`; `to``ho`; `shin``po`; `ayu`mu; `san``po`|concession, conciliation, compromise; pedestrian; walk; walkway; walking, going on foot; progress; to walk, to go on foot; walk|ho:譲歩,歩行者,歩道,徒歩,進歩,散歩;aru:歩く;ayu:歩む
-社|会社員; 結社|`kai``sha``in`; `kes``sha`|company worker; society, association|sha:会社員,結社
+社|会社員; 結社; 副社長|`kai``sha``in`; `kes``sha`; `fuku``sha``chou`|company worker; society, association; vice president|sha:会社員,結社,副社長
 員|会社員; 会員; 全員; 職員; 従業員|`kai``sha``in`; `kai``in`; `zen``in`; `shoku``in`; `juu``gyou``in`|company worker; member; all members, everyone; staff member; worker, employee|in:会社員,会員,全員,職員,従業員
 卵|卵巣; 卵; 卵子|`ran``sou`; tamago; `ran``shi`|ovary; egg; egg (ovum)|ran:卵巣,卵子;tamago:卵
 臼|臼; 脱臼|usu; `dak``kyuu`|mortar; dislocation (e.g. of a joint)|usu:臼;kyuu:脱臼
@@ -393,10 +393,10 @@
 世|世論; 出世; 出世街道; 世帯|`yo``ron`; `shus``se`; `shus``se` `kai``dou`; `se``tai`|public opinion, public sentiment; success in life; highway to success; household, home|yo:世論;se:出世,出世街道,世帯
 論|世論; 論文; 議論; 論争; 論告; 結論|`yo``ron`; `ron``bun`; `gi``ron`; `ron``sou`; `ron``koku`; `ketsu``ron`|public opinion, public sentiment; thesis, paper, essay; argument, discussion, dispute; dispute, controversy; prosecutor's closing argument; conclusion|ron:世論,論文,議論,論争,論告,結論
 調|調査; 調べる; 調う; 強調; 体調; 好調; 口調|`chou``sa`; `shira`beru; `totono`u; `kyou``chou`; `tai``chou`; `kou``chou`; `ku``chou`|investigation; to look into; to arrange, to be in order; emphasis, stressed point (suru verb); physical condition; favourable, in good shape; tone (of voice)|chou:調査,強調,体調,好調,口調;shira:調べる;totono:調う
-査|調査; 監査|`chou``sa`; `kan``sa`|investigation; inspection, audit|sa:調査,監査
+査|調査; 監査; 審査|`chou``sa`; `kan``sa`; `shin``sa`|investigation; inspection, audit; judging|sa:調査,監査,審査
 強|強調; 補強; 強制|`kyou``chou`; `ho``kyou`; `kyou``sei`|emphasis, stressed point (suru verb); support; forced, compelled, coerced|kyou:強調,補強,強制
 異|異議; 異なる; 特異; 異民族; 異常; 異口同音に; 異端|`i``gi`; `koto`naru; `toku``i`; `i``min``zoku`; `i``jou`; `i``ku``dou``on` ni; `i``tan`|objection; to differ, to disagree; unique, singular; different race, ethnic group; strangeness, abnormality; with one voice, with one accord; heresy|i:異議,特異,異民族,異常,異口同音に,異端;koto:異なる
-議|異議; 会議; 議論; 不思議; 議会|`i``gi`; `kai``gi`; `gi``ron`; `fu``shi``gi`; `gi``kai`|objection; meeting; argument, discussion, dispute; wonder, strange; congress, parliament, diet|gi:異議,会議,議論,不思議,議会
+議|異議; 会議; 議論; 不思議; 議会; 審議|`i``gi`; `kai``gi`; `gi``ron`; `fu``shi``gi`; `gi``kai`; `shin``gi`|objection; meeting; argument, discussion, dispute; wonder, strange; congress, parliament, diet; deliberation|gi:異議,会議,議論,不思議,議会,審議
 冷|冷める; 冷たい; 冷酷|`sa`meru; `tsume`tai; `rei``koku`|to cool down; cold; cruel, coldhearted, ruthless|sa:冷める;tsume:冷たい;rei:冷酷
 先|旅先; 先進国; 先約; 先頭; 先登|`tabi``saki`; `sen``shin``koku`; `sen``yaku`; `sen``tou`; `sen``tou`|destination of a journey; advanced country, developed nation; previous appointment; head, lead, vanguard; head, lead, vanguard (先頭 much more common)|saki:旅先;sen:先進国,先約,先頭,先登
 隣|隣; 近隣; 近隣諸国; 隣人|tonari; `kin``rin`; `kin``rin``sho``koku`; `rin``jin`|close; neighborhood, vicinity; neighoring countries; neighbor|tonari:隣;rin:近隣,近隣諸国,隣人
@@ -462,7 +462,7 @@
 請|請ける; 下請け; 請う|`u`keru; `shita``u`ke; `ko`u|to take on (e.g. work for money); subcontract; to beg/ask/request for something|u:請ける,下請け;ko:請う
 挟|挟む; 挟撃|`hasa`mu; `kyou``geki`|to put between; attack from both sides (pincer)|hasa:挟む;kyou:挟撃
 撃|挟撃; 撃つ; 打撃; 反撃; 迎撃; 斬撃|`kyou``geki`; `u`tsu; `da``geki`; `han``geki`; `gei``kei`; `zan``geki`|attack from both sides (pincer); shoot at, attack; blow, shock, batting (baseball); counterattack; intercept; slash|geki:挟撃,打撃,反撃,斬撃;u:撃つ;kei:迎撃
-店|閉店; 店; 売店; 支店|`hei``ten`; mise; `bai``ten`; `shi``ten`|close shop; store; stand, kiosk, stall; branch office|ten:閉店,売店,支店;mise:店
+店|閉店; 店; 売店; 支店; 露店|`hei``ten`; mise; `bai``ten`; `shi``ten`; `ro``ten`|close shop; store; stand, kiosk, stall; branch office; street stall|ten:閉店,売店,支店,露店;mise:店
 務|務める; 事務; 事務所; 義務; 職務; 執務; 執務室; 勤務|`tsuto`meru; `ji``mu`; `ji``mu``sho`; `gi``mu`; `shoku``mu`; `shitsu``mu`; `shitsu``mu``shitsu`; `kin``mu`|to work (as); business/office work; office; obligation, duty; professional duties; (performance of) one's official duties; (physical) office (of a president, emperor, etc.); service, duty, work|tsuto:務める;mu:事務,事務所,義務,職務,執務,執務室,勤務
 錦|錦; 錦を飾る|nishiki; `nishiki` wo `kaza`ru|fine dress; to return home loaded with honors|nishiki:錦,錦を飾る
 飾|飾る; 錦を飾る; 装飾; 着飾る|`kaza`ru; `nishiki` wo `kaza`ru; `sou``shoku`; `ki``kaza`ru|decorate; to return home loaded with honors; ornament; to dress up|kaza:飾る,錦を飾る,着飾る;shoku:装飾
@@ -482,9 +482,9 @@
 政|政治; 行政; 財政; 財政難; 国政; 政党; 政権; 暫定政権|`sei``ji`; `gyou``sei`; `zai``sei`; `zai``sei``nan`; `koku``sei`; `sei``tou`; `sei``ken`; `zan``tei``sei``ken`|politics, government; administration; public finance, financial affairs; economic difficulties; national politics; political party; (political) administration, political power; provisional government|sei:政治,行政,財政,財政難,国政,政党,政権,暫定政権
 治|政治; 治る; 治める; 自治; 明治; 退治|`sei``ji`; `nao`ru; `osa`meru; `ji``chi`; `mei``ji`; `tai``ji`|politics, government; to be cured, to get well; to govern, to manage; self-government, autonomy; Meiji; exterminate (e.g. pests, bandits)|ji:政治,明治,退治;nao:治る;osa:治める;chi:自治
 明|明治; 解明; 表明; 糾明|`mei``ji`; `kai``mei`; `hyou``mei`; `kyuu``mei`|Meiji; to elucidate, unravel; declaration; searching examination, establishing facts through examination|mei:明治,解明,表明,糾明
-解|解く; 理解; 解読; 見解; 解散; 分解; 正解; 解体; 和解; 解明; 難解; 解脱; 解禁; 解任; 解決; 解雇|`to`ku; `ri``kai`; `kai``doku`; `ken``kai`; `kai``san`; `bun``kai`; `sei``kai`; `kai``tai`; `wa``kai`; `kai``mei`; `nan``kai`; `ge``datsu`; `kai``kin`; `kai``nin`; `kai``ketsu`; `kai``ko`|to untie, to solve, to unstitch; understanding; deciphering; opinion, point of view; breakup, dissolution; suru: disassembling, analyzing; correct; demolition, dismantling; reconciliation; to elucidate, unravel; difficult to understand; emancipation from wordly attachments (e.g. nirvana); lifting a ban; dismissal; to resolve; discharge, dismissal|to:解く;kai:理解,解読,見解,解散,分解,正解,解体,和解,解明,難解,解禁,解任,解決,解雇;ge:解脱
+解|解く; 理解; 解読; 見解; 解散; 分解; 正解; 解体; 和解; 解明; 難解; 解脱; 解禁; 解任; 解決; 解雇; 解除|`to`ku; `ri``kai`; `kai``doku`; `ken``kai`; `kai``san`; `bun``kai`; `sei``kai`; `kai``tai`; `wa``kai`; `kai``mei`; `nan``kai`; `ge``datsu`; `kai``kin`; `kai``nin`; `kai``ketsu`; `kai``ko`; `kai``jo`|to untie, to solve, to unstitch; understanding; deciphering; opinion, point of view; breakup, dissolution; suru: disassembling, analyzing; correct; demolition, dismantling; reconciliation; to elucidate, unravel; difficult to understand; emancipation from wordly attachments (e.g. nirvana); lifting a ban; dismissal; to resolve; discharge, dismissal; cancellation, rescinding, calling off|to:解く;kai:理解,解読,見解,解散,分解,正解,解体,和解,解明,難解,解禁,解任,解決,解雇,解除;ge:解脱
 正|正解; 正義; 正常; 正当; 正方形|`sei``kai`; `sei``gi`; `sei``jou`; `sei``tou`; `sei``hou``kei`|correct; justice; normal; just, justified; square|sei:正解,正義,正常,正当,正方形
-和|和解|`wa``kai`|reconciliation|wa:和解
+和|和解; 不和; 和む; 和やか; 和らぐ|`wa``kai`; `fu``wa`; `nago`mu; `nago`yaka; `yawa`ragu|reconciliation; disharmony, discord; to be softened, to calm down; clam, gentle, harmonious; to soften, to calm down|wa:和解,不和;nago:和む,和やか;yawa:和らぐ
 脱|脱ぐ; 脱出; 脱する; 脱臼; 解脱; 脱退|`nu`gu; `das``shutsu`; `das`suru; `dak``kyuu`; `ge``datsu`; `dat``tai`|to undress; escape, break-out; to escape from; dislocation (e.g. of a joint); emancipation from wordly attachments (e.g. nirvana); secession, withdrawal (from a lawsuit, etc.)|nu:脱ぐ;daxtsu:脱出,脱する,脱臼,脱退;datsu:解脱
 武|武器; 武装; 武者; 武道; 武士|`bu``ki`; `bu``sou`; `mu``sha`; `bu``dou`; `bu``shi`|weapon; armament, suru: to arm; warrior; martial arts; warrior|bu:武器,武装,武道,武士;mu:武者
 装|武装; 装う; 女装; 装置; 服装; 変装; 装飾|`bu``sou`; `yosoo`u; `jo``sou`; `sou``chi`; `fuku``sou`; `hen``sou`; `sou``shoku`|armament, suru: to arm; to wear (a costume), to pretend; dressing as a female; equipment, installation; garments, attire; disguise; ornament|sou:武装,女装,装置,服装,変装,装飾;yosoo:装う
@@ -495,7 +495,7 @@
 素|酸素; 水素; 元素; 素晴らしい; 素直; 素早い; 素っぴん; 素顔; 素人; 要素; 酵素|`san``so`; `sui``so`; `gen``so`; `su``ba`rashii; `su``nao`; `su``baya`i; `su`ppin; `su``gao`; `shirou``to`; `you``so`; `kou``so`|oxygen; hydrogen; chemical element; excellent; obedient, honest/upfront; nimble; no makeup; face with no makeup; amateur; element (e.g. of an array), component, item in a list; enzyme (e.g. for fermentation)|so:酸素,水素,元素,要素,酵素;su:素晴らしい,素直,素早い,素っぴん,素顔;shirou:素人
 晴|素晴らしい; 天晴|`su``ba`rashii; `ap``pare`|excellent; praiseworthy, splendid|ba:素晴らしい;pare:天晴
 直|素直; 垂直|`su``nao`; `sui``choku`|obedient, honest/upfront; vertical, perpendicular|nao:素直;choku:垂直
-早|素早い|`su``baya`i|nimble|baya:素早い
+早|素早い; 早い; 早朝; 早退; 早期|`su``baya`i; `haya`i; `sou``chou`; `sou``tai`; `sou``ki`|nimble; fast; early morning; leaving school/office early; early stage|haya:素早い,早い;sou:早朝,早退,早期
 顔|素顔; 顔面|`su``gao`; `gan``men`|face with no makeup; face|gao:素顔;gan:顔面
 快|快楽; 快楽主義; 快い; 快復; 快活; 軽快|`kai``raku`; `kai``raku``shu``gi`; `kokoroyo`i; `kai``fuku`; `kai``katsu`; `kei``kai`|pleasure; hedonism; comfortable, pleasant; recuperation (from an illness); cheerful, lighthearted; casual (e.g. dress), light, numble, jaunty (melody)|kai:快楽,快楽主義,快復,快活,軽快;kokoroyo:快い
 炭|炭; 石炭; 炭鉱; 薪炭|sumi; `seki``tan`; `tan``kou`; `shin``tan`|charcoal; coal; coal mine; wood and charcoal, fuel|sumi:炭;tan:石炭,炭鉱,薪炭
@@ -514,7 +514,7 @@
 深|深める; 深刻; 深夜; 最深; 水深|`fuka`meru; `shin``koku`; `shin``ya`; `sai``shin`; `sui``shin`|to deepen, to promote (e.g. better understanding); series, grave; late at night; deepest; water depth|fuka:深める;shin:深刻,深夜,最深,水深
 砂|砂; 砂利|suna; `ja``ri`|sand; gravel|suna:砂;ja:砂利
 辺|辺; 辺り; 海辺; 辺境|hen; `ata`ri; `umi``be`; `hen``kyou`|vicinity, area; vicinity, area; coast, seaside; remote region, frontier district|hen:辺,辺境;ata:辺り;be:海辺
-海|海辺; 西海岸; 海外; 北海道; 海洋; 海底|`umi``be`; `nishi``kai``gan`; `kai``gai`; `hok``kai``dou`; `kai``you`; `kai``tei`|coast, seaside; west coast; foreign, abroad, overseas; Hokkaidou; ocean; bottom of the sea|umi:海辺;kai:西海岸,海外,北海道,海洋,海底
+海|海辺; 西海岸; 海外; 北海道; 海洋; 海底; 海賊|`umi``be`; `nishi``kai``gan`; `kai``gai`; `hok``kai``dou`; `kai``you`; `kai``tei`; `kai``zoku`|coast, seaside; west coast; foreign, abroad, overseas; Hokkaidou; ocean; bottom of the sea; pirate|umi:海辺;kai:西海岸,海外,北海道,海洋,海底,海賊
 境|境; 国境; 境界; 心境; 境遇; 辺境|sakai; `kok``kyou`; `kyou``kai`; `shin``kyou`; `kyou``guu`; `hen``kyou`|boundary, border; national border; boundary; mental state; environment, circumstances; remote region, frontier district|sakai:境;kyou:国境,境界,心境,境遇,辺境
 補|補う; 補助; 補強; 補佐; 補完; 候補者; 立候補; 補足|`ogina`u; `ho``jo`; `ho``kyou`; `ho``sa`; `ho``kan`; `kou``ho``sha`; `rik``kou``ho`; `ho``soku`|to supply, make up for/compensate for; assistance, support, subsidy; support; assistance, suru: to assist; supplementation; candidate; to announce candidacy/becoming a candidate; suru: supplement|ogina:補う;ho:補助,補強,補佐,補完,候補者,立候補,補足
 佐|補佐|`ho``sa`|assistance, suru: to assist|sa:補佐
@@ -539,7 +539,7 @@
 売|売る; 商売; 売店|`u`ru; `shou``bai`; `bai``ten`|to sell; trade, business; stand, kiosk, stall|u:売る;bai:商売,売店
 向|向こう; 向かう; 方向; 日向; 向上; 動向; 意向|`mu`kou; `mu`kau; `hou``kou`; `hi``nata`; `kou``jou`; `dou``kou`; `i``kou`|opposite side; to face, confront; direction; sunny place; on the rise, looking up, advancing; trend, tendency, movement; trend, tendency, inclination|mu:向こう,向かう;kou:方向,向上,動向,意向;nata:日向
 曲|曲がる; 曲; 曲線; 楽曲|`ma`garu; kyoku; `kyoku``sen`; `gak``kyoku`|to bend, curve; song, tune; curve; musical composition|ma:曲がる;kyoku:曲,曲線,楽曲
-控|控える; 控訴|`hika`eru; `kou``so`|to restrain oneself; suru: to appeal (to a higher court of law)|hika:控える;kou:控訴
+控|控える; 控訴; 控除|`hika`eru; `kou``so`; `kou``jo`|to restrain oneself; suru: to appeal (to a higher court of law); deduction, subtraction (e.g. a subsidy)|hika:控える;kou:控訴,控除
 訴|訴える; 控訴; 起訴|`utta`eru; `kou``so`; `ki``so`|to sue/accuse; suru: to appeal (to a higher court of law); prosecution, indictment|utta:訴える;so:控訴,起訴
 起|起訴|`ki``so`|prosecution, indictment|ki:起訴
 古|古い; 古代; 中古; 古典|`furu`i; `ko``dai`; `chuu``ko`; `ko``ten`|old; ancient, classic; used, second-hand; old book, classics|furu:古い;ko:古代,中古,古典
@@ -551,7 +551,7 @@
 走|走る; 帆走; 暴走; 滑走; 滑走路; 走行; 走者; 疾走|`hashi`ru; `han``sou`; `bou``sou`; `kas``sou`; `kas``sou``ro`; `sou``kou`; `sou``sha`; `shis``sou`|run; sailing; to run wild; gliding, sliding, skating, taxiing (aircraft); runway; running (e.g. of a bus); runner; sprint, dash, scamper|hashi:走る;sou:帆走,暴走,滑走,滑走路,走行,走者,疾走
 帆|帆; 帆走; 出帆|ho; `han``sou`; `shup``pan`|sail; sailing; suru: depart (for a ship)|ho:帆;han:帆走,出帆
 撤|撤収; 撤回; 撤退|`tes``shuu`; `tek``kai`; `tet``tai`|withrawal (of troops), removal (e.g. of a building, stage set); to take back, retraction; retreat, withdraw|textsu:撤収,撤回,撤退
-退|退ける; 退く; 引退; 撤退; 退学; 脱退; 後退; 退治; 退任; 退屈; 辞退|`shirizo`keru; `shirizo`ku; `in``tai`; `tet``tai`; `tai``gaku`; `dat``tai`; `kou``tai`; `tai``ji`; `tai``nin`; `tai``kutsu`; `ji``tai`|to repel; to back off; retire; retreat, withdraw; dropping out of school; secession, withdrawal (from a lawsuit, etc.); retreat, backspace; exterminate (e.g. pests, bandits); retirement, resignation; boring; to pull out (as a candidate)|shirizo:退ける,退く;tai:引退,撤退,退学,脱退,後退,退治,退任,退屈,辞退
+退|退ける; 退く; 引退; 撤退; 退学; 脱退; 後退; 退治; 退任; 退屈; 辞退; 早退|`shirizo`keru; `shirizo`ku; `in``tai`; `tet``tai`; `tai``gaku`; `dat``tai`; `kou``tai`; `tai``ji`; `tai``nin`; `tai``kutsu`; `ji``tai`; `sou``tai`|to repel; to back off; retire; retreat, withdraw; dropping out of school; secession, withdrawal (from a lawsuit, etc.); retreat, backspace; exterminate (e.g. pests, bandits); retirement, resignation; boring; to pull out (as a candidate); leaving school/office early|shirizo:退ける,退く;tai:引退,撤退,退学,脱退,後退,退治,退任,退屈,辞退,早退
 星|星|hoshi|star|hoshi:星
 占|占める; 占い; 占領; 寡占; 寡占市場|`shi`meru; `urana`i; `sen``ryou`; `ka``sen`; `ka``sen``shi``jou`|to occupy, hold, take up; fortune; occupation, capture; ologopoly (market ruled by few major players; oligopolistic market|shi:占める;urana:占い;sen:占領,寡占,寡占市場
 記|記す; 日記; 心に記す; 銘記; 登記; 記録; 記号|`shiru`su; `nik``ki`; `kokoro` ni `shiru`su; `mei``ki`; `tou``ki`; `ki``roku`; `ki``gou`|to write down, to note; diary; to remember; suru: keep in mind, take note of; registration; record (like documents AND like world record); symbol, code, sign, notation|shiru:記す,心に記す;ki:日記,銘記,登記,記録,記号
@@ -567,7 +567,7 @@
 夏|常夏|`toko``natsu`|everlasting summer|natsu:常夏
 従|従う; 従来; 服従; 従業員; 隷従|`shitaga`u; `juu``rai`; `fuku``juu`; `juu``gyou``in`; `rei``juu`|to obey; up until now; obedience, submission; worker, employee; suru: to be enslaved, to be subordinate to|shitaga:従う;juu:従来,服従,従業員,隷従
 業|業; 卒業; 職業; 作業; 従業員; 営業; 授業; 自業自得; 業を煮やす|gou; `sotsu``gyou`; `shoku``gyou`; `sa``gyou`; `juu``gyou``in`; `ei``gyou`; `ju``gyou`; `ji``gou` `ji``toku`; `gou`wo`ni`yasu|karma; graduation; occupation; operation, manufacturing; worker, employee; business, trade; class, lesson; reaping what you sow; to lose one's temper|gou:業,自業自得,業を煮やす;gyou:卒業,職業,作業,従業員,営業,授業
-作|作業; 製作; 操作; 制作|`sa``gyou`; `sei``saku`; `sou``sa`; `sei``saku`|operation, manufacturing; to make (a product); operation, management, processing; to create (usually for art/games), as opposed to 製作 (manufacture)|sa:作業,操作;saku:製作,制作
+作|作業; 製作; 操作; 制作; 副作用|`sa``gyou`; `sei``saku`; `sou``sa`; `sei``saku`; `fuku``sa``you`|operation, manufacturing; to make (a product); operation, management, processing; to create (usually for art/games), as opposed to 製作 (manufacture); side effect, adverse reaction|sa:作業,操作,副作用;saku:製作,制作
 脚|脚|ashi|leg (above ankle)|ashi:脚
 足|足; 足元; 不足; 足りる; 足す; 発足; 補足|ashi; `ashi``moto`; `fu``soku`; `ta`riru; `ta`su; `has``soku`; `ho``soku`|foot (below ankle); around one's feet; insufficient, lacking; to be enough; to add; starting, inaguration, founding; suru: supplement|ashi:足,足元;soku:不足,発足,補足;ta:足りる,足す
 陶|陶器; 陶冶; 陶磁器|`tou``ki`; `tou``ya`; `tou``ji``ki`|pottery, ceramics, porcelain, chinaware; suru: to cultivate (one's character), train, educate; chinaware, procelain, pottery, ceramics|tou:陶器,陶冶,陶磁器
@@ -586,7 +586,7 @@
 歯|虫歯; 歯医者; 歯科; 歯車|`mu``shiba`; `ha``i``sha`; `shi``ka`; `ha``guruma`|cavity; dentist; dentistry; gear, cog|shiba:虫歯;ha:歯医者,歯車;shi:歯科
 亡|亡くなる; 亡者; 金の亡者; 未亡人|`na`kunaru; `mou``ja`; `kane` no `mou``ja`; `mi``bou``jin`|to pass away; the dead; person who desires only money; widow|na:亡くなる;mou:亡者,金の亡者;bou:未亡人
 替|着替える|`ki``ga`eru|to change one's clothes|ga:着替える
-弱|弱い; 心神耗弱; 弱点|`yowa`i; `shin``shin``kou``jaku`; `jaku``ten`|weak; feeble-mindedness, diminished capacity; weak point|yowa:弱い;jaku:心神耗弱,弱点
+弱|弱い; 心神耗弱; 弱点; 薄弱|`yowa`i; `shin``shin``kou``jaku`; `jaku``ten`; `haku``jaku`|weak; feeble-mindedness, diminished capacity; weak point; feebleness, weakness|yowa:弱い;jaku:心神耗弱,弱点,薄弱
 耗|心神耗弱|`shin``shin``kou``jaku`|feeble-mindedness, diminished capacity|kou:心神耗弱
 覚|覚える; 覚める; 知覚; 感覚; 自覚; 発覚; 嗅覚|`oboe`ru; `sa`meru; `chi``kaku`; `kan``kaku`; `ji``kaku`; `hak``kaku`; `kyuu``kaku`|to remember; to awake; suru: to perceive; sense; self-awareness; detection, coming to light; sense of smell|oboe:覚える;sa:覚める;kaku:知覚,感覚,自覚,発覚,嗅覚
 棚|棚; 本棚; 戸棚|tana; `hon``dana`; `to``dana`|shelf; bookshelf; cupboard|tana:棚,本棚,戸棚
@@ -606,7 +606,7 @@
 告|告げる; 告白; 報告; 告示; 予告; 告知; 布告; 告発; 通告; 上告; 論告; 忠告; 警告; 被告|`tsu`geru; `koku``haku`; `hou``koku`; `koku``ji`; `yo``koku`; `koku``chi`; `fu``koku`; `koku``hatsu`; `tsuu``koku`; `jou``koku`; `ron``koku`; `chuu``koku`; `kei``koku`; `hi``koku`|to tell, inform; to confess; report; bulletin; advanced notice; notice, announcement; edict, ordinance, proclamation; indictment, complaint; notice, announcement; final appeal to highest court; prosecutor's closing argument; to advise; warn; defendant, accused|tsu:告げる;koku:告白,報告,告示,予告,告知,布告,告発,通告,上告,論告,忠告,警告,被告
 刃|刃物; 凶刃; 白刃; 自刃|`ha``mono`; `kyou``jin`; `haku``jin`; `ji``jin`|cutlery, knives; assassin's dagger; drawn sword, naked sword; suicide by sword|ha:刃物;jin:凶刃,白刃,自刃
 話|対話|`tai``wa`|dialogue|wa:対話
-朝|朝; 朝食|asa; `chou``shoku`|morning; breakfast|asa:朝;chou:朝食
+朝|朝; 朝食; 早朝|asa; `chou``shoku`; `sou``chou`|morning; breakfast; early morning|asa:朝;chou:朝食,早朝
 坊|寝坊; 赤ん坊; 坊っちゃん|`ne``bou`; `aka`n`bou`; `bo`cchan|oversleep; baby; young master|bou:寝坊,赤ん坊;bo:坊っちゃん
 狂|狂う; 狂言; 狂犬; 狂気; 狂喜|`kuru`u; `kyou``gen`; `kyou``ken`; `kyou``ki`; `kyou``ki`|to go mad; a farce play between Noh plays; mad dog; madness; wild joy, ecstasy|kuru:狂う;kyou:狂言,狂犬,狂気,狂喜
 澄|澄ます; 澄む; 上澄み|`su`masu; `su`mu; `uwa``zu`mi|to make clear, to look unconcerned, to strain [one's ears]; to clear (e.g. weather); top [clear] layer (of soup, etc.)|su:澄ます,澄む,上澄み
@@ -675,7 +675,7 @@
 冒|冒頭; 冒す; 感冒|`bou``tou`; `oka`su; `kan``bou`|the beginning, the opening; to brave, to risk, to face; cold (illness)|bou:冒頭,感冒;oka:冒す
 党|党; 政党; 野党; 新党; 自由民主党; 自民党|tou; `sei``tou`; `ya``tou`; `shin``tou`; `ji``yuu` `min``shu` `tou`; `ji``min``tou`|party, faction; political party; opposition party; new political party; Liberal Democratic Party; LDP|tou:党,政党,野党,新党,自由民主党,自民党
 野|野党; 野; 野菜; 外野; 野蛮人; 野鳥; 分野|`ya``tou`; no; `ya``sai`; `gai``ya`; `ya``ban``jin`; `ya``chou`; `bun``ya`|opposition party; plain, field; vegetable; outfield; barbarians, savages; wild bird; field (e.g. of study)|ya:野党,野菜,外野,野蛮人,野鳥,分野;no:野
-期|時期; 期間; 期待; 長期; 長期的; 定期; 定期的; 最期; 画期的|`ji``ki`; `ki``kan`; `ki``tai`; `chou``ki`; `chou``ki``teki`; `tei``ki`; `tei``ki``teki`; `sai``go`; `kak``ki``teki`|time, season, period, soon, shortly; period, interval, term; anticipation; long-term; long-term; fixed period, fixed term; periodic; one's last moment/time of death; revolutionary, ground-breaking|ki:時期,期間,期待,長期,長期的,定期,定期的,画期的;go:最期
+期|時期; 期間; 期待; 長期; 長期的; 定期; 定期的; 最期; 画期的; 早期|`ji``ki`; `ki``kan`; `ki``tai`; `chou``ki`; `chou``ki``teki`; `tei``ki`; `tei``ki``teki`; `sai``go`; `kak``ki``teki`; `sou``ki`|time, season, period, soon, shortly; period, interval, term; anticipation; long-term; long-term; fixed period, fixed term; periodic; one's last moment/time of death; revolutionary, ground-breaking; early stage|ki:時期,期間,期待,長期,長期的,定期,定期的,画期的,早期;go:最期
 待|待つ; 期待|`ma`tsu; `ki``tai`|wait; anticipation|ma:待つ;tai:期待
 洗|洗う; 洗脳; 水洗; 無洗米; 食洗機; 洗剤; 中性洗剤; 合成洗剤|`ara`u; `sen``nou`; `sui``sen`; `mu``sen``mai`; `shoku``sen``ki`; `sen``zai`; `chuu``sei` `sen``zai`; `gou``sei` `sen``zai`|wash; brainwash; rincing with water; pre-washed rice, wash-free rice; dishwashing machine; detergent; neutral detergent; synthetic detergent|ara:洗う;sen:洗脳,水洗,無洗米,食洗機,洗剤,中性洗剤,合成洗剤
 薬|薬剤|`yaku``zai`|medicine|yaku:薬剤
@@ -692,7 +692,7 @@
 偏|偏る; 偏見|`katayo`ru; `hen``ken`|to be biased/prejudiced, to lean, to incline; prejudice, bias|katayo:偏る;hen:偏見
 宿|宿; 宿る; 宿題; 宿泊; 宿泊費; 下宿|yado; `yado`ru; `shuku``dai`; `shuku``haku`; `shuku``haku``hi`; `ge``shuku`|inn; to lodge; homework; lodging; hotel charge, lodging expense; boarding (house), suru vb.|yado:宿,宿る;shuku:宿題,宿泊,宿泊費,下宿
 泊|泊まる; 宿泊; 宿泊費|`to`maru; `shuku``haku`; `shuku``haku``hi`|to stay (at a place); lodging; hotel charge, lodging expense|to:泊まる;haku:宿泊,宿泊費
-暴|暴力; 暴れる; 暴く; 暴走; 暴動; 暴行|`bou``ryoku`; `aba`reru; `aba`ku; `bou``sou`; `bou``dou`; `bou``kou`|violence; to get violent; to expose, disclose; to run wild; insurrection, rebellion, revolt, riot; assault|bou:暴力,暴走,暴動,暴行;aba:暴れる,暴く
+暴|暴力; 暴れる; 暴く; 暴走; 暴動; 暴行; 暴露|`bou``ryoku`; `aba`reru; `aba`ku; `bou``sou`; `bou``dou`; `bou``kou`; `baku``ro`|violence; to get violent; to expose, disclose; to run wild; insurrection, rebellion, revolt, riot; assault; suru: disclose, expose, reveal|bou:暴力,暴走,暴動,暴行;aba:暴れる,暴く;baku:暴露
 著|著す; 著しい; 著者; 著書; 名著|`arawa`su; `ichijiru`shii; `cho``sha`; `cho``sho`; `mei``cho`|to write, to publish; remarkable, considerable; author; (literary) work, book, one's writings; famous book, masterpiece|arawa:著す;ichijiru:著しい;cho:著者,著書,名著
 恐|恐れる; 恐喝; 恐竜|`oso`reru; `kyou``katsu`; `kyou``ryuu`|to fear; blackmail, intimidate, extort; dinosaur|oso:恐れる;kyou:恐喝,恐竜
 喝|恐喝; 喝破; 一喝|`kyou``katsu`; `kap``pa`; `ik``katsu`|blackmail, intimidate, extort; arguing someone down, scolding; cry in a thundering voice, one roar|katsu:恐喝,一喝;kaxtsu:喝破
@@ -727,7 +727,7 @@
 約|予約; 先約; 節約; 婚約|`yo``yaku`; `sen``yaku`; `setsu``yaku`; `kon``yaku`|reservation, appointment; previous appointment; economising, saving; engagement|yaku:予約,先約,節約,婚約
 要|要る; 要する; 要するに; 必要; 要; 重要; 要素; 主要; 要因|`i`ru; `you`suru; `you`suru ni; `hitsu``you`; kaname; `juu``you`; `you``so`; `shu``you`; `you``in`|to need; to need, to require; in short, to sum up, basically; necessary; pivot, vital point, cornerstone; important; element (e.g. of an array), component, item in a list; chief, main, principal, major; main cause, primary factor|i:要る;you:要する,要するに,必要,重要,要素,主要,要因;kaname:要
 必|必ず; 必要|`kanara`zu; `hitsu``you`|with certainty; necessary|kanara:必ず;hitsu:必要
-結|結ぶ; 結う; 結わえる; 結論; 結社; 結果; 終結; 団結; 連結; 結末; 結婚; 結構|`musu`bu; `yu`u; `yu`waeru; `ketsu``ron`; `kes``sha`; `kek``ka`; `shuu``ketsu`; `dan``ketsu`; `ren``ketsu`; `ketsu``matsu`; `kek``kon`; `kek``kou`|to tie; to braid, to do up your hair; to bind, fasten, tie up; conclusion; society, association; result, outcome; end, close; suru: to unite, combine; concatenation, consolidation; conclusion; marriage; good, quite, fairly|musu:結ぶ;yu:結う,結わえる;ketsu:結論,終結,団結,連結,結末;kextsu:結社,結果,結婚,結構
+結|結ぶ; 結う; 結わえる; 結論; 結社; 結果; 終結; 団結; 連結; 結末; 結婚; 結構; 結核|`musu`bu; `yu`u; `yu`waeru; `ketsu``ron`; `kes``sha`; `kek``ka`; `shuu``ketsu`; `dan``ketsu`; `ren``ketsu`; `ketsu``matsu`; `kek``kon`; `kek``kou`; `kek``kaku`|to tie; to braid, to do up your hair; to bind, fasten, tie up; conclusion; society, association; result, outcome; end, close; suru: to unite, combine; concatenation, consolidation; conclusion; marriage; good, quite, fairly; tuberculosis|musu:結ぶ;yu:結う,結わえる;ketsu:結論,終結,団結,連結,結末;kextsu:結社,結果,結婚,結構,結核
 末|結末|`ketsu``matsu`|conclusion|matsu:結末
 婚|結婚; 再婚; 婚約; 新婚; 婚姻|`kek``kon`; `sai``kon`; `kon``yaku`; `shin``kon`; `kon``in`|marriage; remarriage; engagement; newly-wed; matrimony, marriage|kon:結婚,再婚,婚約,新婚,婚姻
 持|持つ; 気持ち; 所持|`mo`tsu; `ki``mo`chi; `sho``ji`|to hold, carry; feeling, mood; possession, owning|mo:持つ,気持ち;ji:所持
@@ -768,7 +768,7 @@
 操|操る; 操; 操作; 体操|`ayatsu`ru; misao; `sou``sa`; `tai``sou`|to manipulate; chastity, virginity; operation, management, processing; physical exercises, gynmastics|ayatsu:操る;misao:操;sou:操作,体操
 第|次第; 次第に; 第三者; 落第|`shi``dai`; `shi``dai`ni; `dai``san``sha`; `raku``dai`|dependent on; gradually; third party; failure, dropping out|dai:次第,次第に,第三者,落第
 濁|濁る; 濁す; 濁流; 清濁; 白濁|`nigo`ru; `nigo`su; `daku``ryuu`; `sei``daku`; `haku``daku`|to become muddy/cloudy; to make muddy/ambiguous; muddy stream; good and evil, purity and impurity; cloudiness|nigo:濁る,濁す;daku:濁流,清濁,白濁
-希|希少; 希望; 希少価値|`ki``shou`; `ki``bou`; `ki``shou``ka``chi`|scarce, rare; hope; scarcity value|ki:希少,希望,希少価値
+希|希少; 希望; 希少価値; 希薄|`ki``shou`; `ki``bou`; `ki``shou``ka``chi`; `ki``haku`|scarce, rare; hope; scarcity value; thin, sparse, lacking, deficient|ki:希少,希望,希少価値,希薄
 価|価値; 価値観; 価する; 物価; 希少価値|`ka``chi`; `ka``chi``kan`; `atai`suru; `buk``ka`; `ki``shou``ka``chi`|value; value system, sense of values; to be worth, to merit; prices of commodities, prices (in general), cost of living; scarcity value|ka:価値,価値観,物価,希少価値;atai:価する
 値|価値; 価値観; 値する; 高値; 下値; 上値; 終値; 安値; 希少価値|`ka``chi`; `ka``chi``kan`; `atai`suru; `taka``ne`; `shita``ne`; `uwa``ne`; `owari``ne`; `yasu``ne`; `ki``shou``ka``chi`|value; value system, sense of values; to be worth, to merit; high price; lowest price; higher price, price rise; closing price (e.g. stock exchange); low price; scarcity value|chi:価値,価値観,希少価値;atai:値する;ne:高値,下値,上値,終値,安値
 暫|暫定; 暫定政権|`zan``tei`; `zan``tei``sei``ken`|temporary, tentative; provisional government|zan:暫定,暫定政権
@@ -784,7 +784,7 @@
 続|続く; 連続; 続行; 継続|`tsudu`ku; `ren``zoku`; `zok``kou`; `kei``zoku`|to continue; serial, consecutively occurring; continuation; continuation|tsudu:続く;zoku:連続,継続;zoxtsu:続行
 泥|泥; 泥土|doro; `dei``do`|mud; mud|doro:泥;dei:泥土
 垂|垂れる; 垂らす; 雨垂れ; 垂直|`ta`reru; `ta`rasu; `ama``da`re; `sui``choku`|to hang, droop, sag; to spill; raindrops (from a tree, roof, etc.); vertical, perpendicular|ta:垂れる,垂らす,雨垂れ;sui:垂直
-軽|軽い; 軽やか; 手軽; 軽減; 軽音楽; 軽快; 軽井沢; 軽蔑|`karu`i; `karo`yaka; `te``garu`; `kei``gen`; `kei``on``gaku`; `kei``kai`; `karu``i``zawa`; `kei``betsu`|light; graceful; easy, simple, straightforward; abatement, reduction; light music, popular music; casual (e.g. dress), light, numble, jaunty (melody); Karuizawa (summer resort area nw of tokyo); contempt, scorn|karu:軽い,手軽,軽井沢;karo:軽やか;kei:軽減,軽音楽,軽快,軽蔑
+軽|軽い; 軽やか; 手軽; 軽減; 軽音楽; 軽快; 軽井沢; 軽蔑; 軽薄|`karu`i; `karo`yaka; `te``garu`; `kei``gen`; `kei``on``gaku`; `kei``kai`; `karu``i``zawa`; `kei``betsu`; `kei``haku`|light; graceful; easy, simple, straightforward; abatement, reduction; light music, popular music; casual (e.g. dress), light, numble, jaunty (melody); Karuizawa (summer resort area nw of tokyo); contempt, scorn; frivolous, superficial|karu:軽い,手軽,軽井沢;karo:軽やか;kei:軽減,軽音楽,軽快,軽蔑,軽薄
 井|井; 井戸; 天井; 軽井沢|i; `i``do`; `ten``jou`; `karu``i``zawa`|well; well; ceiling; Karuizawa (summer resort area nw of tokyo)|i:井,井戸,軽井沢;jou:天井
 肝|肝; 肝心|kimo; `kan``jin`|liver, guts; essential, crucial, main, fundumental|kimo:肝;kan:肝心
 斬|斬る; 斬撃; 斬新; 斬殺|`ki`ru; `zan``geki`; `zan``shin`; `zan``satsu`|to cut/kill with a sword; slash; novel, original; killing by sword|ki:斬る;zan:斬撃,斬新,斬殺
@@ -847,7 +847,7 @@
 酵|発酵; 酵素; 酵母|`hak``kou`; `kou``so`; `kou``bo`|fermentation; enzyme (e.g. for fermentation); yeast, leaven|kou:発酵,酵素,酵母
 因|因る; 要因; 死因; 敗因; 一因; 因子|`yo`ru; `you``in`; `shi``in`; `hai``in`; `ichi``in`; `in``shi`|to be caused by, to be due to; main cause, primary factor; cause of death; cause of defeat; cause; factor, divisor, element|yo:因る;in:要因,死因,敗因,一因,因子
 底|底; 徹底; 海底|soko; `tet``tei`; `kai``tei`|depths; thoroughness, completeness; bottom of the sea|soko:底;tei:徹底,海底
-徹|徹底|`tet``tei`|thoroughness, completeness|textsu:徹底
+徹|徹底; 徹夜|`tet``tei`; `tetsu``ya`|thoroughness, completeness; all night|textsu:徹底;tetsu:徹夜
 慎|慎む; 慎重; 謹慎; 不謹慎|`tsutsushi`mu; `shin``chou`; `kin``shin`; `fu``kin``shin`|to be careful, descreet, moderate; careful, discreet; self-restraint, pestilance, suru: house arrest; indescretion, imprudence|tsutsushi:慎む;shin:慎重,謹慎,不謹慎
 謹|謹んで; 謹慎; 不謹慎|`tsutsushi`nde; `kin``shin`; `fu``kin``shin`|respectfully...; self-restraint, pestilance, suru: house arrest; indescretion, imprudence|tsutsushi:謹んで;kin:謹慎,不謹慎
 誇|誇る; 誇張; 誇示|`hoko`ru; `ko``chou`; `ko``ji`|to be proud of, to boast; exaggeration; ostentation, display|hoko:誇る;ko:誇張,誇示
@@ -856,3 +856,18 @@
 憩|憩い; 休憩|`iko`i; `kyuu``kei`|rest, relaxation; rest, break|iko:憩い;kei:休憩
 岳|岳; 山岳; 北岳|take; `san``gaku`; `kita``dake`|peak; mountains; mt Kita (2nd tallest after Fuji)|take:岳,北岳;gaku:山岳
 鍵|鍵; 鍵|kagi; ken|key (for doors); key (of a piano, computer, etc)|kagi:鍵;ken:鍵
+審|審議; 審査; 不審; 副審|`shin``gi`; `shin``sa`; `fu``shin`; `fuku``shin`|deliberation; judging; doubt, suspicion, question; assistant umpire|shin:審議,審査,不審,副審
+副|副作用; 副社長; 副審|`fuku``sa``you`; `fuku``sha``chou`; `fuku``shin`|side effect, adverse reaction; vice president; assistant umpire|fuku:副作用,副社長,副審
+賊|賊; 海賊|zoku; `kai``zoku`|robber, burglar; pirate|zoku:賊,海賊
+潜|潜む; 潜る; 潜水|`hiso`mu; `mogu`ru; `sen``sui`|to lurk, to be in hiding; to dive into; diving|hiso:潜む;mogu:潜る;sen:潜水
+薄|薄い; 薄弱; 希薄; 軽薄|`usu`i; `haku``jaku`; `ki``haku`; `kei``haku`|thin (book), weak (flavor), light (color); feebleness, weakness; thin, sparse, lacking, deficient; frivolous, superficial|usu:薄い;haku:薄弱,希薄,軽薄
+核|核; 中核; 結核|kaku; `chuu``kaku`; `kek``kaku`|core, seed; core, nucleus, center; tuberculosis|kaku:核,中核,結核
+導|導く; 指導; 導入; 主導; 導体|`michibi`ku; `shi``dou`; `dou``nyuu`; `shu``dou`; `dou``tai`|to guide; to lead, guide, instruct; inroduction, bringing in, leading in; leadership, initiative; conductor (e.g. electricity)|michibi:導く;dou:指導,導入,主導,導体
+永|永遠|`ei``en`|eternal|ei:永遠
+露|露; 露店; 暴露; 露出; 露光|tsuyu; `ro``ten`; `baku``ro`; `ro``shutsu`; `ro``kou`|dew tears; street stall; suru: disclose, expose, reveal; exposure; (photographic) exposure|tsuyu:露;ro:露店,暴露,露出,露光
+除|除く; 解除; 控除|`nozo`ku; `kai``jo`; `kou``jo`|to remove, exclude, eliminate; cancellation, rescinding, calling off; deduction, subtraction (e.g. a subsidy)|nozo:除く;jo:解除,控除
+倉|倉; 倉庫|kura; `sou``ko`|warehouse, storehouse, cellar; warehouse, storehouse|kura:倉;sou:倉庫
+庫|金庫; 車庫; 倉庫|`kin``ko`; `sha``ko`; `sou``ko`|safe (for storing money); garage; warehouse, storehouse|ko:金庫,車庫,倉庫
+象|象; 対象; 印象; 現象; 象牙|zou; `tai``shou`; `in``shou`; `gen``shou`; `zou``ge`|elephant; target, object (e.g. of worship, study, etc.); impression; phenomenon; elephant tusk, ivory|zou:象,象牙;shou:対象,印象,現象
+牙|牙; 象牙|kiba; `zou``ge`|fang; elephant tusk, ivory|kiba:牙;ge:象牙
+弁|弁当; 弁; 答弁; 合弁; 代弁|`ben``tou`; ben; `tou``ben`; `gou``ben`; `dai``ben`|box lunch; designates dialects; response, reply, defense; joint management, pool; speaking by proxy, speaking for someone else, payment by proxy|ben:弁当,弁,答弁,合弁,代弁
