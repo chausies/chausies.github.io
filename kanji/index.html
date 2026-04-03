@@ -742,23 +742,30 @@
               const kanjisInWord = targetWord.split('').filter(c => c.match(/[\u4E00-\u9FAF]/));
               const targetIndex = kanjisInWord.indexOf(currentCardKanji);
               
-              if (targetIndex !== -1 && data.kanaRaw.includes('`')) {
-                const segments = [];
-                const regex = /`([^`]+)`/g;
-                let match;
-                while ((match = regex.exec(data.kanaRaw)) !== null) {
-                  segments.push(match[1]);
-                }
-                
-                const numKanjis = kanjisInWord.length;
-                if (numKanjis > 0 && segments.length % numKanjis === 0) {
-                  for (let j = targetIndex; j < segments.length; j += numKanjis) {
-                    if (devoice(applyXtsu(segments[j])) === devoice(groupLabel)) {
+              if (targetIndex !== -1) {
+                if (data.kanaRaw.includes('`')) {
+                  const segments = [];
+                  const regex = /`([^`]+)`/g;
+                  let match;
+                  while ((match = regex.exec(data.kanaRaw)) !== null) {
+                    segments.push(match[1]);
+                  }
+                  
+                  const numKanjis = kanjisInWord.length;
+                  if (numKanjis > 0 && segments.length % numKanjis === 0) {
+                    for (let j = targetIndex; j < segments.length; j += numKanjis) {
+                      if (devoice(applyXtsu(segments[j])) === devoice(groupLabel)) {
+                        return data; // Perfect reading match found!
+                      }
+                    }
+                  } else if (targetIndex < segments.length) {
+                    if (devoice(applyXtsu(segments[targetIndex])) === devoice(groupLabel)) {
                       return data; // Perfect reading match found!
                     }
                   }
-                } else if (targetIndex < segments.length) {
-                  if (devoice(applyXtsu(segments[targetIndex])) === devoice(groupLabel)) {
+                } else {
+                  // No backticks: the whole kana is the reading for the word/kanji
+                  if (devoice(applyXtsu(data.kana)) === devoice(groupLabel)) {
                     return data; // Perfect reading match found!
                   }
                 }
