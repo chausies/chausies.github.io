@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows to WSL2 Path Converter</title>
+  <style>
+    :root {
+      --bg-color: #f4f4f7;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --text-muted: #666666;
+      --primary-color: #2563eb;
+      --primary-hover: #1d4ed8;
+      --border-color: #e5e7eb;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.5;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    header {
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .blurb {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    textarea {
+      width: 100%;
+      height: 80px;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      user-select: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .toggle-container input {
+      cursor: pointer;
+    }
+
+    .output-container {
+      position: relative;
+    }
+
+    .output-box {
+      background-color: #f8fafc;
+      border: 1px solid var(--border-color);
+      min-height: 60px;
+      padding: 0.75rem;
+      padding-right: 4rem;
+      border-radius: var(--radius);
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.9rem;
+      word-break: break-all;
+      white-space: pre-wrap;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.4rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .copy-btn:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .copy-btn.success {
+      background-color: #10b981;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>WSL2 Path Converter</h1>
+      <p class="blurb">
+        Quickly convert copied Windows Explorer file paths into clean, web-safe, shell-ready paths for WSL2. This utility runs entirely client-side inside your browser and works completely offline.
+      </p>
+    </header>
+
+    <main>
+      <div class="form-group">
+        <label for="windowsPath">Paste Windows Path:</label>
+        <textarea id="windowsPath" placeholder="E.g., C:\Users\Name\Documents\My Project" autofocus></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="toggle-container">
+          <input type="checkbox" id="quoteToggle">
+          Wrap path in quotes (disables character escaping)
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label>WSL2 Equivalent:</label>
+        <div class="output-container">
+          <div id="wslOutput" class="output-box"></div>
+          <button id="copyBtn" class="copy-btn">Copy</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    /**
+     * Core path translation logic and shell formatting operations.
+     */
+    const PathConverter = {
+      // Characters that break a standard unquoted bash command line
+      bashSpecialChars: /([ &$*?()\[\]{}|<>~;`!#^'"\\])/g,
+
+      /**
+       * Convert Windows format to Linux/WSL format
+       * @param {string} winPath - The raw Windows file path
+       * @param {boolean} useQuotes - Wrap system strings inside quotes
+       * @returns {string} Fully parsed WSL path
+       */
+      convert(winPath, useQuotes) {
+        let path = winPath.trim();
+        if (!path) return '';
+
+        // Edge Case: Handle standard absolute network paths (UNC paths: \\server\share)
+        if (path.startsWith('\\\\')) {
+          path = path.replace(/\\/g, '/');
+          // Standard pattern for accessing unmounted network resources via WSL localhost networks
+          return useQuotes ? `"${path}"` : this.escapeShellChars(path);
+        }
+
+        // Process standard Windows local drives (e.g., C:\ or f:\)
+        const driveMatch = path.match(/^([a-zA-Z]):(.*)/);
+        
+        if (driveMatch) {
+          const driveLetter = driveMatch[1].toLowerCase();
+          let remainingPath = driveMatch[2];
+
+          // Normalize all backslashes to standard Unix forward slashes
+          remainingPath = remainingPath.replace(/\\/g, '/');
+
+          // Assemble standard /mnt/ wrapper path
+          path = `/mnt/${driveLetter}${remainingPath}`;
+        } else {
+          // Fallback if user pasted a relative path or a string without a drive letter
+          path = path.replace(/\\/g, '/');
+        }
+
+        // Apply shell syntax handling depending on selection context
+        if (useQuotes) {
+          return `"${path}"`;
+        } else {
+          return this.escapeShellChars(path);
+        }
+      },
+
+      /**
+       * Escapes sensitive bash characters with single backslashes
+       * @param {string} str 
+       * @returns {string}
+       */
+      escapeShellChars(str) {
+        return str.replace(this.bashSpecialChars, '\\$1');
+      }
+    };
+
+    /**
+     * DOM elements interaction configuration and tracking lifecycle.
+     */
+    document.addEventListener('DOMContentLoaded', () => {
+      const inputArea = document.getElementById('windowsPath');
+      const quoteToggle = document.getElementById('quoteToggle');
+      const outputBox = document.getElementById('wslOutput');
+      const copyBtn = document.getElementById('copyBtn');
+
+      // Main reactive controller pipeline
+      function handleConversion() {
+        const rawInput = inputArea.value;
+        const shouldQuote = quoteToggle.checked;
+        
+        const result = PathConverter.convert(rawInput, shouldQuote);
+        outputBox.textContent = result;
+      }
+
+      // Clipboard logic tracking transient success feedback states
+      async function handleCopy() {
+        const textToCopy = outputBox.textContent;
+        if (!textToCopy) return;
+
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          copyBtn.textContent = 'Copied!';
+          copyBtn.classList.add('success');
+          
+          setTimeout(() => {
+            copyBtn.textContent = 'Copy';
+            copyBtn.classList.remove('success');
+          }, 1500);
+        } catch (err) {
+          console.error('Failed to copy text: ', err);
+        }
+      }
+
+      // Event Listeners bind triggers
+      inputArea.addEventListener('input', handleConversion);
+      quoteToggle.addEventListener('change', handleConversion);
+      copyBtn.addEventListener('click', handleCopy);
+    });
+  </script>
+</body>
+</html>
