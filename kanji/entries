@@ -571,6 +571,7 @@
 指す|`sa`su|to point
 異議|`i``gi`|objection
 異なる|`koto`naru|to differ, to disagree
+異国|`i``koku`|foreign country
 特異|`toku``i`|unique, singular
 会議|`kai``gi`|meeting
 議論|`gi``ron`|argument, discussion, dispute
@@ -1108,6 +1109,7 @@
 心神|`shin``shin`|mind
 心神耗弱|`shin``shin``kou``jaku`|feeble-mindedness, diminished capacity
 知る|`shi`ru|to know
+知人|`chi``jin`|someone you know, an aquaintance
 覚える|`oboe`ru|to remember
 覚める|`sa`meru|to awake
 知覚|`chi``kaku`|suru: to perceive
@@ -1547,6 +1549,7 @@
 一樹|`ichi``ju`|one tree
 林|hayashi|woods
 帯|obi|belt
+帯びる|`o`biru|to have (a quality, property), to be tinged with, to bear (a sword, a mission)
 地帯|`chi``tai`|area, zone, belt (of land)
 世帯|`se``tai`|household, home
 所帯|`sho``tai`|household, home, more informal than 世帯
@@ -2450,6 +2453,7 @@
 降りる|`o`riru|to descend, to get off
 降る|`fu`ru|to rain
 下降|`ka``kou`|descend (opposite of 上昇)
+降伏|`kou``fuku`|surrender
 降雨|`kou``u`|rainfall
 雨天|`u``ten`|rainy weather
 雨水|`u``sui`|rainwater
@@ -2529,6 +2533,7 @@
 哀れ|`awa`re|pitiable, pathetic, miserable
 可哀想|`ka``wai``sou`|poor, pitiable
 悲哀|`hi``ai`|sorrow, grief, sadness
+統べる|`su`beru|to rule over, to command, to control
 大統領|`dai``tou``ryou`|president
 統計|`tou``kei`|statistics
 正統|`sei``tou`|orthodox
@@ -2819,3 +2824,67 @@
 盆地|`bon``chi`|basin/valley (e.g. between two mountains)
 覆水盆に返らず|`fuku``sui``bon`ni`kae`razu|can't return spilled water to the tray, what's done is done
 前科|`zen``ka`|a previous conviction, a previous offence, a criminal record
+成り立ち|`na`ri`ta`chi|the way something came into existence / came about, origin
+気さくに|`ki`sakuni|feel free to (I'm being friendly, sociable, amiable, good-humoured)
+手中|`shu``chuu`|in one's grasp
+八つ当たり|`ya`tsu`a`tari|to take it out on someone
+全治|`zen``chi`|a complete recovery (全治十年 = 10 years for complete recovery)
+若干|`jak``kan`|just a bit, just a touch, just a hair
+等しい|`hito`shii|identical, the same, no different
+平等|`byou``dou`|equality
+上等|`jou``tou`|first-class, "Now that's what I'm talking about!"
+高等|`kou``tou`|high class, high grade (高校 is short for 高等学校)
+対等|`tai``tou`|on equal footing
+優等生|`yuu``tou``sei`|honor student (opposite 劣等生)
+一等|`it``tou`|first class
+等価|`tou``ka`|equal value
+算数|`san``suu`|arithmetic
+十字軍|`juu``ji``gun`|the Crusades
+蔵|kura|warehouse, storehouse (sometimes also 倉)
+冷蔵庫|`rei``zou``ko`|refrigerator
+埋蔵|`mai``zou`|burying in the ground
+大蔵省|`oo``kura``shou`|Ministry of Finance
+叢書|`sou``sho`|a collection of books, personal library
+所蔵|`sho``zou`|suru: to possess
+内蔵|`nai``zou`|internal (e.g. mechanisms)
+地蔵|`ji``zou`|the Jizo statue things
+弔辞|`chou``ji`|memorial address, eulogy
+訪ねる|`tazu`neru|to visit, to pay a visit to
+訪れる|`otozu`reru|to visit
+訪問|`hou``mon`|suru: to visit
+訪米|`hou``bei`|to visit the US
+訪日|`hou``nichi`|to visit Japan
+訪中|`hou``chuu`|to visit China
+来訪|`rai``hou`|a visit (from someone)
+戸別訪問|`ko``betsu``hou``mon`|door-to-door visits (e.g. e.g. for canvassing)
+釣り合う|`tsu`ri`a`u|to match well
+搾る|`shibo`ru|to squeeze the juice out of something
+搾取|`saku``shu`|exploiting, bleeding (someone) dry, squeezing dry
+搾乳|`saku``nyuu`|milking (a cow, a goat, etc.)
+戦後|`sen``go`|post-war
+巣窟|`sou``kutsu`|den, nest, haunt
+輸入|`yu``nyuu`|import
+輸出|`yu``shutsu`|export
+輸血|`yu``ketsu`|blood transfusion
+輸送|`yu``sou`|transportation, conveyance
+運輸|`un``yu`|transportation
+空輸|`kuu``yu`|air transport
+禁輸|`kin``yu`|embargo
+運輸省|`un``yu``shou`|Ministry of Transport
+関節|`kan``setsu`|a joint
+衰える|`otoro`eru|to become weak, to decline, to wear (反: 栄える)
+衰弱|`sui``jaku`|weakness, debility
+老衰|`rou``sui`|suru: becoming senile, infirm (through age)
+衰退|`sui``tai`|decline, degeneration, decay
+減衰|`gen``sui`|attenuation, damping
+叔父|`o``ji`|uncle (specifically, a parent's 弟)
+述べる|`no`beru|to state, to express (e.g. an opinion)
+記述|`ki``jutsu`|suru: to describe, to account
+口述|`kou``jutsu`|dictation, verbal statement
+陳述|`chin``jutsu`|statement, declaration
+叙情|`jo``jou`|lyricism, describing one's feelings (反: 叙事)
+叙事|`jo``ji`|describing things and facts (with no emotion) (反: 叙情)
+除する|`jo`suru|to relate, to narrate, to describe
+叙述|`jo``jutsu`|to describe, to narrate
+著述|`cho``jutsu`|writing, book, (literary) work
+前述|`zen``jutsu`|aforementioned
