@@ -199,11 +199,11 @@
 梅雨|tsuyu|rainy season
 栄える|`saka`eru|flourish, thrive shine
 栄える|`ha`eru|shine, be bright, glow
-杉並木|`sugi``nami``ki`|row of cedar trees
-杉|sugi|cedar
+木|ki|tree
 並ぶ|`nara`bu|line up
 並み|`na`mi|medium, average, common, ordinary
-木|ki|tree
+杉並木|`sugi``nami``ki`|row of cedar trees
+杉|sugi|cedar
 書く|`ka`ku|write
 時雨|shigure|late-autumn-early-winter showers, drizzle
 時代|`ji``dai`|era, period
@@ -352,6 +352,8 @@
 円滑な|`en``katsu` na|smooth
 滑る|`sube`ru|slide
 滑らか|`name`raka|smooth
+沢|sawa|marsh
+沢山|`taku``san`|many
 光沢|`kou``taku`|luster, polish, glossy finish
 仲がいい|`naka`gaii|get along well
 今夜|`kon``ya`|tonight
@@ -1125,7 +1127,6 @@
 亡者|`mou``ja`|the dead
 金の亡者|`kane` no `mou``ja`|person who desires only money
 未亡人|`mi``bou``jin`|widow
-怪しい|`aya`shii|suspicious
 怪我|`ke``ga`|injury
 怪物|`kai``butsu`|monster
 先進国|`sen``shin``koku`|advanced country, developed nation
@@ -1232,6 +1233,7 @@
 後釜|`ato``gama`|successor
 裁く|`saba`ku|to pass judgement
 裁つ|`ta`tsu|to cut (e.g. cloth)
+総|sou|overall, gross, entire, general (manager, etc.)
 総裁|`sou``sai`|president, governor, general director
 体裁|`tei``sai`|outward appearance
 総合|`sou``gou`|synthesis, putting together
@@ -1841,7 +1843,6 @@
 井|i|well
 井戸|`i``do`|well
 天井|`ten``jou`|ceiling
-沢|sawa|marsh
 軽井沢|`karu``i``zawa`|Karuizawa (summer resort area nw of tokyo)
 肝|kimo|liver, guts
 肝心|`kan``jin`|essential, crucial, main, fundumental
@@ -2820,7 +2821,7 @@
 用いる|`mochi`iru|to utilize, to make use of, to use
 頭が上がらない|`atama`ga`a`garanai|can't thank you enough (X ni atama etc.)
 無事|`bu``ji`|one being well/unharmed (more literally: they weren't in an accident or anything unfortunate)
-崇める|`a`gameru|to revere, to respect, to worship
+崇める|`ag`ameru|to revere, to respect, to worship
 崇高|`suu``kou`|sublime, noble, lofty
 崇敬|`suu``kei`|reverence
 勧める|`susu`meru|to pursuade/encourage someone towards an action, to recommend a thing
@@ -3142,7 +3143,7 @@
 巻末|`kan``matsu`|end of a book/scroll
 中巻|`chuu``kan`|the middle volume
 床|yuka|floor
-床屋|`yoko``ya`|barber (shop)
+床屋|`toko``ya`|barber (shop)
 起床|`ki``shou`|rising (out of bed)
 病床|`byou``shou`|hospital bed, sickbed
 寝床|`ne``doko`|a bed, a place to sleep
@@ -3153,3 +3154,102 @@
 淡泊|`tan``paku`|plain (food), aloof/indifferent (person). Opposite would be rich and bold flavours
 淡紅色|`tan``kou``shoku`|pink, light red
 淡味|`tan``mi`|light flavour
+屋内|`oku``nai`|indoors
+屋外|`oku``gai`|outdoors
+望外|`bou``gai`|beyond one's hopes/expectations (in a good sense)
+勝る|`masa`ru|to outrival, to surpass, to have an edge, to outweigh (AはBに勝る = A>B)
+疑心暗鬼|`gi``shin``an``ki`|once you suspect things, everything looks suspicious. Suspicious begets monsters
+接する|`ses``suru`|to touch, to come in contact with, to engage with, to receive (a visitor), to be tangent to (curves)
+接ぐ|`tsu`gu|to graft onto a whole
+接続|`setsu``zoku`|connection, attachment, link
+面接|`men``setsu`|interview (for a job)
+直接|`choku``setsu`|directly
+接近|`sek``kin`|suru: to draw closer, to approach
+接ぎ木|`tsu`gi`ki`|grafting
+接合|`setsu``gou`|union, joining
+接待|`set``tai`|entertainment (of guests), wining and dining
+接戦|`ses``sen`|a close match
+隣接|`rin``setsu`|adjacency, contiguity
+動く|`ugo`ku|to move, to work, to operate
+動物|`dou``butsu`|animal
+自動|`ji``dou`|automatic
+証|akashi|proof, evidence
+検査|`ken``sa`|inspection, audit
+証明|`shou``mei`|proof, testimony, verification
+保証|`ho``shou`|to guarantee
+検証|`ken``shou`|suru: to verify, to confirm
+証言|`shou``gen`|testimony
+証人|`shou``nin`|witness
+点検|`ten``ken`|thorough examination, checking point by point
+検事|`ken``ji`|public prosecutor
+検問|`ken``mon`|examination, inspection, check
+検定|`ken``tei`|official certification, official approval
+掃く|`ha`ku|to sweep (e.g. with a broom)
+掃除|`sou``ji`|suru: to clean
+清掃|`sei``sou`|cleaning, clean-up, garbage collection
+掃海|`sou``kai`|sweeping the sea for mines
+清掃員|`sei``sou``in`|janitor, cleaner
+この頃|kono`goro` or kono`koro`|these days, recently, at this time
+他|hoka|another
+他人|`ta``nin`|another person
+余所|`yo``so`|somewhere else, another place, away from here
+他所|`yo``so`|somewhere else, another place, away from here
+他方|`ta``hou`|the other one (of two)
+他社|`ta``sha`|another company
+他国|`ta``koku`|another country
+実習|`jis``shuu`|hands-on practice
+念入りに|`nen``i`rini|carefully, elaborately
+命令|`mei``rei`|order, command
+指令|`shi``rei`|order, directive
+司令館|`shi``rei``kan`|commanding officer
+司令部|`shi``rei``bu`|headquarters
+辞令|`ji``rei`|wording, phraseology
+法令|`hou``rei`|statute, law, regulation
+巧言令色|`kou``gen``rei``shoku`|flattery, honeyed words
+命|mei|an order
+未だ|`ma`da|not yet (usu. kana alone)
+未定|`mi``tei`|not-yet decided
+未婚|`mi``kon`|yet-to marry, unmarried
+文体|`bun``tai`|style (of writing), literary style
+就く|`tsu`ku|to take/assume (a seat, a position, an office)
+就職|`shuu``shoku`|suru: to get a job
+就任|`shuu``nin`|suru: to assume (an office, a post, etc.)
+就寝|`shuu``shin`|going to bed, retiring (for the night)
+就労|`shuu``rou`|working, being employed
+就学|`shuu``gaku`|entering school, school attendance
+就業|`shuu``gyou`|starting work (for the day), employment
+活動|`katsu``dou`|activity (of a person, a volcano, etc.)
+就活|`shuu``katsu`|job hunting
+礼|rei|manners, ettiquette, thanks
+失礼|`shitsu``rei`|impolite, rude, discourteous
+無礼|`bu``rei`|rudeness, insolence, discourtesy
+謝礼|`sha``rei`|reward, remuneration
+洗礼|`sen``rei`|baptism
+充てる|`a`teru|to assign, to set aside for, to allocate to
+充当|`juu``tou`|allocation, appropriation
+充実|`juu``jitsu`|fullness, completeness, perfection, substantiality
+リア充|ria`juu`|normie, someone who's happy in the real world
+充電|`juu``den`|charging
+充分|`juu``bun`|enough, plenty (often just 十分)
+補充|`ho``juu`|replenishment, supplementation, refilling
+充満|`juu``man`|being filled with, permeating with
+充足|`juu``soku`|sufficiency
+充血|`juu``ketsu`|blood congestion, bloodshot
+慰労|`i``rou`|to acknowledge a person's services
+湿る|`shime`ru|to become damp, to become moist, the be in a slump, depressed, in low spirits (湿ります)
+湿気る|`shi``ke`ru|to be in low spirits, depressed, "a wet towel" (湿気ります)
+湿度|`shitsu``do`|humidity
+湿気|`shik``ke`|humidity, moisture
+除湿|`jo``shitsu`|dehumidification
+加湿器|`ka``shitsu``ki`|humidifier
+湿地|`shit``chi`|damp ground
+多湿|`ta``shitsu`|high humidity
+歌詞|`ka``shi`|lyrics
+動詞|`dou``shi`|verb
+名詞|`mei``shi`|noun
+代名詞|`dai``mei``shi`|pronoun
+形容詞|`kei``you``shi`|adjective
+副詞|`fuku``shi`|adverb
+助詞|`jo``shi`|japanese particles (e.g. は, を)
+接続詞|`setsu``zoku``shi`|conjunction
+下る|`kuda`ru|to go down, to descend
