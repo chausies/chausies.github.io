@@ -199,6 +199,7 @@
 梅雨|tsuyu|rainy season
 栄える|`saka`eru|flourish, thrive shine
 栄える|`ha`eru|shine, be bright, glow
+光栄|`kou``ei`|an honour
 木|ki|tree
 並ぶ|`nara`bu|line up
 並み|`na`mi|medium, average, common, ordinary
@@ -359,7 +360,7 @@
 今夜|`kon``ya`|tonight
 人権|`jin``ken`|human rights
 権利|`ken``ri`|rights
-利く|`ki`ku|to do enough (気が利く), speak(口を利く)
+利く|`ki`ku|to do (more than) enough (気が利く), speak(口を利く)
 京都|`kyou``to`|Kyoto
 都|miyako|capital
 都合|`tsu``gou`|circumstances
@@ -391,6 +392,7 @@
 現す|`arawa`su|to reveal, show
 表す|`arawa`su|to represent, signify, stand for
 現場|`gen``ba`|actual spot
+実る|`mino`ru|to ripen, to bear fruit, to show (good) results
 現実|`gen``jitsu`|reality
 表現|`hyou``gen`|expression
 代表|`dai``you`|representative
@@ -531,7 +533,7 @@
 研究|`ken``kyuu`|research
 研ぐ|`to`gu|sharpen, hone, whet, grind, wash (rice)
 学研|`gak``ken`|study and research
-究める|`kiwa`meru|to master, to investigate thoroughly
+究める|`kiwa`meru|to investigate thoroughly, to master
 学究|`gak``kyuu`|scholar, student
 不可能な|`fu``ka``nou` na|impossible
 能力|`nou``ryoku`|ability
@@ -920,7 +922,7 @@
 砂|suna|sand
 砂利|`ja``ri`|gravel
 反復|`han``puku`|repitition
-反らす|`so`rasu|to bend, warp, curve
+反らす|`so`rasu|to send back
 反対|`han``tai`|opposite, oppose
 反撃|`han``geki`|counterattack
 違反|`i``han`|violation, breach
@@ -978,6 +980,7 @@
 完璧|`kan``peki`|perfect
 召し上がる|`me`shi`a`garu|eat (honorific)
 召集|`shou``shuu`|convening, calling together (e.g. parliment, strategy meeting, etc.)
+思し召し|`obo`shi`me`shi|will (esp. of god)
 嘲る|`azake`ru|ridicule
 自嘲|`ji``chou`|self-deprecation
 職員|`shoku``in`|staff member
@@ -1067,6 +1070,7 @@
 常に|`tsune`ni|always, constantly
 常夏|`toko``natsu`|everlasting summer
 非常|`hi``jou`|extraordinary
+通常|`tsuu``jou`|what is normal, what is usual
 異常|`i``jou`|strangeness, abnormality
 常闇|`toko``yami`|everlasting darkness
 正常|`sei``jou`|normal
@@ -1155,8 +1159,9 @@
 お菓子|o`ka``shi`|sweets (candy)
 製菓|`sei``ka`|confectionary production, baking
 出馬|`shutsu``ba`|suru: to stand or run as a candidate
+兼|ken|indicating an on-going list (X and Y and Z = X兼、Y兼、Z)
 兼任|`ken``nin`|suru: to hold two posts simultaneously
-兼ねる|`ka`neru|to double as
+兼ねる|`ka`neru|to double as (serve two roles simultaneously), to find something difficult
 兼ねない|`ka`nenai|to be likely to, to be able to, "I wouldn't put it passed him to..."
 気兼ね|`ki``ga`ne|hesitance, diffidence, fear of troubling someone
 任せる|`maka`seru|to entrust
@@ -1312,6 +1317,7 @@
 経る|`he`ru|to pass, elapse, go by
 経営|`kei``ei`|to manage, to run (a company)
 営む|`itona`mu|to manage/run a business
+野営|`ya``ei`|camping
 神経|`shin``kei`|nerve
 神経質|`shin``kei``shitsu`|nervous, high-strung, sensitive, worried about small things
 経由|`kei``yu`|suru: to go by way of, via
@@ -1337,6 +1343,7 @@
 写す|`utsu`su|to transcribe, to reproduce
 写真|`sha``shin`|picture
 写生|`sha``sei`|sketching, drawing from nature
+複数|`fuku``suu`|multiple, plural
 複写|`fuku``sha`|suru: copy, duplicate
 複写機|`fuku``sha``ki`|copying machine (usually just コピー機)
 重複|`chou``fuku` or `juu``fuku`|to be repeating, redundant
@@ -1353,6 +1360,7 @@
 宮殿|`kyuu``den`|palace
 殿|`tono` or `dono`|lord, mister
 殿下|`den``ka`|your highness
+貴殿|`ki``den`|thou
 投げる|`na`geru|to throw
 投機|`tou``ki`|speculation
 飛行機|`hi``kou``ki`|plane
@@ -1371,8 +1379,11 @@
 謡|utai|Noh chanting
 民謡|`min``you`|folk song
 歌謡|`ka``you`|song, ballad
-貴い|`touto`i|precious
+貴い|`touto`i|precious (esp. with regards to people)
 貴重|`ki``chou`|precious, valuable
+貴族|`ki``zoku`|nobles
+貴様|`ki``sama`|you bastard
+貴方|anata|you
 来賓|`rai``hin`|guest, visitor
 賓客|`hin``kyaku`|guest of honor
 貴賓室|`ki``hin``shitsu`|VIP room
@@ -1635,7 +1646,7 @@
 末|sue|end, close
 持つ|`mo`tsu|to hold, carry
 気持ち|`ki``mo`chi|feeling, mood
-所持|`sho``ji`|possession, owning
+所持|`sho``ji`|possession, owning, having on one's person
 料|ryou|fee
 無料|`mu``ryou`|free of charge
 食料|`shoku``ryou`|food
@@ -1948,6 +1959,7 @@
 便所|`ben``jo`|toilet
 便利|`ben``ri`|convenient
 便箋|`bin``sen`|stationary, writing paper
+制服|`sei``fuku`|uniform
 制作|`sei``saku`|to create (usually for art/games), as opposed to 製作 (manufacture)
 制度|`sei``do`|system, institution
 体制|`tai``sei`|order, system, structure, set-up
@@ -1976,6 +1988,7 @@
 首席|`shu``seki`|top [first] in the class
 青年|`sei``nen`|young man
 異端|`i``tan`|heresy
+異端者|`i``tan``sha`|heretic, deviant
 都市|`to``shi`|city
 市民|`shi``min`|citizens, townspeople
 同市|`dou``shi`|same city
@@ -2093,6 +2106,7 @@
 副作用|`fuku``sa``you`|side effect, adverse reaction
 副社長|`fuku``sha``chou`|vice president
 不審|`fu``shin`|doubt, suspicion, question
+不審者|`fu``shin``sha`|suspicious person
 副審|`fuku``shin`|assistant umpire
 賊|zoku|robber, burglar
 海賊|`kai``zoku`|pirate
@@ -2355,7 +2369,7 @@
 萎々|`shio`shio|downheartedly, in low spirits
 萎える|`na`eru|to lose strength, to become weak, to wither, to droop
 縮む|`chidi`mu|to shrink
-縮小|`shuku``shou`|reduction, curtailment
+縮小|`shuku``shou`|shrink, reduction, curtailment
 短縮|`tan``shuku`|shortening, abbreviation
 萎縮|`i``shuku`|to wither, to become atrophied
 軍縮|`gun``shuku`|disarmament, limitation of arms
@@ -2458,6 +2472,7 @@
 直後|`choku``go`|immediately following
 直前|`choku``zen`|immediately before
 慌てる|`awa`teru|to be flustered, to be in a panic
+慌ただし|`awa`tadashii|busy, hectic, hurried
 貧しい|`mazu`shii|poor, needy
 貧乏|`bin``bou`|poverty, destitute, poor
 清貧|`sei``hin`|honourable poverty
@@ -2530,7 +2545,7 @@
 有効|`yuu``kou`|effective, valid
 無効|`mu``kou`|ineffective, invalid
 有利|`yuu``ri`|advantageous
-有無|`u``mu`|existence or nonexistence
+有無|`u``mu`|existence or nonexistence, presence or absence
 有罪|`yuu``zai`|guilty
 有志|`yuu``shi`|volunteer, sympathizer, supporter
 山脈|`san``myaku`|mountain range
@@ -2618,7 +2633,7 @@
 肥満|`hi``man`|corpulence, obesity
 円満|`en``man`|harmonious, peaceful, smooth, complete, perfect
 為|tame|for the benefit of
-行為|`kou``i`|act, deed
+行為|`kou``i`|conduct, acts, deeds
 所為|`se``i`|fault, blame (usually written kana alone)
 為す|`na`su|to do
 為さる|`na`saru|to do
@@ -2925,6 +2940,7 @@
 衰退|`sui``tai`|decline, degeneration, decay
 減衰|`gen``sui`|attenuation, damping
 叔父|`o``ji`|uncle (specifically, a parent's 弟)
+叔母|`o``ba`|aunt (specifically, a parent's 妹)
 述べる|`no`beru|to state, to express (e.g. an opinion)
 記述|`ki``jutsu`|suru: to describe, to account
 口述|`kou``jutsu`|dictation, verbal statement
@@ -3085,7 +3101,6 @@
 争議|`sou``gi`|a dispute, a (work) strike
 給料|`kyuu``ryou`|salary, wages, pay
 昇給|`shou``kyuu`|salary increase, suru: to get a pay raise
-給与|`kyuu``yo`|pay, salary, wage
 給食|`kyuu``shoku`|providing a meal, lunch service (e.g. at work)
 支給|`shi``kyuu`|provision, supply, allowance
 月給|`gek``kyuu`|monthly salary
@@ -3135,6 +3150,7 @@
 加工|`ka``kou`|to process (food, etc.) (e.g. in a factory/facility)
 加工乳|`ka``kou``nyuu`|processed milk
 比べる|`kura`beru|to compare
+比率|`hi``ritsu`|ratio
 対比|`tai``hi`|suru: contrast, juxtapose, compare
 比重|`hi``juu`|specific gravity, relative importance
 込む|`ko`mu|usu. added at end of verbs to signify "to go into, put into, do thoroughly, etc."
@@ -3169,14 +3185,14 @@
 接合|`setsu``gou`|union, joining
 接待|`set``tai`|entertainment (of guests), wining and dining
 接戦|`ses``sen`|a close match
-隣接|`rin``setsu`|adjacency, contiguity
+隣接|`rin``setsu`|adjacency, contiguity, being adjoined to
 動く|`ugo`ku|to move, to work, to operate
 動物|`dou``butsu`|animal
 自動|`ji``dou`|automatic
 証|akashi|proof, evidence
 検査|`ken``sa`|inspection, audit
 証明|`shou``mei`|proof, testimony, verification
-保証|`ho``shou`|to guarantee
+保証|`ho``shou`|to confirm something, to guarantee something
 検証|`ken``shou`|suru: to verify, to confirm
 証言|`shou``gen`|testimony
 証人|`shou``nin`|witness
@@ -3253,3 +3269,410 @@
 助詞|`jo``shi`|japanese particles (e.g. は, を)
 接続詞|`setsu``zoku``shi`|conjunction
 下る|`kuda`ru|to go down, to descend
+雄大|`yuu``dai`|grand, magnificent, majestic
+一切|`is``sai`|all, everything, when negated: without exception
+志願|`shi``gan`|suru: aspiring, volunteering, desiring
+与える|`ata`eru|to give (esp. to lower status), to bestow
+給与|`kyuu``yo`|pay, salary, wage
+関与|`kan``yo`|suru: participating/taking part in
+与党|`yo``tou`|ruling party, party in power
+野党|`ya``tou`|opposition party
+寄与|`ki``yo`|contribution, service
+授与|`ju``yo`|awarding, conferment
+投与|`tou``yo`|administering (of medicine)
+貸与|`tai``yo`|loan, lending
+返す|`kae`su|to send back
+返事|`hen``ji`|reply
+返答|`hen``tou`|response
+役|yaku|role, assignment, duty, function
+役立つ|`yaku``da`tsu|to be useful/helpful
+役目|`yaku``me`|duty, role, function
+役所|`yaku``sho`|government office, public office
+役人|`yaku``nin`|government official
+役者|`yaku``sha`|actor, actress, cunning/clever person
+主役|`shu``yaku`|main role
+役員|`yaku``in`|executive, officer
+服役|`fuku``eki`|penal servitude, serving time in prison
+苦役|`ku``eki`|toil, drudgery, penal servitude, imprisonment (with hard labour)
+目的|`moku``teki`|objective
+選りすぐり|`e`risuguri or `yo`risuguri|special selection, finest pick
+不当|`fu``tou`|unjust, unfair, undue, unwarranted
+古巣|`furu``su`|"my old haunts", back at the old place
+支度|`shi``taku`|to prepare, to get ready
+始末|`shi``matsu`|to put an end to
+命中|`mei``chuu`|hitting the mark, (direct) hit
+特効|`tok``kou`|a strong/special effect
+地形|`chi``kei`|terrain
+待機|`tai``ki`|stand-by
+防御|`bou``gyo`|defense
+回避|`kai``hi`|evasion
+技|waza|technique, skill
+技能|`gi``nou`|skill
+追う|`o`u|to follow, to pursue
+追撃|`tsui``geki`|pursuing attack
+配剤|`hai``zai`|dispencing (medicine)
+天の配剤|`ten`no`hai``zai`|a gift from heaven, providence
+済む|`su`mu|to finish, to end, to settle (a debt)
+経済|`kei``zai`|economy
+返済|`hen``sai`|repayment, reimbursement
+共済|`kyou``sai`|mutual aid
+指南|`shi``nan`|instruction, coaching, teaching
+交代|`kou``tai`|alternation, changing
+反面|`han``men`|an opposing point, on the other hand
+細かい|`koma`kai|fine, minute, small
+明細|`mei``sai`|details, particulars, specifics
+細部|`sai``bu`|details, particulars
+細心|`sai``shin`|meticulous, discreet, scrupulous
+零細|`rei``sai`|insignificant, trifling, paltry
+微細|`bi``sai`|minute, fine, detailed, subtle
+細工|`sai``ku`|crafsmanship, handiwork, tampering, doctoring
+細やか|`sasa`yaka|small, meager, modest (usu. kana alone)
+値打ち|`ne``u`chi|value, worth, merit
+先刻|`sen``koku`|just now, a short while ago
+座する|`za`suru|to squat, to sit idly by
+口説く|kudoku|to pester, to force conversation on
+値踏み|`ne``bu`mi|suru: appraising, evaluating, setting prices
+陰り|`kage`ri|gloom, shade, darkness
+縮図|`shuku``zu`|miniature copy, small version of, microcosm
+住む|`su`mu|to reside (somewhere)
+住人|`juu``nin`|residents
+信徒|`shin``to`|follower, believer
+音信|`on``shin`|correspondence
+雑|`zatsu`|rough, crude, sloppy, messy (na-adj)
+複雑|`fuku``zatsu`|complicated
+雑用|`zatsu``you`|random chores, odd jobs
+混雑|`kon``zatsu`|crowding, congestion, disorder
+雑巾|`zou``kin`|rag, house-cloth
+雑談|`zatsu``dan`|idle chatter
+雑音|`zatsu``on`|incoherent sounds
+雑踏|`zat``tou`|hustle and bustle, throng, crowd
+単数|`tan``suu`|singular (反: 複数)
+資質|`shi``shitsu`|disposition, qualities, nature, temprament
+冊|satsu|counter for books
+冊数|`sas``suu`|number of books
+冊子|`sas``shi`|pamphlet
+畝|une|ridges/ribs (like on ruffle chips, or rice paddies)
+無形|`mu``kei`|formless, intangible
+局|kyoku|bureau, department, office
+結局|`kek``kyoku`|after all, in the end
+薬局|`yak``kyoku`|pharmacist, chemist, drugstore
+局番|`kyoku``ban`|area code (of a phone number)
+局長|`kyoku``chou`|bureau director
+難局|`nan``kyoku`|difficult situation
+当局|`tou``kyoku`|the relevant authorities
+局面|`kyoku``men`|state of the game (in Go)
+破局|`ha``kyoku`|catastrophe
+礼儀|`rei``gi`|manners, courtesy
+行儀|`gyou``gi`|manners, behavior
+儀式|`gi``shiki`|ceremony, ritual
+葬儀|`sou``gi`|funeral ceremony
+斤|kin|unit of weight (approx. 600g)
+斤量|`kin``ryou`|(measured) weight
+先祖|`sen``zo`|ancestors, forefathers
+祖国|`so``koku`|homeland, motherland
+曽祖父|`sou``so``fu`|great-grandfather
+祖母|`so``bo`|grandmother
+親父|`oya``ji`|dad
+袋|fukuro|bag, pouch, peel (of an orange, etc.)
+手袋|`te``bukuro`|glove, mitten
+風袋|`fuu``tai`|packing, wrapping
+足袋|tabi|traditional tabi socks
+袋小路|`fukuro``kou``ji`|blind alley, cul-de-sac, dead end street
+有袋類|`yuu``tai``rui`|pouched animal, marsupial
+小国|`shou``koku`|small country
+軽工業|`kei``kou``gyou`|light industry
+凝る|`ko`ru|to grow stiff (shoulders, etc.), to be absorbed in, to develop a passion for
+凝固|`gyou``ko`|solidification, coagulation, freezing
+凝縮|`gyou``shuku`|condensation (of ideas, emotions, vapor), concentration
+凝視|`gyou``shi`|stare, gaze, fixate
+天皇|`ten``nou`|Emperor of Japan
+皇居|`kou``kyo`|Imperial Palace
+皇太子|`kou``tai``shi`|crown prince
+皇帝|`kou``tei`|emperor
+皇位|`kou``i`|Imperial Throne (of japan)
+皇族|`kou``zoku`|imperial family
+后|kisaki|empress (consort), queen (consort)
+皇后|`kou``gou`|empress/queen (consort)
+障る|`sawa`ru|to harm, hurt, or hinder
+障害|`shou``gai`|obstacle, impediment, hindrance, impairment, disability
+障害者|`shou``gai``sha`|person with physical/mental disability
+保障|`ho``shou`|to guarantee something
+支障|`shi``shou`|obstacle, hindrance, impediment
+目障り|`me``zawa`ri|eyesore
+社会保障|`sha``kai``ho``shou`|social security
+障子|`shou``ji`|paper-sliding door
+壁|kabe|wall, barrier
+障壁|`shou``heki`|enclosing barrier/fence, obstacle
+区別|`ku``betsu`|distinction, differentiation
+地区|`chi``ku`|district, zone, area
+区分|`ku``bun`|suru: to partition, divide, segment (land into different areas)
+区切る|`ku``gi`ru|to partition, divide, segment (land into different areas)
+区|ku|denotes wards (in Tokyo)
+区間|`ku``kan`|section, interval (of a track)
+千代田区|`chi``yo``da``ku`|Chiyoda Ward (in Tokyo)
+関連|`kan``ren`|relation, connection, "in relation to"
+頼む|`tano`mu|to request, to beg, to ask, to entrust to
+頼る|`tayo`ru|to count on, to rely on
+信頼|`shin``rai`|trust, confidence, faith
+確か|`tashi`ka|certain
+確率|`kaku``ritsu`|probability, liklihood, chances
+正確|`sei``kaku`|precise, accurate
+確認|`kaku``nin`|to confirm, to verify
+確実|`kaku``jitsu`|certain, sure, definite
+明確|`mei``kaku`|clear, definite, distinct
+的確|`teki``kaku`|apt, appropriate, right, precise, accurate
+確信|`kaku``shin`|conviction
+確保|`kaku``ho`|to secure, to obtain
+確定|`kaku``tei`|suru: to settle, establish, confirm
+確固|`kak``ko`|firm, unshakeable, resolute
+確証|`kaku``shou`|conclusive evidence, definite proof
+行方|yukue|whereabouts, where one is headed
+不明|`fu``mei`|unclear, uncertain, ambiguous
+受注|`ju``chuu`|accepting an order, receiving an order
+発注|`hat``chuu`|placing an order
+身の上話|`mi`no`ue``banashi`|life story, story of one's life
+散策|`san``saku`|roaming, exploring, strolling around
+素性|`su``jou`|lineage, parentage, background, identity
+担う|`nina`u|to bear, to shoulder
+担任|`tan``nin`|the one in charge (of a class or subject)
+担当|`tan``tou`|being responsible (for a work role)
+有望|`yuu``bou`|promising, full of promise
+予め|`arakaji`me|beforehand, in advance, ahead of time
+茶化す|`cha``ka`su|to poke fun at, to make fun of
+敗北|`hai``boku`|defeat
+敗走|`hai``sou`|to rout (an enemy)
+決する|`kes`suru|to decide, to determine, to resolve
+及ぶ|`oyo`bu|to reach, to come up to, to be a match for
+及第点|`kyuu``dai``ten`|passing marks
+急落|`kyuu``raku`|success or failure
+子細|`shi``sai`|particulars, reasons, circumstances
+楽観|`rak``kan`|optimism, taking an optimistic view
+真剣|`shin``ken`|serious, earnest
+全うする|`mat``tou`suru|to accomplish, to carry out
+風情|`fu``zei`|the likes of..., lowly people such as...
+様式|`you``shiki`|style, pattern
+当たり障りのない|`a`tari`sa`warinonai|inoffensive, milquetoast, safe
+率いる|`hiki`iru|to lead
+屈指|`kus``shi`|leading, foremost
+加担|`ka``tan`|support, assist, be complicit
+加担者|`ka``tan``sha`|accomplice
+相応|`sou``ou`|fitting, befitting
+相応しい|fusawashii|fitting, befitting
+直視|`choku``shi`|taking a straight look at something, looking someone straight in the eyes
+差出人|`sashi``dashi``nin`|the one who sent (e.g. a letter)
+対応|`tai``ou`|to coordinate
+仰る|`ossha`ru|to say (humble)
+逸らす|`so`rasu|to divert, bend, warp, curve
+逸れる|`hagu`reru|to stray from, to lose sight of
+逸する|`is`suru|to lose/miss (a chance), to overlook, to forget
+逸材|`itsu``zai`|outstanding talent, exceptional talent
+逸脱|`itsu``datsu`|deviation, departure
+逸話|`itsu``wa`|anecdote
+逸品|`ip``pin`|excellent article, fine item
+狙う|`nera`u|to aim at
+狙撃|`so``geki`|sniping
+催す|`moyoo`su|to hold (an event, a dinner, a party, etc.), to feel (a sensation, emotion, etc.)
+催し|`moyoo`shi|event, festivities, social gathering
+催し物|`moyoo`shi`mono`|special event, entertainment
+開催|`kai``sai`|holding (a conference, exhibition, etc.), hosting (e.g. the olympics), opening (an event)
+主催|`shu``sai`|sponsorship, promotion
+主催者|`shu``sai``sha`|sponsor, promoter
+共催|`kyou``sai`|joint sponsorship
+催涙|`sai``rui`|tear-inducing (e.g. onions, teargas)
+地下街|`chi``ka``gai`|underground shopping mall
+限る|`kagi`ru|to restrict, to limit, to confine
+制限|`sei``gen`|limit, restriction
+期限|`ki``gen`|time limit
+権限|`ken``gen`|jurisdiction, authority, power
+無限|`mu``gen`|without limit, infinity
+有限|`yuu``gen`|finite, limited
+蒸す|`mu`su|steaming (a towel, etc.)
+蒸らす|`mu`rasu|to cook (with steam)
+蒸す|`fuka`su|to steam (food)
+蒸気|`jou``ki`|vapor, steam
+水蒸気|`sui``jou``ki`|water vapour
+蒸発|`jou``hatsu`|to evaporate
+蒸留|`jou``ryuu`|distilation
+瓶|bin|bottle, jar, phial, decantor
+瓶詰め|`bin``du`me|bottling, bottled
+宗教|`shuu``kyou`|religion
+宗派|`shuu``ha`|sect, denomination (of a religion)
+宗門|`shuu``mon`|sect, denomination (of a religion)
+宗家|`sou``ke`|head of family, originator
+滑走|`kas``sou`|slide, roll, glide
+兵士|`hei``shi`|soilder
+核兵器|`kaku``hei``ki`|nuclear weapon
+兵隊|`hei``tai`|armed forces
+歩兵|`ho``hei`|infantry, foot soilder
+兵役|`hei``eki`|military service
+名無しの権兵衛|`na``na`shino`gon``be``e`|Mr. Nobody, John Doe
+協力|`kyou``ryoku`|cooperation, support
+協定|`kyou``tei`|arrangement, pact, agreement
+協会|`kyou``kai`|association, organization, society
+協議|`kyou``gi`|negotiation, conference, consultation
+協調|`kyou``chou`|cooperation, conciliation, coordination
+紳士|`shin``shi`|gentleman
+貴紳|`ki``shin`|noble, notable person, man of rank
+最低|`sai``tei`|the worst, the minimum
+初歩|`sho``ho`|first steps, the ABCs, basics
+丼|donburi|bowl, bowl of meat/fish served over rice
+親子丼|`oya``ko``don`|chicken and egg bowl
+丼勘定|`donburi``kan``jou`|rough estimate, sloppy accounting, slapdash bookkeeping
+指図|`sashi``zu`|orders, directions, instructions
+惰弱|`da``jaku`|apathetic, indolent, weak, feeble, enervated
+背中|`se``naka`|back (of the body)
+背後|`hai``go`|behind, rear
+背信|`hai``shin`|betrayal, infidelity
+遂げる|`to`geru|to accomplish, to achieve, to carry out
+遂行|`sui``kou`|suru: to accomplish (e.g. a mission)
+未遂|`mi``sui`|(failed) attempt
+遂に|`tsui`ni|finally..., at last...
+余罪|`yo``zai`|other crimes, further offences
+割る|`wa`ru|to divide
+割れる|`wa`reru|to break, to smash, to split, to crack, to be divided/split (e.g. a vote, a party), to come to light/be revealed
+割引|`wari``biki`|discount
+役割|`yaku``wari`|part, role
+割合|`wari``ai`|proportion (e.g. 3 boys to 2 girls)
+分割|`bun``katsu`|partition, division, separation
+芝居|`shiba``i`|play, acting
+布教|`fu``kyou`|propogation (e.g. a religion), proselytizing, missionary work
+風変わり|`fuu``ga`wari|peculiar, strange, eccentric, unusual
+悲報と朗報|`hi``hou`to`rou``hou`|bad news and good news
+品|shina|item
+科を作る|`shina`wo`tsuku`ru|to act flirtatious, to act kittenish, to put on coquettish airs
+誤る|`ayama`ru|to make a mistake, to err
+誤解|`go``kai`|misunderstanding
+誤差|`go``sa`|miscalculation, measurement error, discrepancy
+誤魔化す|`go``ma``ka`su|to deceive, to swindle, to fool
+誤認|`go``nin`|misrecognition, mistaking (x for y)
+誤字|`go``ji`|typo, misprint
+誤訳|`go``yaku`|mistranslation
+扱う|`atsuka`u|to handle, to deal with
+際|sai|occasion
+際|kiwa|edge, brink, verge (usu. giwa when attached to verb)
+汚い|`kitana`i|dirty, underhanded
+汚れる|`yogo`reru|to get dirty
+汚らわしい|`kega`rawashii|filthy, disgusting, nasty
+汚水|`o``sui`|filthy water, sewage
+汚職|`o``shoku`|(political) corruption
+汚名|`o``mei`|bad name, bad reputation, disgrace
+染みる|`shi`miru|to soak (into), to permeate, to seep (in), can be used with 込む
+染める|`so`meru|to dye, to colour
+染まる|`so`maru|to be tainted, stained, effected, steeped in
+伝染|`den``sen`|contagion, infection
+感染|`kan``sen`|infection (viruses, harmful ideas, etc.)
+染み|`shi`mi|stain, spot
+染色|`sen``shoku`|dying
+背教者|`hai``kyou``sha`|apostates, renegades (of a church)
+適する|`teki`suru|to fit, to suit
+適当|`teki``tou`|suitable, fitting
+最適|`sai``teki`|most suitable, optimum
+適任|`teki``nin`|competent, qualified, suitable (for a responsibility)
+適性|`teki``sei`|suitability, aptness
+快適|`kai``teki`|pleasant, agreeable
+適切|`teki``setsu`|appropriate, suitable, fitting
+適応|`teki``ou`|adaptation, accomodation
+手練れ|`te``da`re|mastery, skillfullness, dexterity, a master hand
+当初|`tou``sho`|at first, at the beginning, initially
+途絶える|`to``da`eru|to stop, cease, come to an end, cut off
+余地|`yo``chi`|space, room (e.g. for doubt)
+重んじる|`omo`njiru|to give weight/importance to
+有する|`yuu`suru|to have, possess, be endowed with
+生理|`sei``ri`|physiology, menstruation/one's period
+号砲|`gou``hou`|signal gun, starting gun
+漆|urushi|East Asian Lacquer, Japan
+漆器|`shik``ki`|lacquerware
+漆黒|`shik``koku`|pitch black
+潰す|`tsubu`su|to crush, to smash
+崩潰|`hou``kai`|collapse, breaking down (more commonly 崩壊)
+潰瘍|`kai``you`|ulcer
+お嬢さん|o`jou`san|young lady/miss
+令嬢|`rei``jou`|daughter (of a good family)
+筆|fude|brush
+万年筆|`man``nen``hitsu`|fountain pen
+随筆|`zui``hitsu`|essays, miscellaneous writings
+筆記|`hik``ki`|writing down, taking notes, copying
+筆者|`his``sha`|writer, author
+執筆|`ship``pitsu`|writing, authoring
+主筆|`shu``hitsu`|editor-in-chief
+一筆|`ip``pitsu`|a stroke of the pen
+見方|`mi``kata`|way of viewing things, point of view
+根|ne|roots
+屋根|`ya``ne`|roof
+根本的|`kon``pon``teki`|fundamental
+根性|`kon``jou`|guts, determination
+根源|`kon``gen`|source, origin, cause, root
+根気|`kon``ki`|perseverance, persistence, patience
+根底|`kon``tei`|basis, foundation, root
+根ざす|`ne`zasu|to come from, to have roots in
+箱根|`hako``ne`|Hakone (scenic mountain spot near Fuji)
+極めて|`kiwa`mete|extremely, exceedingly
+極限|`kyoku``gen`|the extreme limit
+極端|`kyoku``tan`|extreme
+極道|`goku``dou`|the "underground" (e.g. yakuza)
+南極|`nan``kyoku`|South Pole
+北極|`hok``kyoku`|North Pole
+積極的|`sek``kyoku``teki`|assertive, proactive
+消極的|`shou``kyoku``teki`|passive, unmotivated, half-hearted
+究極|`kyuu``kyoku`|ultimate, final
+極度|`kyoku``do`|maximum, utmost
+極楽|`goku``raku`|paradise
+媒体|`bai``tai`|medium, media
+媒介|`bai``kai`|mediation, acting as a go-between
+冷媒|`rei``bai`|coolant
+酌量|`shaku``ryou`|taking into consideration, making compromises
+酌む|`ku`mu|to pour drinks (e.g. sake)
+お酌|o`shaku`|(person) pouring drinks
+独酌|`doku``shaku`|drinking alone
+媒酌人|`bai``shaku``nin`|matchmaker, go-between
+差し引く|`sa`shi`hi`ku|to deduct, to take away
+奥さん|`oku`san|(your/his) wife
+沼|numa|marsh, swamp, bog
+泥沼|`doro``numa`|quagmire, marsh
+敬遠|`kei``en`|to (act respectful but) keep at a distance, baseball: intentionally walking the batter
+計略|`kei``ryaku`|strategem, plan, scheme, trick
+罰する|`bas`suru|to punish
+罰|batsu|punishment
+処罰|`sho``batsu`|punishment
+刑罰|`kei``batsu`|(criminal) punishment
+体罰|`tai``batsu`|corporal punishment
+罰金|`bak``kin`|fine, penalty
+正式|`sei``shiki`|formal, official
+返還|`hen``kan`|suru: to return, to restore (to its rightful place)
+不条理|`fu``jou``ri`|unreasonable, irrational, absurd
+因果|`in``ga`|karma
+因果応報|`in``ga``ou``hou`|getting your just desserts (for your bad actions)
+原因|`gen``in`|cause
+得難い|egatai|hard to come by, hard to get
+人材|`jin``zai`|capable person, talented person
+奪う|`uba`u|to steal, usurp, disposess
+奪回|`dak``kai`|recovery, rescue, recapture
+奪還|`dak``kan`|recapture, take back, recover
+略奪|`ryaku``datsu`|to pillage
+奪取|`das``shu`|to steal
+交わす|`ka`wasu|to exchange (words)
+飛び交う|`to`bi`ka`u|flitting about, fluttering about
+徒労|`to``rou`|wasted effort, fruitless effort:
+注力|`chuu``ryoku`|to focus one's efforts (into a particular thing)
+承知|`shou``chi`|awareness, knowledge, agreement, consent
+承認|`shou``nin`|suru: acknowledge, recognize
+承る|`uketemawa`ru|to understand, to receive (orders), to hear, to be told
+継承|`kei``shou`|inheritence, succession
+伝承|`den``shou`|folklore, handing down (information)
+失せる|`u`seru|to go away
+諸々|`moro`moro|various, several (things, people, etc.)
+土地|`to``chi`|land
+以降|`i``kou`|ever since...
+優る|`masa`ru|same as 勝る (masaru) basically
+失策|`shis``saku`|blunder, slip, error
+挽回|`ban``kai`|recover from (a mistake), get back, come back from (a miss)
+関の山|`seki`no`yama`|the best one can do, the best one can expect
+紙一重|`kami``hito``e`|paper-thin (difference)
+羽目を外す|`ha``me`wo`hazu`su|to go over the top, to act without restraint
+台詞|serifu|lines (e.g. that an actor speaks)
+称える|`tata`eru|to praise
+与する|`kumi`suru|to side with, to be party to, to take part in
+酷い|`hido`i|terrible, horrible
+片っ端から|`kata`p`pashi`kara|absolutely every little bit, everything from A to Z
+端末|`tan``matsu`|terminal (e.g. computer)
+気絶|`ki``zetsu`|to be unconcious, to be knocked out
