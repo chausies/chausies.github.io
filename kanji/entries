@@ -922,7 +922,8 @@
 砂|suna|sand
 砂利|`ja``ri`|gravel
 反復|`han``puku`|repitition
-反らす|`so`rasu|to send back
+反らす|`so`rasu|to bend, to warp
+反る|`so`ru|to be bent
 反対|`han``tai`|opposite, oppose
 反撃|`han``geki`|counterattack
 違反|`i``han`|violation, breach
@@ -2459,13 +2460,15 @@
 泰然|`tai``zen`|calm, composed
 直す|`nao`su|to fix
 直ちに|`tada`chini|at once
+直に|`jiki`ni|soon, in a moment
 正直|`shou``jiki`|honesty
 直下|`chok``ka`|right under
 直ぐ|`su`gu|immediately, at once
-もう直に|mou`jiki`ni|at once
 真っ直ぐ|`ma`s`su`gu|right ahead
 直線|`choku``sen`|straight line
 角|kado|corner
+角|tsuno|horn, antler
+角度|`kaku``do`|angle
 直角|`chok``kaku`|right angle
 三角|`san``kaku`|triangle
 直感|`chok``kan`|intuition, instincts
@@ -2934,6 +2937,8 @@
 禁輸|`kin``yu`|embargo
 運輸省|`un``yu``shou`|Ministry of Transport
 関節|`kan``setsu`|a joint
+節|fushi|joint, knuckle
+節穴|`fushi``ana`|bad eyes, peep-hole
 衰える|`otoro`eru|to become weak, to decline, to wear (反: 栄える)
 衰弱|`sui``jaku`|weakness, debility
 老衰|`rou``sui`|suru: becoming senile, infirm (through age)
@@ -2947,7 +2952,7 @@
 陳述|`chin``jutsu`|statement, declaration
 叙情|`jo``jou`|lyricism, describing one's feelings (反: 叙事)
 叙事|`jo``ji`|describing things and facts (with no emotion) (反: 叙情)
-除する|`jo`suru|to relate, to narrate, to describe
+叙する|`jo`suru|to relate, to narrate, to describe
 叙述|`jo``jutsu`|to describe, to narrate
 著述|`cho``jutsu`|writing, book, (literary) work
 前述|`zen``jutsu`|aforementioned
@@ -3064,6 +3069,7 @@
 領事|`ryou``ji`|consul (e.g. a political consul/representative)
 浮かぶ|`u`kabu|to float, to rise
 浮く|`u`ku|to be merry, happy
+浮つく|`uwa`tsuku|to be frivolous, fickle, giddy (e.g. like kids letting their hair down and stuff at prom)
 浮気|`uwa``ki`|having an affair, cheating
 浮上|`fu``jou`|surfacing, rising to the surface
 浮力|`fu``ryoku`|buoyancy
@@ -3444,6 +3450,7 @@
 決する|`kes`suru|to decide, to determine, to resolve
 及ぶ|`oyo`bu|to reach, to come up to, to be a match for
 及第点|`kyuu``dai``ten`|passing marks
+追及|`tsui``kyuu`|investigation (e.g. into someone's guilt, into your responsibilities), questioning, pressing
 急落|`kyuu``raku`|success or failure
 子細|`shi``sai`|particulars, reasons, circumstances
 楽観|`rak``kan`|optimism, taking an optimistic view
@@ -3676,3 +3683,143 @@
 片っ端から|`kata`p`pashi`kara|absolutely every little bit, everything from A to Z
 端末|`tan``matsu`|terminal (e.g. computer)
 気絶|`ki``zetsu`|to be unconcious, to be knocked out
+避ける|`yo`keru|to dodge
+くだを巻く|kudawo`ma`ku|to ramble drunkenly
+分析|`bun``seki`|analysis
+解析|`kai``seki`|analysis
+析出|`seki``shutsu`|suru: to extract, to educe
+数値|`suu``chi`|numerical values
+飲み代|`no`mi`dai` or `no`mi`shiro`|money for drinking
+債|sai|debt, loan
+負債|`fu``sai`|debt, liabilities
+国債|`koku``sai`|national debt
+債権|`sai``ken`|credit, claim
+債務|`sai``mu`|legal or contractual obligations to a person/party, debt, liabilities
+債務者|`sai``mu``sha`|debtor
+債券|`sai``ken`|bond (financial), debenture
+社債|`sha``sai`|corporate bond
+公債|`kou``sai`|public bond, government securities
+定期券|`tei``ki``ken`|season ticket, commuter pass (abbreviation)
+入場券|`nyuu``jou``ken`|admission ticket
+株券|`kabu``ken`|stock certificate
+致す|`ita`su|to do (humble)
+一致|`it``chi`|to agree, to be consistent
+致命的|`chi``mei``teki`|fatal
+致命傷|`chi``mei``shou`|fatal wound
+合致|`gat``chi`|agreement conformance, compliance
+極致|`kyoku``chi`|culmination, ultimate, peak
+満場一致|`man``jou``it``chi`|unanimous agreement
+言行一致|`gen``kou``it``chi`|consistency between speech and action
+警察|`kei``satsu`|police
+察する|`sas`suru|to guess, to presume
+視察|`shi``satsu`|to inspect
+考察|`kou``satsu`|to exame/study (as an academic inquiry)
+慈しみ|`itsuku`shimi|love, affection
+慈悲|`ji``hi`|compassion, mercy, clemency
+慈愛|`ji``ai`|affection (esp. parental)
+味|aji|taste
+大麦|`oo``mugi`|barley
+究明|`kyuu``mei`|to look deep into, to investigate, to inquire info
+排除|`hai``jo`|to eliminate, to remove, to get rid of
+排水|`hai``sui`|drainage, sewerage
+排出|`hai``shutsu`|discharge, emission
+排気|`hai``ki`|exhaust (from a car)
+排他|`hai``ta`|exclusion
+排卵|`hai``ran`|ovulation
+癒やす|`i`yasu|to heal, to soothe, to alleviate, to cure
+治癒|`chi``yu`|suru: to cure, to heal
+癒着|`yu``chaku`|adhesion, suru: to adhere
+陰茎|`in``kei`|penis
+注射|`chuu``sha`|a shot, an injection
+発射|`has``sha`|launching (e.g. a missle)
+反射|`han``sha`|reflex, reflection
+反射的|`han``sha``teki`|reflexively
+射撃|`sha``geki`|firing, shooting
+射殺|`sha``satsu`|shooting to death
+放射|`hou``sha`|radiation, emission
+射す|`sa`su|to shine (basically 差す)
+射る|`i`ru|to shoot (an arrow, a bolt)
+通|tsuu|expert, connoisseur
+勉強|`ben``kyou`|studying
+勤勉|`kin``ben`|diligent, hard-working, industrious (反: 怠惰)
+力む|`riki`mu|to strain oneself
+不吉|`fu``kitsu`|ominous, sinister, unlucky
+村民|`son``min`|villager
+村長|`son``chou`|village chief
+村議会|`son``gi``kai`|village assembly
+村内|`son``nai`|inside the village
+節目|`fushi``me`|juncture/turning-point (in one's life)
+古|inishie|ancient
+疾く|`to`ku|swiftly, quickly, expeditiously
+昨今|`sak``kon`|these days, nowadays, lately
+穏やか|`oda`yaka|peaceful, calm
+平穏|`hei``on`|peaceful
+骨|hone|bone
+露骨|`ro``kotsu`|blatant, open, undisguised, obvious (e.g. an obvious attempt to change the conversation)
+骨格|`kok``kaku`|skeleton, framework
+背骨|`se``bone`|spine, backbone
+口実|`kou``jitsu`|excuse/pretext (e.g. to meet someone)
+屈する|`kus`suru|to yield, to submit, to surrender
+屈服|`kup``puku`|suru: to yield, to sumit, to surrender
+屈める|`kaga`meru|to bend (e.g. one's knee), to stoop
+手向ける|`ta``mu`keru|to offer/present (to a grave, or to someone who's about to depart)
+様子|`you``su`|appearance, manner, demeanor, state (of affairs)
+異様|`i``you`|strange, unusual, unfitting, peculiar
+攻める|`se`meru|to attack, to take on
+攻撃|`kou``geki`|to attack
+攻勢|`kou``sei`|agression, offensive (movement)
+攻略|`kou``ryaku`|to capture, conquest, assault, strategy, tactics, guide, walthrough (video games)
+進攻|`shin``kou`|advance, attack, drive
+攻守|`kou``shu`|offense and defense
+攻防|`kou``bou`|offense and defense
+特攻隊|`tok``kou``tai`|special attack unit, kamikaze unit, suicide squad
+専ら|`moppa`ra|wholly, solely, entirely, exclusively
+専攻|`sen``kou`|major subject (that one studies in college)
+専門|`sen``mon`|special subject of study, concentration
+専門家|`sen``mon``ka`|specialist, expert, authority
+専用|`sen``you`|exclusive use
+専念|`sen``nen`|giving undivided attention, devoting oneself (to)
+自重|`ji``chou`|self-restraint, self-respect
+憤り|`ikidoo`ri|resentment, anger, indignation
+お召になる|o`meshi`ninaru|to wear, to have (a coat) (honorific)
+共産主義|`kyou``san``shu``gi`|Communism
+段|dan|steps, rungs, counter for tiers/layers
+階段|`kai``dan`|stairs
+段階|`dan``kai`|step, phase, stage
+値段|`ne``dan`|price
+手段|`shu``dan`|means, way
+段落|`dan``raku`|paragraph, a stopping point (before the next phase)
+段取り|`dan``dori`|arrangements, plans, programme
+段々|`dan``dan`|more and more, little by little, gradually, increasingly
+長男|`chou``nan`|eldest son
+緯度|`i``do`|latitude
+経緯|`kei``i` or `kei``satsu`|circumstances, sequence of events, how things got this way, details, particulars, lattitude and longitude
+珍しい|`mezura`shii|rare, uncommon
+珍客|`chin``kyaku`|unexpected/rare guest
+珍重|`chin``chou`|prizing, valuing highly, esteeming
+弊社|`hei``sha`|our company/firm (humble)
+通弊|`tsuu``hei`|common evil, common fault
+疲弊|`hi``hei`|exhaustion, fatigue, (financial) exhaustion/ruin
+弊害|`hei``gai`|harmful effect/influence, abuse, malady
+悪弊|`aku``hei`|corrupt/evil practice
+旧弊|`kyuu``hei`|old evils, long-standing abuses
+再三|`sai``san`|again and again, repeatedly
+湖|mizuumi|lake
+湖水|`ko``sui`|lake water
+湖岸|`ko``gan`|lake shore
+湖沼|`ko``shou`|marsh, wetland, lake
+湖底|`ko``tei`|bottom of a lake
+畔|aze|ridge between ricefields
+湖畔|`ko``han`|lakeside, lakeshore
+克服|`koku``fuku`|to overcome/conquer (e.g. a fear)
+克明|`koku``mei`|detailed, scrupulous, diligent, sincere
+克つ|`ka`tsu|to overcome
+館内|`kan``nai`|inside the building
+平均|`hei``kin`|average, mean
+均等|`kin``tou`|equal, even, uniform
+均す|`na`rasu|to make even/level/smooth, to flatten, to average
+故に|`yue`ni|therefore, thence
+事故|`ji``ko`|accident
+故障|`ko``shou`|breakdown, failure (e.g. of a machine)
+故意|`ko``i`|(bad) intent, intention, bad faith
+故国|`ko``koku`|one's old country
