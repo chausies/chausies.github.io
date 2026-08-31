@@ -746,6 +746,7 @@
 偽造|`gi``zou`|forgery
 日本酒|`ni``hon``shu`|japanese sake
 累進|`rui``shin`|gradual progression, rising step by step
+課する|`ka`suru|to impose/levy (a tax/fine)
 課税|`ka``zei`|taxation
 累計|`rui``kei`|cumulative/accumulated total
 課長|`ka``chou`|section chief/manager
@@ -758,7 +759,6 @@
 民放|`min``pou`|commercial broadcast (short for minkan housou)
 民間|`min``kan`|private (as opposed to government)
 放課後|`hou``ka``go`|after school
-課する|`ka`suru|to impose/levy (a tax/fine)
 税金|`zei``kin`|tax
 税理士|`zei``ri``shi`|tax counsellor
 減税|`gen``zei`|tax reduction
@@ -1363,6 +1363,7 @@
 殿下|`den``ka`|your highness
 貴殿|`ki``den`|thou
 投げる|`na`geru|to throw
+投じる|`tou`jiru|to throw, to cast, to devote oneself to (a cause)
 投機|`tou``ki`|speculation
 飛行機|`hi``kou``ki`|plane
 機|hata|loom
@@ -1445,7 +1446,7 @@
 長期的|`chou``ki``teki`|long-term
 長考|`chou``kou`|thinking for a long time, lengthy consideration, pondering
 定期|`tei``ki`|fixed period, fixed term
-定期的|`tei``ki``teki`|periodic
+定期的|`tei``ki``teki`|periodic, に: periodically
 最期|`sai``go`|one's last moment/time of death
 小指|`ko``yubi`|little finger, little toe
 一休み|`hito``yasu`mi|a little break
@@ -1740,6 +1741,7 @@
 剣|`ken` or `tsurugi`|sword
 辞職|`ji``shoku`|to resign
 辞める|`ya`meru|to quit
+辞する|`ji`suru|to quit
 辞書|`ji``sho`|dictionary
 辞典|`ji``ten`|encyclopedia, dictionary
 辞表|`ji``hyou`|letter of resignation
@@ -3265,7 +3267,7 @@
 湿気|`shik``ke`|humidity, moisture
 除湿|`jo``shitsu`|dehumidification
 加湿器|`ka``shitsu``ki`|humidifier
-湿地|`shit``chi`|damp ground
+湿地|`shic``chi`|damp ground
 多湿|`ta``shitsu`|high humidity
 歌詞|`ka``shi`|lyrics
 動詞|`dou``shi`|verb
@@ -3436,7 +3438,7 @@
 行方|yukue|whereabouts, where one is headed
 不明|`fu``mei`|unclear, uncertain, ambiguous
 受注|`ju``chuu`|accepting an order, receiving an order
-発注|`hat``chuu`|placing an order
+発注|`hac``chuu`|placing an order
 身の上話|`mi`no`ue``banashi`|life story, story of one's life
 散策|`san``saku`|roaming, exploring, strolling around
 素性|`su``jou`|lineage, parentage, background, identity
@@ -3543,6 +3545,7 @@
 役割|`yaku``wari`|part, role
 割合|`wari``ai`|proportion (e.g. 3 boys to 2 girls)
 分割|`bun``katsu`|partition, division, separation
+割譲|`katsu``jou`|cession (of territory)
 芝居|`shiba``i`|play, acting
 布教|`fu``kyou`|propogation (e.g. a religion), proselytizing, missionary work
 風変わり|`fuu``ga`wari|peculiar, strange, eccentric, unusual
@@ -3574,6 +3577,7 @@
 染色|`sen``shoku`|dying
 背教者|`hai``kyou``sha`|apostates, renegades (of a church)
 適する|`teki`suru|to fit, to suit
+適う|`kana`u|to fit, to suit
 適当|`teki``tou`|suitable, fitting
 最適|`sai``teki`|most suitable, optimum
 適任|`teki``nin`|competent, qualified, suitable (for a responsibility)
@@ -3705,13 +3709,13 @@
 入場券|`nyuu``jou``ken`|admission ticket
 株券|`kabu``ken`|stock certificate
 致す|`ita`su|to do (humble)
-一致|`it``chi`|to agree, to be consistent
+一致|`ic``chi`|to agree, to be consistent
 致命的|`chi``mei``teki`|fatal
 致命傷|`chi``mei``shou`|fatal wound
-合致|`gat``chi`|agreement conformance, compliance
+合致|`gac``chi`|agreement conformance, compliance
 極致|`kyoku``chi`|culmination, ultimate, peak
-満場一致|`man``jou``it``chi`|unanimous agreement
-言行一致|`gen``kou``it``chi`|consistency between speech and action
+満場一致|`man``jou``ic``chi`|unanimous agreement
+言行一致|`gen``kou``ic``chi`|consistency between speech and action
 警察|`kei``satsu`|police
 察する|`sas`suru|to guess, to presume
 視察|`shi``satsu`|to inspect
@@ -3838,7 +3842,7 @@
 余暇|`yo``ka`|spare time, leisure time
 軽率|`kei``sotsu`|thoughtless, imprudent, rash
 統率|`tou``sotsu`|suru: to command, lead
-率直|`sot``choku`|frankly, directly, candidly
+率直|`soc``choku`|frankly, directly, candidly
 黄色|`ki``iro`|yellow
 黄金|`ou``gon`|gold
 卵黄|`ran``ou`|egg yolk
@@ -4026,7 +4030,7 @@
 熱意|`netsu``i`|zeal, enthusiasm
 熱心|`nes``shin`|zealous, enthusiastic, ardent
 熱狂|`nek``kyou`|wild enthusiasm
-熱中|`net``chuu`|being wild about, being absorbed in, being enthusiastic about
+熱中|`nec``chuu`|being wild about, being absorbed in, being enthusiastic about
 熱帯|`net``tai`|tropics
 断熱|`dan``netsu`|insulation
 熱湯|`net``tou`|boiling water
@@ -4040,7 +4044,7 @@
 両側|`ryou``gawa`|both sides
 主催|`shu``sai`|chairmanship, presidency
 宰相|`sai``shou`|prime minister
-宰領|`sai``ryou`|suru: to supervice, manage, oversee
+宰領|`sai``ryou`|suru: to supervise, manage, oversee
 幹|miki|tree trunk, base, foundation
 幹部|`kan``bu`|executive members, managing staff, key officers
 幹線|`kan``sen`|main line
@@ -4066,3 +4070,66 @@
 左様|`sa``you`|so, like that, that's right, basically fancy そう
 政庁|`sei``chou`|government office
 足踏み|`ashi``bumi`|stepping in place, standstill
+戯れ|`tawamu`re|(having a bit of) fun, joke, flirtation
+遊戯|`yuu``gi`|game
+戯画|`gi``ga`|caricature, cartoon, comic
+戯曲|`gi``kyoku`|drama, play, chinese opera
+戯言|`tawa``goto`|nonsense, silly talk, drivel
+悪戯|itazura|prank, mischief, trick
+前戯|`zen``gi`|(sexual) foreplay
+閉会式|`hei``kai``shiki`|closing ceremony
+炭酸飲料|`tan``san``in``ryou`|carbonated drinks
+書店|`sho``ten`|bookstore
+奉る|`tatematsu`ru|to offer, to present (humble)
+奉じる|`hou`jiru|to offer, to present, to serve (humble)
+奉公|`hou``kou`|public duty/service, live-in apprenticeship/domestic service
+奉仕|`hou``shi`|church work, service, offering services/goods for free (altruistically)
+奉納|`hou``nou`|dedication, offering, presentation, oblation
+奉行|`bu``gyou`|magistrate, shogunate administrator
+蚊|ka|mosquito
+蚊帳|`ka``ya`|mosquito net
+外務省|`gai``mu``shou`|Ministry of Foreign Affairs
+醸す|`kamo`su|to brew (sake), to cause/bring about/give rise to
+醸造|`jou``zou`|brewing
+醸成|`jou``sei`|to bring about, to brew/arouse/breed (atmosphere, feelings, etc.)
+絞める|`shi`meru|to strangle
+絞る|`shibo`ru|to narrow/wittle down (candidates), to reprimand/chew out, to strain hard (e.g. one's brain/one's voice), to wring dry (also 搾る)
+絞殺|`kou``satsu`|strangulation
+福音書|`fuku``in``sho`|the Gospel
+猿|saru|monkey
+類人猿|`rui``jin``en`|anthropomorphic (looks like a human)
+猿人|`en``jin`|ape man
+犬猿|`ken``en`|dogs and monkeys (bad relationship)
+国勢調査|`koku``sei``chou``sa`|national census
+家畜|`ka``chiku`|livestock
+畜生|`chiku``shou`|beast, animal, brute, damnit
+畜産|`chiku``san`|livestock industry, animal husbandry
+牧師|`boku``shi`|pastor, minister, clergyman, reverend
+牧場|`boku``jou`|(livestock) farm, ranch
+牧草|`boku``sou`|pasture
+牧畜業|`boku``chiku``gyou`|(live-)stock farming
+遊牧|`yuu``boku`|nomadism
+牧舎|`boku``sha`|barn, stable
+尊い|`touto`i|precious
+尊ぶ|`touto`bu or `tato`bu|to respect, to honor
+尊敬|`son``kei`|suru: respect, revere, honor
+尊重|`son``chou`|suru: respect, revere, honor
+男尊女卑|`dan``son``jo``hi`|male domination of women, chauvinism
+津波|`tsu``nami`|Tsunami, tidal wave
+興味津々|`kyou``mi``shin`shin|full of interest (in something)
+天津飯|`ten``shin``han`|crab omlette over rice
+鑑みる|`kanga`miru|to take into account, to bear in mind, to consider
+言いたげ|`i`itage|seeming to want to say something
+駐留|`chuu``ryuu`|stationing (e.g. troops), garrison
+察知|`sac``chi`|to pirck up on, to sense, to infer, to gather
+奇しき|`ku`shiki|strange, mysterious, queer
+布く|`shi`ku|to deploy (troops), to impose widely (e.g. martial law)
+背ける|`somu`keru|to avert (one's eyes), to turn your back on
+徹する|`tes`suru|to devote oneself (to), to do intently and exclusively, to focus on
+治世|`chi``sei`|rule, reign, peaceful times
+最早|`mo``haya`|already, now, no longer, not anymore
+万事|`ban``ji`|all, everything
+武功|`bu``kou`|military feats/achievements
+前途多難|`zen``to``ta``nan`|having many difficulties on the path ahead
+目処|`me``do`|aim, goal, prospect, outlook
+住所|`juu``sho`|address
